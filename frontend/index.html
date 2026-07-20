@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Analyzer - Next-Gen ATS Optimizer</title>
+    <!-- Modern Typography: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Decorative Elements -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <i class="fa-solid fa-wand-magic-sparkles logo-icon"></i>
+                <span class="logo-text">ResumeSphere <span class="accent-text">AI</span></span>
+            </div>
+            <p class="subtitle">Extract text, calculate ATS scores, and find matched job recommendations instantly</p>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="main-content">
+            <!-- Upload Card -->
+            <section class="card upload-card">
+                <h2 class="card-title"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Resume</h2>
+                <p class="card-desc">Drag and drop your PDF resume here, or browse files</p>
+                
+                <div class="drop-zone" id="drop-zone">
+                    <div class="drop-zone-content">
+                        <div class="upload-icon-container">
+                            <i class="fa-solid fa-file-pdf pdf-glow-icon"></i>
+                        </div>
+                        <p class="drop-text">Drag & drop your PDF resume here</p>
+                        <p class="drop-subtext">Supports PDF format (Max 10MB)</p>
+                        <button class="btn btn-primary" id="browse-btn">
+                            <i class="fa-solid fa-magnifying-glass"></i> Browse Files
+                        </button>
+                        <input type="file" id="file-input" accept="application/pdf" style="display: none;">
+                    </div>
+                </div>
+
+                <!-- Uploading & Parsing Progress (Hidden by default) -->
+                <div class="progress-container hidden" id="progress-container">
+                    <div class="file-details">
+                        <span class="filename" id="filename-display"><i class="fa-solid fa-file-invoice"></i> resume.pdf</span>
+                        <span class="filesize" id="filesize-display">1.2 MB</span>
+                    </div>
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                    </div>
+                    <div class="status-message" id="status-message">
+                        <i class="fa-solid fa-spinner fa-spin"></i> Parsing with PyMuPDF...
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section (Hidden by default) -->
+            <section class="results-container hidden" id="results-container">
+                <div class="results-grid">
+                    
+                    <!-- Left: ATS Score Gauge -->
+                    <div class="card result-card score-card">
+                        <h3 class="card-subtitle"><i class="fa-solid fa-chart-simple"></i> ATS Score</h3>
+                        <div class="gauge-wrapper">
+                            <svg class="progress-ring" width="200" height="200">
+                                <circle class="progress-ring-bg" stroke="rgba(255, 255, 255, 0.05)" stroke-width="12" fill="transparent" r="80" cx="100" cy="100"/>
+                                <circle class="progress-ring-bar" id="score-ring" stroke="url(#gradient-cyan-purple)" stroke-dasharray="502.6" stroke-dashoffset="502.6" stroke-width="12" stroke-linecap="round" fill="transparent" r="80" cx="100" cy="100"/>
+                                <defs>
+                                    <linearGradient id="gradient-cyan-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#00f2fe" />
+                                        <stop offset="100%" stop-color="#4facfe" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="gauge-text">
+                                <span class="score-number" id="score-number">0</span>
+                                <span class="score-percent">%</span>
+                            </div>
+                        </div>
+                        <p class="score-evaluation" id="score-evaluation">Scanning complete.</p>
+                    </div>
+
+                    <!-- Right: Extracted Skills -->
+                    <div class="card result-card skills-card">
+                        <h3 class="card-subtitle"><i class="fa-solid fa-brain"></i> Extracted Skills</h3>
+                        <p class="card-desc">Keywords extracted using NLP Processing</p>
+                        <div class="skills-grid" id="skills-grid">
+                            <!-- Skill tags dynamically generated -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Job Recommendations -->
+                <div class="card recommendations-card">
+                    <h3 class="card-subtitle"><i class="fa-solid fa-briefcase"></i> Job Recommendations</h3>
+                    <p class="card-desc">Top matched profiles based on resume skill analysis</p>
+                    <div class="job-list" id="job-list">
+                        <!-- Job cards dynamically generated -->
+                    </div>
+                </div>
+                
+                <!-- Resume Suggestions -->
+                <div class="card suggestions-card">
+                    <h3 class="card-subtitle"><i class="fa-solid fa-wand-magic-sparkles"></i> Resume Suggestions</h3>
+                    <p class="card-desc">Actionable feedback to improve your ATS score</p>
+                    <ul class="suggestions-list" id="suggestions-list">
+                        <!-- Suggestions dynamically generated -->
+                    </ul>
+                </div>
+
+                <!-- Job Description Matching & Skill Gap -->
+                <div class="card jd-match-card">
+                    <h3 class="card-subtitle"><i class="fa-solid fa-bullseye"></i> Job Description Match & Skill Gap</h3>
+                    <p class="card-desc">Paste a job description to see your match score and skill gaps.</p>
+                    <textarea id="jd-input" class="jd-textarea" placeholder="Paste target Job Description here..." rows="4" style="width:100%; margin-top:10px; background:rgba(255,255,255,0.05); color:white; border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px;"></textarea>
+                    <button class="btn btn-primary" id="jd-match-btn" style="margin-top:10px; width:100%;">
+                        <i class="fa-solid fa-bolt"></i> Analyze Job Description
+                    </button>
+                    
+                    <div id="jd-results" class="hidden" style="margin-top: 20px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.05); padding:15px; border-radius:8px;">
+                            <div>
+                                <h2 style="margin:0; font-size:2rem; color:#00f2fe;"><span id="jd-match-score">0</span>% Match</h2>
+                            </div>
+                            <div>
+                                <span style="font-size:1.2rem; color:#4facfe;"><span id="jd-semantic-score">0</span>% Semantic Similarity</span>
+                            </div>
+                        </div>
+                        
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:15px;">
+                            <div style="background:rgba(16, 185, 129, 0.1); padding:15px; border-radius:8px; border:1px solid rgba(16, 185, 129, 0.2);">
+                                <h4 style="color:#10b981; margin-top:0;"><i class="fa-solid fa-check-circle"></i> Matched Skills</h4>
+                                <div id="jd-matched-skills" class="skills-grid" style="margin-top:10px;"></div>
+                            </div>
+                            <div style="background:rgba(239, 68, 68, 0.1); padding:15px; border-radius:8px; border:1px solid rgba(239, 68, 68, 0.2);">
+                                <h4 style="color:#ef4444; margin-top:0;"><i class="fa-solid fa-times-circle"></i> Missing Skills</h4>
+                                <div id="jd-missing-skills" class="skills-grid" style="margin-top:10px;"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:8px; border:1px solid rgba(255,255,255,0.1); margin-top:15px;">
+                            <h4 style="color:#f59e0b; margin-top:0;"><i class="fa-solid fa-lightbulb"></i> Learning Suggestions</h4>
+                            <ul id="jd-learning-suggestions" style="margin:10px 0 0 0; padding-left:20px; color:#fff; line-height:1.6;">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collapsible Extracted Text -->
+                <div class="card text-preview-card">
+                    <div class="accordion-header" id="accordion-toggle">
+                        <h3 class="card-subtitle m-0"><i class="fa-solid fa-file-lines"></i> Cleaned Extracted Text</h3>
+                        <i class="fa-solid fa-chevron-down accordion-icon" id="accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content collapsed" id="accordion-content">
+                        <div class="raw-text-container">
+                            <pre id="extracted-text-display"></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Built with <i class="fa-solid fa-heart animate-pulse"></i> FastAPI, PyMuPDF, and Sleek Modern CSS</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

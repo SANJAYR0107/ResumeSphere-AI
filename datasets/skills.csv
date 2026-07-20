@@ -1,0 +1,347 @@
+skill,category
+Python,Programming
+JavaScript,Programming
+TypeScript,Programming
+Java,Programming
+C,Programming
+C++,Programming
+C#,Programming
+Go,Programming
+Rust,Programming
+Swift,Programming
+Kotlin,Programming
+Ruby,Programming
+PHP,Programming
+Scala,Programming
+R,Programming
+MATLAB,Programming
+Perl,Programming
+Bash,Programming
+Shell Scripting,Programming
+PowerShell,Programming
+Groovy,Programming
+Dart,Programming
+Elixir,Programming
+Haskell,Programming
+Lua,Programming
+Julia,Programming
+Assembly,Programming
+COBOL,Programming
+Fortran,Programming
+HTML,Web
+CSS,Web
+SASS,Web
+SCSS,Web
+Less,Web
+Bootstrap,Web
+Tailwind CSS,Web
+Material UI,Web
+Ant Design,Web
+Chakra UI,Web
+React,Frontend
+Angular,Frontend
+Vue.js,Frontend
+Svelte,Frontend
+Next.js,Frontend
+Nuxt.js,Frontend
+Gatsby,Frontend
+Redux,Frontend
+MobX,Frontend
+Zustand,Frontend
+Recoil,Frontend
+React Query,Frontend
+GraphQL,Frontend
+Apollo Client,Frontend
+Webpack,Frontend
+Vite,Frontend
+Rollup,Frontend
+Parcel,Frontend
+Babel,Frontend
+ESLint,Frontend
+Prettier,Frontend
+Jest,Frontend
+React Testing Library,Frontend
+Storybook,Frontend
+Flutter,Mobile
+React Native,Mobile
+Swift UI,Mobile
+Jetpack Compose,Mobile
+Xamarin,Mobile
+Ionic,Mobile
+Cordova,Mobile
+Expo,Mobile
+Android SDK,Mobile
+iOS SDK,Mobile
+FastAPI,Backend
+Django,Backend
+Flask,Backend
+Node.js,Backend
+Express.js,Backend
+Spring Boot,Backend
+Spring Framework,Backend
+Laravel,Backend
+Ruby on Rails,Backend
+ASP.NET,Backend
+ASP.NET Core,Backend
+NestJS,Backend
+Gin,Backend
+Echo,Backend
+Fiber,Backend
+Actix-web,Backend
+Tornado,Backend
+Celery,Backend
+RabbitMQ,Backend
+Apache Kafka,Backend
+gRPC,Backend
+REST API,Backend
+SOAP,Backend
+WebSockets,Backend
+OAuth2,Backend
+JWT,Backend
+PostgreSQL,Database
+MySQL,Database
+SQLite,Database
+Microsoft SQL Server,Database
+Oracle Database,Database
+MariaDB,Database
+MongoDB,Database
+Redis,Database
+Cassandra,Database
+DynamoDB,Database
+Elasticsearch,Database
+Neo4j,Database
+CouchDB,Database
+Firebase Realtime Database,Database
+Firestore,Database
+InfluxDB,Database
+TimescaleDB,Database
+Snowflake,Database
+BigQuery,Database
+Amazon Redshift,Database
+Pinecone,Database
+Weaviate,Database
+Chroma,Database
+SQLAlchemy,Database
+Prisma,Database
+Sequelize,Database
+Mongoose,Database
+TypeORM,Database
+AWS,Cloud
+Amazon EC2,Cloud
+Amazon S3,Cloud
+Amazon RDS,Cloud
+Amazon Lambda,Cloud
+Amazon ECS,Cloud
+Amazon EKS,Cloud
+Amazon SageMaker,Cloud
+Amazon CloudFront,Cloud
+Amazon Route 53,Cloud
+Amazon VPC,Cloud
+Amazon IAM,Cloud
+Amazon SNS,Cloud
+Amazon SQS,Cloud
+Azure,Cloud
+Azure DevOps,Cloud
+Azure Functions,Cloud
+Azure Kubernetes Service,Cloud
+Azure Blob Storage,Cloud
+Azure Active Directory,Cloud
+Google Cloud Platform,Cloud
+Google Cloud Run,Cloud
+Google Cloud Functions,Cloud
+Google Kubernetes Engine,Cloud
+Google Cloud Storage,Cloud
+Firebase,Cloud
+Cloudflare,Cloud
+DigitalOcean,Cloud
+Heroku,Cloud
+Vercel,Cloud
+Netlify,Cloud
+Terraform,DevOps
+Ansible,DevOps
+Docker,DevOps
+Kubernetes,DevOps
+Helm,DevOps
+Prometheus,DevOps
+Grafana,DevOps
+ELK Stack,DevOps
+Logstash,DevOps
+Kibana,DevOps
+Jenkins,DevOps
+GitHub Actions,DevOps
+GitLab CI/CD,DevOps
+CircleCI,DevOps
+Travis CI,DevOps
+ArgoCD,DevOps
+Flux,DevOps
+Istio,DevOps
+Nginx,DevOps
+Apache HTTP Server,DevOps
+HAProxy,DevOps
+Vault,DevOps
+SonarQube,DevOps
+DataDog,DevOps
+New Relic,DevOps
+Splunk,DevOps
+Machine Learning,AI/ML
+Deep Learning,AI/ML
+Neural Networks,AI/ML
+Natural Language Processing,AI/ML
+Computer Vision,AI/ML
+Reinforcement Learning,AI/ML
+Transfer Learning,AI/ML
+TensorFlow,AI/ML
+PyTorch,AI/ML
+Keras,AI/ML
+Scikit-learn,AI/ML
+XGBoost,AI/ML
+LightGBM,AI/ML
+CatBoost,AI/ML
+Hugging Face Transformers,AI/ML
+BERT,AI/ML
+GPT,AI/ML
+LangChain,AI/ML
+LlamaIndex,AI/ML
+Sentence Transformers,AI/ML
+OpenAI API,AI/ML
+Stable Diffusion,AI/ML
+YOLO,AI/ML
+OpenCV,AI/ML
+spaCy,AI/ML
+NLTK,AI/ML
+Gensim,AI/ML
+FastText,AI/ML
+Word2Vec,AI/ML
+Pandas,AI/ML
+NumPy,AI/ML
+SciPy,AI/ML
+Matplotlib,AI/ML
+Seaborn,AI/ML
+Plotly,AI/ML
+Jupyter Notebook,AI/ML
+MLflow,AI/ML
+Weights & Biases,AI/ML
+DVC,AI/ML
+Ray,AI/ML
+Dask,AI/ML
+Apache Spark,AI/ML
+PySpark,AI/ML
+Hadoop,AI/ML
+Pentesting,Cyber Security
+Ethical Hacking,Cyber Security
+OWASP,Cyber Security
+Metasploit,Cyber Security
+Burp Suite,Cyber Security
+Wireshark,Cyber Security
+Nmap,Cyber Security
+Nessus,Cyber Security
+Snort,Cyber Security
+SIEM,Cyber Security
+SOC,Cyber Security
+Threat Modeling,Cyber Security
+Vulnerability Assessment,Cyber Security
+Incident Response,Cyber Security
+Digital Forensics,Cyber Security
+Cryptography,Cyber Security
+PKI,Cyber Security
+Zero Trust Security,Cyber Security
+GDPR Compliance,Cyber Security
+ISO 27001,Cyber Security
+SOC 2,Cyber Security
+Linux,Operating Systems
+Ubuntu,Operating Systems
+Debian,Operating Systems
+CentOS,Operating Systems
+Red Hat Enterprise Linux,Operating Systems
+Fedora,Operating Systems
+Arch Linux,Operating Systems
+macOS,Operating Systems
+Windows Server,Operating Systems
+Windows,Operating Systems
+FreeBSD,Operating Systems
+Android,Operating Systems
+iOS,Operating Systems
+Pytest,Testing
+Unittest,Testing
+JUnit,Testing
+Selenium,Testing
+Cypress,Testing
+Playwright,Testing
+Postman,Testing
+Insomnia,Testing
+k6,Testing
+Locust,Testing
+Apache JMeter,Testing
+Test Driven Development,Testing
+Behavior Driven Development,Testing
+Mockito,Testing
+Mocha,Testing
+Chai,Testing
+Sinon,Testing
+TCP/IP,Networking
+DNS,Networking
+HTTP/HTTPS,Networking
+SSL/TLS,Networking
+VPN,Networking
+Load Balancing,Networking
+CDN,Networking
+Firewall,Networking
+Proxy Server,Networking
+OSI Model,Networking
+BGP,Networking
+OSPF,Networking
+VLAN,Networking
+SDN,Networking
+Git,Version Control
+GitHub,Version Control
+GitLab,Version Control
+Bitbucket,Version Control
+SVN,Version Control
+Mercurial,Version Control
+JIRA,Tools
+Confluence,Tools
+Slack,Tools
+Trello,Tools
+Notion,Tools
+Figma,Tools
+Adobe XD,Tools
+Sketch,Tools
+InVision,Tools
+VS Code,Tools
+IntelliJ IDEA,Tools
+PyCharm,Tools
+Eclipse,Tools
+Vim,Tools
+Neovim,Tools
+Emacs,Tools
+Xcode,Tools
+Android Studio,Tools
+Postman,Tools
+Insomnia,Tools
+Swagger,Tools
+RapidAPI,Tools
+pgAdmin,Tools
+MongoDB Compass,Tools
+TablePlus,Tools
+DBeaver,Tools
+Redis Insight,Tools
+Agile,Tools
+Scrum,Tools
+Kanban,Tools
+Waterfall,Tools
+Design Patterns,Tools
+Microservices,Tools
+Monolithic Architecture,Tools
+Event-Driven Architecture,Tools
+CQRS,Tools
+Domain-Driven Design,Tools
+Test Driven Development,Tools
+Continuous Integration,Tools
+Continuous Deployment,Tools
+Infrastructure as Code,Tools
+Site Reliability Engineering,Tools
+System Design,Tools
+Data Structures,Tools
+Algorithms,Tools
+Object-Oriented Programming,Tools
+Functional Programming,Tools

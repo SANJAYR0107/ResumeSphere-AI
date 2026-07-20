@@ -1,0 +1,15 @@
+# ── Phase 1 / 2 ────────────────────────────────────────────────────────────
+fastapi>=0.100.0
+uvicorn>=0.22.0
+pymupdf>=1.22.0
+python-multipart>=0.0.6
+pydantic>=2.0.0
+
+# ── Phase 3 — NLP Pipeline ─────────────────────────────────────────────────
+# Sentence embedding model (all-MiniLM-L6-v2)
+sentence-transformers>=2.2.0
+# PyTorch CPU build — keeps the Docker image lean; GPU users can override
+torch>=2.0.0
+
+# ── Testing ────────────────────────────────────────────────────────────────
+pytest>=7.0.0
