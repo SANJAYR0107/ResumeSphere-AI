@@ -80,7 +80,7 @@ which is O(tokens²) internally but bounded by the model's 256-token limit.
 import logging
 import re
 import time
-from typing import TypedDict
+from typing import TypedDict, Any
 
 from backend.app.services.ats_service import compute_ats_score
 from backend.app.services.embedding_service import EmbeddingResult, get_embedding
@@ -89,6 +89,25 @@ from backend.app.services.preprocessing_service import preprocess
 from backend.app.services.section_service import detect_sections
 from backend.app.services.skill_extractor_service import SkillMatch, extract_skills
 from backend.app.services.suggestions_service import generate_suggestions
+from backend.app.services.quality_service import QualityReport, analyze_quality
+from backend.app.services.score_service import calculate_section_scores, calculate_overall_score, SectionScore, OverallScoreResult
+from backend.app.services.insights_service import (
+    analyze_projects,
+    analyze_skills,
+    analyze_experience,
+    analyze_grammar,
+    analyze_keywords,
+    analyze_summary,
+    generate_actionable_suggestions,
+    identify_strengths,
+    identify_weaknesses,
+    Suggestion,
+    ProjectAnalysis,
+    SkillAnalysis,
+    ExperienceAnalysis,
+    GrammarAnalysis,
+    KeywordAnalysis,
+    SummaryAnalysis)
 
 logger = logging.getLogger(__name__)
 
@@ -112,9 +131,26 @@ class ResumeAnalysis(TypedDict):
     clean_text: str
     # ── Phase 4 fields ──────────────────────────────────────────────────
     ats_score: int
-    ats_breakdown: dict[str, int]
+    ats_breakdown: dict[str, Any]
+    ats_grade: str
+    hiring_probability: str
+    resume_strength_index: float
+    recruiter_confidence: str
     suggestions: list[str]
     job_recommendations: list[dict]
+    quality_report: QualityReport
+    # ── Phase 2 fields ──────────────────────────────────────────────────
+    overall_score: OverallScoreResult
+    section_scores: dict[str, SectionScore]
+    project_analysis: ProjectAnalysis
+    skill_analysis: SkillAnalysis
+    experience_analysis: ExperienceAnalysis
+    grammar_analysis: GrammarAnalysis
+    keyword_analysis: KeywordAnalysis
+    summary_analysis: SummaryAnalysis
+    strengths: list[str]
+    weaknesses: list[str]
+    actionable_suggestions: list[Suggestion]
 
 
 # ---------------------------------------------------------------------------
@@ -213,7 +249,7 @@ def run_pipeline(
     t0 = time.perf_counter()
     clean: str = preprocess(raw_text)
     logger.info(
-        "Pipeline [1/4] Preprocessing complete — %d → %d chars  (%.1f ms)",
+        "Pipeline [1/8] Preprocessing complete — %d → %d chars  (%.1f ms)",
         len(raw_text),
         len(clean),
         (time.perf_counter() - t0) * 1000,
@@ -223,7 +259,7 @@ def run_pipeline(
     t0 = time.perf_counter()
     sections: dict[str, str] = detect_sections(clean)
     logger.info(
-        "Pipeline [2/4] Sections detected — %d section(s)  (%.1f ms)",
+        "Pipeline [2/8] Sections detected — %d section(s)  (%.1f ms)",
         len(sections),
         (time.perf_counter() - t0) * 1000,
     )
@@ -233,7 +269,7 @@ def run_pipeline(
     skill_details: list[SkillMatch] = extract_skills(clean)
     skill_names: list[str] = [s["skill"] for s in skill_details]
     logger.info(
-        "Pipeline [3/4] Skills extracted — %d skill(s)  (%.1f ms)",
+        "Pipeline [3/8] Skills extracted — %d skill(s)  (%.1f ms)",
         len(skill_names),
         (time.perf_counter() - t0) * 1000,
     )
@@ -247,25 +283,35 @@ def run_pipeline(
     embed_text: str = clean[:2000]
     embedding_result: EmbeddingResult = get_embedding(embed_text)
     logger.info(
-        "Pipeline [4/4] Embedding generated — dim=%d  (%.1f ms)",
+        "Pipeline [4/8] Embedding generated — dim=%d  (%.1f ms)",
         embedding_result["dimension"],
         (time.perf_counter() - t0) * 1000,
     )
 
-    # ── Stage 5: ATS scoring ──────────────────────────────────────────────
+    # ── Stage 5: Quality Checks ───────────────────────────────────────────
     t0 = time.perf_counter()
-    ats_result: dict = compute_ats_score(
+    quality_report: QualityReport = analyze_quality(clean, sections)
+    logger.info(
+        "Pipeline [5/10] Quality checks complete — score=%d  (%.1f ms)",
+        quality_report["quality_score"],
+        (time.perf_counter() - t0) * 1000,
+    )
+
+    # ── Stage 6: ATS scoring ──────────────────────────────────────────────
+    t0 = time.perf_counter()
+    ats_result = compute_ats_score(
         sections=sections,
         skills=skill_names,
         raw_text=clean,
+        quality_report=quality_report,
     )
     logger.info(
-        "Pipeline [5/7] ATS score computed — score=%d  (%.1f ms)",
+        "Pipeline [6/10] ATS score computed — score=%d  (%.1f ms)",
         ats_result["ats_score"],
         (time.perf_counter() - t0) * 1000,
     )
 
-    # ── Stage 6: Suggestions ──────────────────────────────────────────────
+    # ── Stage 7: Suggestions ──────────────────────────────────────────────
     t0 = time.perf_counter()
     suggestions: list[str] = generate_suggestions(
         sections=sections,
@@ -274,20 +320,54 @@ def run_pipeline(
         ats_breakdown=ats_result["breakdown"],
     )
     logger.info(
-        "Pipeline [6/7] Suggestions generated — %d item(s)  (%.1f ms)",
+        "Pipeline [7/10] Suggestions generated — %d item(s)  (%.1f ms)",
         len(suggestions),
         (time.perf_counter() - t0) * 1000,
     )
 
-    # ── Stage 7: Job recommendations ──────────────────────────────────────
+    # ── Stage 8: Job recommendations ──────────────────────────────────────
     t0 = time.perf_counter()
     job_recs: list[dict] = get_job_recommendations(
         resume_skills=skill_names,
         resume_text=clean,
     )
     logger.info(
-        "Pipeline [7/7] Job recommendations — %d result(s)  (%.1f ms)",
+        "Pipeline [8/10] Job recommendations — %d result(s)  (%.1f ms)",
         len(job_recs),
+        (time.perf_counter() - t0) * 1000,
+    )
+
+    # (Quality checks were moved to Stage 5)
+
+    # ── Stage 9: Score Calculation ────────────────────────────────────────
+    t0 = time.perf_counter()
+    section_scores = calculate_section_scores(
+        sections, skill_names, quality_report, ats_result["breakdown"])
+    overall_score_result = calculate_overall_score(section_scores)
+    logger.info(
+        "Pipeline [9/10] Score calculation complete — overall=%d  (%.1f ms)",
+        overall_score_result["overall_score"],
+        (time.perf_counter() - t0) * 1000,
+    )
+
+    # ── Stage 10: Deep Insights Generation ─────────────────────────────────
+    t0 = time.perf_counter()
+    project_analysis = analyze_projects(sections)
+    skill_analysis = analyze_skills(skill_details)
+    experience_analysis = analyze_experience(sections)
+    grammar_analysis = analyze_grammar(clean, quality_report)
+    keyword_analysis = analyze_keywords(clean, skill_names, sections)
+    summary_analysis = analyze_summary(sections)
+
+    strengths = identify_strengths(section_scores, quality_report)
+    weaknesses = identify_weaknesses(section_scores, quality_report)
+    actionable_suggestions = generate_actionable_suggestions(
+        quality_report, section_scores)
+
+    logger.info(
+        "Pipeline [10/10] Insights generated — %d strengths, %d weaknesses  (%.1f ms)",
+        len(strengths),
+        len(weaknesses),
         (time.perf_counter() - t0) * 1000,
     )
 
@@ -319,7 +399,23 @@ def run_pipeline(
         processing_time_ms=elapsed_ms,
         clean_text=clean,
         ats_score=ats_result["ats_score"],
+        ats_grade=ats_result["ats_grade"],
+        hiring_probability=ats_result["hiring_probability"],
+        resume_strength_index=ats_result["resume_strength_index"],
+        recruiter_confidence=ats_result["recruiter_confidence"],
         ats_breakdown=ats_result["breakdown"],
         suggestions=suggestions,
         job_recommendations=job_recs,
+        quality_report=quality_report,
+        overall_score=overall_score_result,
+        section_scores=section_scores,
+        project_analysis=project_analysis,
+        skill_analysis=skill_analysis,
+        experience_analysis=experience_analysis,
+        grammar_analysis=grammar_analysis,
+        keyword_analysis=keyword_analysis,
+        summary_analysis=summary_analysis,
+        strengths=strengths,
+        weaknesses=weaknesses,
+        actionable_suggestions=actionable_suggestions,
     )

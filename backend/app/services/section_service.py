@@ -73,6 +73,13 @@ logger = logging.getLogger(__name__)
 
 _SECTION_PATTERNS: list[tuple[str, re.Pattern]] = [
     (
+        "contact",
+        re.compile(
+            r"^\s*(?:contact(?:\s+(?:info|information|details))?|personal\s+(?:info|information|details)|get\s+in\s+touch)\s*$",
+            re.IGNORECASE,
+        ),
+    ),
+    (
         "summary",
         re.compile(
             r"^\s*(?:professional\s+summary|career\s+summary|summary|profile"
@@ -85,7 +92,7 @@ _SECTION_PATTERNS: list[tuple[str, re.Pattern]] = [
         "experience",
         re.compile(
             r"^\s*(?:work\s+experience|professional\s+experience|relevant\s+experience"
-            r"|employment(?:\s+history)?|work\s+history|experience|history)\s*$",
+            r"|employment(?:\s+history)?|work\s+history|experience|history|career\s+history)\s*$",
             re.IGNORECASE,
         ),
     ),
@@ -93,7 +100,7 @@ _SECTION_PATTERNS: list[tuple[str, re.Pattern]] = [
         "education",
         re.compile(
             r"^\s*(?:education(?:al\s+background)?|academic\s+(?:background|qualifications?|history)"
-            r"|qualifications?|degrees?)\s*$",
+            r"|qualifications?|degrees?|academics)\s*$",
             re.IGNORECASE,
         ),
     ),
@@ -101,23 +108,23 @@ _SECTION_PATTERNS: list[tuple[str, re.Pattern]] = [
         "skills",
         re.compile(
             r"^\s*(?:technical\s+skills?|core\s+skills?|key\s+skills?"
-            r"|professional\s+skills?|skills?"
+            r"|professional\s+skills?|skills?|my\s+skills|skill\s+set"
             r"|technical\s+expertise|technology\s+stack|tech\s+stack"
-            r"|technologies|competenc(?:y|ies)|expertise)\s*$",
+            r"|technologies|core\s+competenc(?:y|ies)|competenc(?:y|ies)|expertise)\s*$",
             re.IGNORECASE,
         ),
     ),
     (
         "projects",
         re.compile(
-            r"^\s*(?:personal\s+|academic\s+|key\s+|notable\s+|side\s+)?projects?\s*$",
+            r"^\s*(?:personal\s+|academic\s+|key\s+|notable\s+|side\s+)?(?:projects?|project\s+experience)\s*$",
             re.IGNORECASE,
         ),
     ),
     (
         "certifications",
         re.compile(
-            r"^\s*(?:certifications?|licenses?|credentials?|accreditations?)\s*$",
+            r"^\s*(?:certifications?|certificates?|licenses?|credentials?|accreditations?)\s*$",
             re.IGNORECASE,
         ),
     ),
@@ -138,7 +145,7 @@ _SECTION_PATTERNS: list[tuple[str, re.Pattern]] = [
     (
         "publications",
         re.compile(
-            r"^\s*(?:publications?|research(?:\s+(?:papers?|publications?))?|patents?|papers?)\s*$",
+            r"^\s*(?:publications?|research(?:\s+(?:papers?|publications?|experience))?|patents?|papers?)\s*$",
             re.IGNORECASE,
         ),
     ),
@@ -154,6 +161,20 @@ _SECTION_PATTERNS: list[tuple[str, re.Pattern]] = [
         re.compile(
             r"^\s*(?:volunteer(?:ing)?(?:\s+(?:experience|work|service))?"
             r"|community\s+service|social\s+work)\s*$",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "leadership",
+        re.compile(
+            r"^\s*(?:leadership(?:\s+(?:experience|roles?))?|extracurriculars?|activities)\s*$",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "hobbies",
+        re.compile(
+            r"^\s*(?:hobbies|interests|pastimes)\s*$",
             re.IGNORECASE,
         ),
     ),
@@ -235,7 +256,8 @@ def detect_sections(text: str) -> dict[str, str]:
     >>> print(sections.get("experience", ""))
     """
     if not text:
-        logger.warning("section_service: received empty text; returning empty dict")
+        logger.warning(
+            "section_service: received empty text; returning empty dict")
         return {}
 
     lines: list[str] = text.splitlines()

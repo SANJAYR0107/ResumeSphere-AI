@@ -95,7 +95,8 @@ class EmbeddingResult(TypedDict):
 # Singleton state
 # ---------------------------------------------------------------------------
 
-_model: Optional["SentenceTransformer"] = None          # SentenceTransformer instance (set by load_model)
+# SentenceTransformer instance (set by load_model)
+_model: Optional["SentenceTransformer"] = None
 _last_vector: Optional[np.ndarray] = None  # Most recently generated vector
 
 
@@ -181,7 +182,8 @@ def get_embedding(text: str) -> EmbeddingResult:
         dim = int(model.get_sentence_embedding_dimension() or 0)  # type: ignore
 
     if not text or not text.strip():
-        logger.warning("EmbeddingService: received empty text — returning zero vector")
+        logger.warning(
+            "EmbeddingService: received empty text — returning zero vector")
         _last_vector = np.zeros(dim, dtype=np.float32)
         return EmbeddingResult(
             dimension=dim,

@@ -18,7 +18,6 @@ Test matrix covers:
   - embedding_dimension is 384
 """
 
-import time
 
 import pytest
 
@@ -132,7 +131,10 @@ would like to be considered. Please find my credentials below. Thank you.
 # Helper
 # ---------------------------------------------------------------------------
 
-def run(text: str, filename: str = "test_resume.pdf", pages: int = 1) -> ResumeAnalysis:
+def run(
+        text: str,
+        filename: str = "test_resume.pdf",
+        pages: int = 1) -> ResumeAnalysis:
     return run_pipeline(raw_text=text, filename=filename, page_count=pages)
 
 

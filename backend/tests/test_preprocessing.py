@@ -47,7 +47,8 @@ class TestUnicodeNormalisation:
         assert result.startswith("Hello")
 
     def test_zero_width_space_removed(self):
-        result = preprocess("Pyth\u200Bon")   # zero-width space inside "Python"
+        # zero-width space inside "Python"
+        result = preprocess("Pyth\u200Bon")
         assert "\u200B" not in result
 
     def test_non_breaking_space_normalised(self):
@@ -85,7 +86,8 @@ class TestTypographicSubstitutions:
 class TestBulletNormalisation:
     """Bullet characters → "- " prefix."""
 
-    @pytest.mark.parametrize("bullet", ["•", "▪", "◦", "‣", "▸", "►", "➤", "✓", "✔", "→"])
+    @pytest.mark.parametrize("bullet",
+                             ["•", "▪", "◦", "‣", "▸", "►", "➤", "✓", "✔", "→"])
     def test_bullet_normalised_to_hyphen(self, bullet):
         text = f"{bullet} Implemented REST API"
         result = preprocess(text)
@@ -97,7 +99,8 @@ class TestBulletNormalisation:
         result = preprocess(text)
         lines = [ln for ln in result.splitlines() if ln.strip()]
         for line in lines:
-            assert line.strip().startswith("-"), f"Expected hyphen, got: {line}"
+            assert line.strip().startswith(
+                "-"), f"Expected hyphen, got: {line}"
 
 
 class TestWhitespaceCollapsing:

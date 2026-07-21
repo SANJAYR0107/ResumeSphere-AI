@@ -140,6 +140,7 @@ _JOB_PROFILES: dict[str, dict[str, Any]] = {
 # Module-level vector cache — populated lazily on first call
 _profile_vectors: Optional[Dict[str, np.ndarray]] = None
 
+
 def _cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
     """Return cosine similarity between two 1-D numpy arrays."""
     norm_a = float(np.linalg.norm(a))
@@ -147,6 +148,7 @@ def _cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
     if norm_a == 0.0 or norm_b == 0.0:
         return 0.0
     return float(np.dot(a, b) / (norm_a * norm_b))
+
 
 def _get_profile_vectors() -> dict[str, np.ndarray]:
     """Lazily embed all job profiles and cache the results."""
@@ -163,8 +165,11 @@ def _get_profile_vectors() -> dict[str, np.ndarray]:
             if vec is not None:
                 vectors[title] = vec.copy()
         _profile_vectors = vectors
-        logger.info("recommendation_service: %d profile vectors cached.", len(vectors))
+        logger.info(
+            "recommendation_service: %d profile vectors cached.",
+            len(vectors))
     return _profile_vectors
+
 
 def get_job_recommendations(
     resume_skills: list[str],
@@ -196,8 +201,7 @@ def get_job_recommendations(
             if resume_vec.shape != profile_vec.shape:
                 raise RuntimeError(
                     f"Dimension mismatch: resume_vec has shape {resume_vec.shape}, "
-                    f"but profile_vec '{title}' has shape {profile_vec.shape}."
-                )
+                    f"but profile_vec '{title}' has shape {profile_vec.shape}.")
             sem_sim = _cosine_similarity(resume_vec, profile_vec)
         else:
             sem_sim = 0.0
@@ -205,7 +209,8 @@ def get_job_recommendations(
         # Skill overlap
         profile_lower: set[str] = {s.lower() for s in profile["skills"]}
         overlap_count = len(resume_lower & profile_lower)
-        skill_sim = overlap_count / len(profile_lower) if profile_lower else 0.0
+        skill_sim = overlap_count / \
+            len(profile_lower) if profile_lower else 0.0
 
         # Matched skills for display
         matched = [s for s in profile["skills"] if s.lower() in resume_lower]

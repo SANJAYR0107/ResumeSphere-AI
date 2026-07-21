@@ -14,7 +14,6 @@ Test matrix covers:
   - Resume with unrecognised headings (captured as 'other')
 """
 
-import pytest
 
 from backend.app.services.section_service import detect_sections
 
@@ -196,7 +195,8 @@ class TestNoHeadingsResume:
 
     def test_no_sections_detected(self):
         result = detect_sections(NO_HEADINGS_RESUME)
-        # Should have no named sections — content may go into 'other' or be empty
+        # Should have no named sections — content may go into 'other' or be
+        # empty
         named_sections = {k for k in result if k != "other"}
         assert len(named_sections) == 0
 
@@ -241,7 +241,9 @@ class TestFreshGraduateResume:
 
     def test_education_contains_cgpa(self):
         result = detect_sections(FRESH_GRADUATE_RESUME)
-        assert "CGPA" in result.get("education", "") or "9.1" in result.get("education", "")
+        assert "CGPA" in result.get(
+            "education", "") or "9.1" in result.get(
+            "education", "")
 
     def test_skills_contains_git(self):
         result = detect_sections(FRESH_GRADUATE_RESUME)

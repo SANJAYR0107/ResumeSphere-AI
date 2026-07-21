@@ -14,6 +14,7 @@ from pathlib import Path
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from pydantic import BaseModel, Field
+from typing import Any
 
 from backend.app.config import MAX_UPLOAD_BYTES
 from backend.app.services.job_match_service import match_job_description
@@ -26,6 +27,11 @@ from backend.app.services.parser_service import (
 from backend.app.services.preprocessing_service import preprocess
 from backend.app.services.skill_extractor_service import extract_skills
 from backend.resume_pipeline import ResumeAnalysis, run_pipeline
+from backend.app.services.ats_service import compute_ats_score, AtsCategoryBreakdown
+from backend.app.services.section_service import detect_sections
+from backend.app.services.recommendation_service import get_job_recommendations
+from backend.app.services.skill_gap_service import analyze_skill_gap
+from backend.app.services.recruiter_service import generate_recruiter_insights
 
 # Module-level logger
 logger = logging.getLogger(__name__)
@@ -131,24 +137,27 @@ async def upload_resume(
     HTTPException (500)
         For any unexpected error during processing.
     """
-    # ── Step 1: Validate that the upload is a PDF ───────────────────────────────────────
+    # ── Step 1: Validate that the upload is a PDF ───────────────────────────
     validate_pdf(resume)
 
-    # ── Step 2: Persist the file to disk ──────────────────────────────────────────
+    # ── Step 2: Persist the file to disk ────────────────────────────────────
     saved_path: Path = save_uploaded_file(resume)
 
-    # ── Step 3: Extract raw text and page count from the PDF ──────────────────
+    # ── Step 3: Extract raw text and page count from the PDF ────────────────
+    import time
+    t0 = time.perf_counter()
     extraction_result: dict = extract_text_from_pdf(saved_path)
     raw_text: str = extraction_result["raw_text"]
     page_count: int = extraction_result["pages"]
+    logger.info("Parser time: %.1f ms", (time.perf_counter() - t0) * 1000)
 
-    # ── Step 4: Clean the extracted text ──────────────────────────────────────────
+    # ── Step 4: Clean the extracted text ────────────────────────────────────
     cleaned_text: str = clean_text(raw_text)
     # The full cleaned_text is intentionally kept here in-process.
     # Phase 3 NLP preprocessing (tokenization, lemmatization, etc.) will
     # consume it directly without re-reading from disk.
 
-    # ── Step 5: Slice a safe public preview ────────────────────────────────────
+    # ── Step 5: Slice a safe public preview ─────────────────────────────────
     preview: str = cleaned_text[:PREVIEW_LENGTH]
 
     logger.info(
@@ -159,7 +168,7 @@ async def upload_resume(
         len(preview),
     )
 
-    # ── Step 6: Build and return the structured response ───────────────────────
+    # ── Step 6: Build and return the structured response ────────────────────
     return UploadResponse(
         filename=resume.filename or "unknown.pdf",
         pages=page_count,
@@ -250,9 +259,29 @@ class AnalyzeResponse(BaseModel):
     processing_time_ms: int
     clean_text: str
     ats_score: int = Field(ge=0, le=100)
-    ats_breakdown: dict[str, int]
+    ats_breakdown: dict[str, AtsCategoryBreakdown]
+    ats_grade: str
+    hiring_probability: str
+    resume_strength_index: float
+    recruiter_confidence: str
     suggestions: list[str]
     job_recommendations: list[JobRecommendationSchema]
+    quality_report: Any
+    # ── Phase 2 fields ──────────────────────────────────────────────────
+    overall_score: Any
+    section_scores: Any
+    project_analysis: Any
+    skill_analysis: Any
+    experience_analysis: Any
+    grammar_analysis: Any
+    keyword_analysis: Any
+    summary_analysis: Any
+    strengths: list[str]
+    weaknesses: list[str]
+    actionable_suggestions: list[Any]
+    recruiter_summary: Any
+    career_insights: Any
+    interview_readiness: Any
 
 
 @router.post(
@@ -340,9 +369,12 @@ async def analyze_resume(
     saved_path: Path = save_uploaded_file(resume)
 
     # ── Step 4: Extract raw text via PyMuPDF ───────────────────────────────
+    import time
+    t0 = time.perf_counter()
     extraction: dict = extract_text_from_pdf(saved_path)
     raw_text: str = extraction["raw_text"]
     page_count: int = extraction["pages"]
+    logger.info("Parser time: %.1f ms", (time.perf_counter() - t0) * 1000)
 
     # ── Step 5: Run NLP pipeline ────────────────────────────────────────────
     try:
@@ -355,11 +387,22 @@ async def analyze_resume(
         logger.error("Pipeline error for '%s': %s", resume.filename, exc)
         raise HTTPException(status_code=500, detail=str(exc)) from exc
     except Exception as exc:  # noqa: BLE001
-        logger.error("Unexpected pipeline error for '%s': %s", resume.filename, exc)
+        logger.error(
+            "Unexpected pipeline error for '%s': %s",
+            resume.filename,
+            exc)
         raise HTTPException(
             status_code=500,
             detail=f"Unexpected error during NLP analysis: {exc}",
         ) from exc
+
+    # Generate Recruiter Insights based on the pipeline output
+    recruiter_data = generate_recruiter_insights(
+        ats_score=analysis["ats_score"],
+        skills=analysis["skills"],
+        experience_text=analysis["sections"].get("experience", ""),
+        projects_text=analysis["sections"].get("projects", "")
+    )
 
     # ── Step 6: Build and return the structured response ──────────────────
     return AnalyzeResponse(
@@ -382,6 +425,10 @@ async def analyze_resume(
         clean_text=analysis["clean_text"],
         ats_score=analysis["ats_score"],
         ats_breakdown=analysis["ats_breakdown"],
+        ats_grade=analysis.get("ats_grade", "N/A"),
+        hiring_probability=analysis.get("hiring_probability", "N/A"),
+        resume_strength_index=analysis.get("resume_strength_index", 0.0),
+        recruiter_confidence=analysis.get("recruiter_confidence", "N/A"),
         suggestions=analysis["suggestions"],
         job_recommendations=[
             JobRecommendationSchema(
@@ -392,6 +439,21 @@ async def analyze_resume(
             )
             for r in analysis["job_recommendations"]
         ],
+        quality_report=analysis["quality_report"],
+        overall_score=analysis["overall_score"],
+        section_scores=analysis["section_scores"],
+        project_analysis=analysis["project_analysis"],
+        skill_analysis=analysis["skill_analysis"],
+        experience_analysis=analysis["experience_analysis"],
+        grammar_analysis=analysis["grammar_analysis"],
+        keyword_analysis=analysis["keyword_analysis"],
+        summary_analysis=analysis["summary_analysis"],
+        strengths=analysis["strengths"],
+        weaknesses=analysis["weaknesses"],
+        actionable_suggestions=analysis["actionable_suggestions"],
+        recruiter_summary=recruiter_data["recruiter_summary"],
+        career_insights=recruiter_data["career_insights"],
+        interview_readiness=recruiter_data["interview_readiness"],
     )
 
 
@@ -490,14 +552,11 @@ async def job_match(
         semantic_similarity=result["semantic_similarity"],
     )
 
-from backend.app.services.ats_service import compute_ats_score
-from backend.app.services.section_service import detect_sections
-from backend.app.services.recommendation_service import get_job_recommendations
-from backend.app.services.skill_gap_service import analyze_skill_gap
 
 class SkillGapRequest(BaseModel):
     matched_skills: list[str]
     missing_skills: list[str]
+
 
 class SkillGapResponse(BaseModel):
     matched_skills: list[str]
@@ -505,41 +564,68 @@ class SkillGapResponse(BaseModel):
     recommended_skills: list[str]
     learning_suggestions: list[str]
 
-@router.post("/skill-gap", response_model=SkillGapResponse, tags=["Resume Analysis"])
+
+@router.post("/skill-gap",
+             response_model=SkillGapResponse,
+             tags=["Resume Analysis"])
 async def skill_gap(request: SkillGapRequest) -> SkillGapResponse:
     result = analyze_skill_gap(request.matched_skills, request.missing_skills)
     return SkillGapResponse(**result)
+
 
 class RecommendationsRequest(BaseModel):
     resume_skills: list[str]
     resume_text: str
 
+
 class RecommendationsResponse(BaseModel):
     recommendations: list[JobRecommendationSchema]
 
-@router.post("/recommendations", response_model=RecommendationsResponse, tags=["Resume Analysis"])
-async def recommendations(request: RecommendationsRequest) -> RecommendationsResponse:
+
+@router.post("/recommendations",
+             response_model=RecommendationsResponse,
+             tags=["Resume Analysis"])
+async def recommendations(
+        request: RecommendationsRequest) -> RecommendationsResponse:
     clean_resume = preprocess(request.resume_text)
     recs = get_job_recommendations(request.resume_skills, clean_resume)
     return RecommendationsResponse(
         recommendations=[JobRecommendationSchema(**r) for r in recs]
     )
 
+
 class AtsScoreRequest(BaseModel):
     resume_text: str
 
+
 class AtsScoreResponse(BaseModel):
     ats_score: int
-    breakdown: dict[str, int]
+    ats_grade: str
+    hiring_probability: str
+    resume_strength_index: float
+    recruiter_confidence: str
+    breakdown: dict[str, AtsCategoryBreakdown]
 
-@router.post("/ats-score", response_model=AtsScoreResponse, tags=["Resume Analysis"])
+
+@router.post("/ats-score",
+             response_model=AtsScoreResponse,
+             tags=["Resume Analysis"])
 async def ats_score(request: AtsScoreRequest) -> AtsScoreResponse:
     clean_resume = preprocess(request.resume_text)
     sections = detect_sections(clean_resume)
     skills_matches = extract_skills(clean_resume)
     skills = [s["skill"] for s in skills_matches]
-    result = compute_ats_score(sections, skills, clean_resume)
+    # quality_report is needed for the new ats scoring.
+    # In a lightweight ats_score endpoint, we can pass a dummy or run the basic quality check.
+    from backend.app.services.quality_service import analyze_quality
+    qr = analyze_quality(clean_resume, sections)
+    
+    result = compute_ats_score(sections, skills, clean_resume, qr)
     return AtsScoreResponse(
         ats_score=result["ats_score"],
+        ats_grade=result["ats_grade"],
+        hiring_probability=result["hiring_probability"],
+        resume_strength_index=result["resume_strength_index"],
+        recruiter_confidence=result["recruiter_confidence"],
         breakdown=result["breakdown"]
     )

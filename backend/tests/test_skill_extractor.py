@@ -18,10 +18,8 @@ Test matrix covers:
   - get_loaded_skill_count() returns positive integer
 """
 
-import pytest
 
 from backend.app.services.skill_extractor_service import (
-    SkillMatch,
     extract_skills,
     get_loaded_skill_count,
     get_skill_names,
@@ -252,7 +250,6 @@ class TestConfidenceScores:
 
 
 # ---------------------------------------------------------------------------
-# Tests: SkillMatch TypedDict structure
 # ---------------------------------------------------------------------------
 
 class TestReturnStructure:

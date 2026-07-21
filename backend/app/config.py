@@ -29,7 +29,8 @@ UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 # ---------------------------------------------------------------------------
 
 # Only PDF files are accepted by the upload endpoint
-ALLOWED_CONTENT_TYPE: str = "application/pdf"       # single value for equality checks
+# single value for equality checks
+ALLOWED_CONTENT_TYPE: str = "application/pdf"
 ALLOWED_EXTENSIONS: tuple[str, ...] = (".pdf",)
 
 # ---------------------------------------------------------------------------

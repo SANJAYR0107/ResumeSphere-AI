@@ -66,6 +66,28 @@ from backend.app.config import SKILLS_CSV_PATH
 
 logger = logging.getLogger(__name__)
 
+# ---------------------------------------------------------------------------
+# Synonyms Map
+# ---------------------------------------------------------------------------
+_SYNONYM_MAP: dict[str, str] = {
+    "js": "javascript",
+    "node": "node.js",
+    "nodejs": "node.js",
+    "node js": "node.js",
+    "ml": "machine learning",
+    "ai": "artificial intelligence",
+    "reactjs": "react",
+    "react.js": "react",
+    "vue": "vue.js",
+    "golang": "go",
+    "k8s": "kubernetes",
+    "aws": "amazon web services",
+    "gcp": "google cloud platform",
+    "nlp": "natural language processing",
+    "llm": "large language models",
+    "spring": "spring boot",  # As requested by user
+}
+
 
 # ---------------------------------------------------------------------------
 # Data Types
@@ -113,7 +135,8 @@ class _SkillsDatabase:
                     f"skills.csv must have columns 'skill' and 'category'. "
                     f"Found: {reader.fieldnames}"
                 )
-            for row_num, row in enumerate(reader, start=2):  # 2 = first data row
+            for row_num, row in enumerate(
+                    reader, start=2):  # 2 = first data row
                 skill = (row.get("skill") or "").strip()
                 category = (row.get("category") or "").strip()
                 if not skill or not category:
@@ -125,8 +148,20 @@ class _SkillsDatabase:
                     )
                     continue
                 key = skill.lower()
+                # Apply synonym normalization at load time as well if needed
+                if key in _SYNONYM_MAP:
+                    key = _SYNONYM_MAP[key]
                 self.skills[key] = category
-                self.canonical[key] = skill
+                # Only set canonical name if not already set or if it's
+                # longer/better
+                if key not in self.canonical:
+                    self.canonical[key] = skill
+
+        # Also register synonyms so the regex pattern picks them up
+        for syn, canon in _SYNONYM_MAP.items():
+            if canon in self.skills:
+                self.skills[syn] = self.skills[canon]
+                self.canonical[syn] = self.canonical[canon]
 
         logger.info(
             "skill_extractor: loaded %d skills from '%s'",
@@ -186,10 +221,12 @@ def extract_skills(text: str) -> list[SkillMatch]:
         logger.info("skill_extractor: no skills detected in text")
         return []
 
-    # Count occurrences per skill (case-normalised)
+    # Count occurrences per skill (case-normalised and synonym-normalised)
     frequency: dict[str, int] = {}
     for m in matches:
         key = m.group(0).lower()
+        if key in _SYNONYM_MAP:
+            key = _SYNONYM_MAP[key]
         frequency[key] = frequency.get(key, 0) + 1
 
     max_count: int = max(frequency.values())

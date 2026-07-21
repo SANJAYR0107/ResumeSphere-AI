@@ -33,10 +33,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentResumeText = '';
     let currentResumeSkills = [];
 
-    const API_URL = 'http://127.0.0.1:8000/api';
+    let API_URL = 'http://127.0.0.1:8000/api';
+    if (window.location.port === '8000' || (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && window.location.protocol !== 'file:')) {
+        API_URL = '/api';
+    }
+
+    // Theme Logic
+    const themeBtn = document.getElementById('theme-toggle-btn');
+    if (themeBtn) {
+        if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        });
+    }
 
     // Radial Progress Configuration
-    const radius = scoreRing.r.baseVal.value;
+    const radius = 100;
     const circumference = radius * 2 * Math.PI;
     scoreRing.style.strokeDasharray = `${circumference} ${circumference}`;
     scoreRing.style.strokeDashoffset = circumference;
@@ -56,16 +69,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 scoreNumber.textContent = percent;
             }
         }, stepTime);
+    }
+
+    function setGauge(ring, textEl, evalEl, percent) {
+        const offset = circumference - (percent / 100) * circumference;
+        ring.style.strokeDashoffset = offset;
+        
+        let current = 0;
+        const duration = 800; // ms
+        const stepTime = Math.abs(Math.floor(duration / percent)) || 10;
+        const timer = setInterval(() => {
+            current += 1;
+            textEl.textContent = current;
+            if (current >= percent) {
+                clearInterval(timer);
+                textEl.textContent = percent;
+            }
+        }, stepTime);
 
         if (percent >= 85) {
-            scoreEvaluation.textContent = "Excellent Match Potential!";
-            scoreEvaluation.style.color = "#00f2fe";
+            evalEl.textContent = "Excellent";
+            evalEl.style.color = "#00f2fe";
         } else if (percent >= 70) {
-            scoreEvaluation.textContent = "Good Match Potential";
-            scoreEvaluation.style.color = "#4facfe";
+            evalEl.textContent = "Good";
+            evalEl.style.color = "#4facfe";
         } else {
-            scoreEvaluation.textContent = "Needs Optimization";
-            scoreEvaluation.style.color = "#e100ff";
+            evalEl.textContent = "Needs Work";
+            evalEl.style.color = "#e100ff";
         }
     }
 
@@ -158,18 +188,202 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderResults(analyzeData, recData, atsData) {
         resultsContainer.classList.remove('hidden');
+        document.getElementById('export-pdf-btn').style.display = 'inline-flex';
 
-        // Render ATS Score
-        setScore(atsData.ats_score || 0);
+        // 1. Overall Score
+        const overall = analyzeData.overall_score || { overall_score: 0, explanation: "N/A" };
+        setScore(overall.overall_score);
+        document.getElementById('score-explanation').textContent = overall.explanation;
 
-        // Render Skills
+        // Hero Summary Card updates
+        document.getElementById('hero-ats-grade').textContent = analyzeData.ats_grade || "N/A";
+        document.getElementById('hero-hiring-prob').textContent = analyzeData.hiring_probability || "N/A";
+        document.getElementById('hero-strength-index').textContent = analyzeData.resume_strength_index || "N/A";
+        document.getElementById('hero-confidence').textContent = analyzeData.recruiter_confidence || "N/A";
+
+        // Gauges
+        const atsRing = document.getElementById('ats-ring');
+        const atsScoreText = document.getElementById('ats-score-number');
+        const atsEval = document.getElementById('ats-score-evaluation');
+        if (atsRing) setGauge(atsRing, atsScoreText, atsEval, analyzeData.ats_score || 0);
+
+        const intRing = document.getElementById('interview-ring');
+        const intScoreText = document.getElementById('interview-score-number');
+        const intEval = document.getElementById('interview-score-evaluation');
+        if (intRing) {
+            const intScore = analyzeData.interview_readiness?.interview_score || 0;
+            setGauge(intRing, intScoreText, intEval, intScore);
+        }
+
+        // 2. Section Scores Grid
+        const grid = document.getElementById('section-scores-grid');
+        grid.innerHTML = '';
+        if (analyzeData.section_scores) {
+            Object.entries(analyzeData.section_scores).forEach(([key, data]) => {
+                const color = data.score >= 80 ? '#10b981' : (data.score >= 50 ? '#f59e0b' : '#ef4444');
+                grid.innerHTML += `
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 15px; border-radius: 10px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <strong style="text-transform:capitalize; font-size:0.95rem;">${key.replace('_', ' ')}</strong>
+                            <span style="font-weight:bold; color:${color};">${data.score}%</span>
+                        </div>
+                        <div style="width:100%; height:6px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden;">
+                            <div style="height:100%; width:${data.score}%; background:${color};"></div>
+                        </div>
+                        <div style="font-size:0.75rem; color:var(--text-muted); margin-top:8px;">${escapeHtml(data.reason)}</div>
+                    </div>
+                `;
+            });
+        }
+
+        // 3. Radar Chart for Skills
+        const ctx = document.getElementById('skillRadarChart').getContext('2d');
+        if (window.myRadarChart) {
+            window.myRadarChart.destroy();
+        }
+        
+        const skillGroups = analyzeData.skill_analysis?.groups || {};
+        const labels = Object.keys(skillGroups);
+        const dataPoints = labels.map(l => skillGroups[l].length);
+        
+        if (labels.length > 0) {
+            window.myRadarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Skill Count',
+                        data: dataPoints,
+                        backgroundColor: 'rgba(0, 242, 254, 0.2)',
+                        borderColor: '#00f2fe',
+                        pointBackgroundColor: '#e100ff',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#e100ff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#9aa2b1', font: { size: 12 } },
+                            ticks: { display: false, max: Math.max(...dataPoints) + 2 }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // 4. Strengths & Weaknesses
+        const slist = document.getElementById('strengths-list');
+        const wlist = document.getElementById('weaknesses-list');
+        slist.innerHTML = (analyzeData.strengths || []).map(s => `<li>${escapeHtml(s)}</li>`).join('');
+        wlist.innerHTML = (analyzeData.weaknesses || []).map(w => `<li>${escapeHtml(w)}</li>`).join('');
+
+        // 5. Actionable Suggestions
+        const actionList = document.getElementById('actionable-suggestions-list');
+        if (analyzeData.actionable_suggestions) {
+            actionList.innerHTML = analyzeData.actionable_suggestions.map(s => {
+                const badgeColor = s.priority === 'High' ? '#ef4444' : (s.priority === 'Medium' ? '#f59e0b' : '#3b82f6');
+                return `
+                    <div style="background: rgba(255,255,255,0.03); padding: 12px; border-left: 3px solid ${badgeColor}; border-radius: 6px;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                            <strong style="color:var(--text-primary); font-size:0.95rem;">${escapeHtml(s.suggestion)}</strong>
+                            <span style="font-size:0.75rem; background: ${badgeColor}20; color:${badgeColor}; padding:2px 8px; border-radius:12px;">${s.priority} Priority</span>
+                        </div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">
+                            <i class="fa-solid fa-hammer"></i> Difficulty: ${s.difficulty} &nbsp;|&nbsp; 
+                            <i class="fa-solid fa-clock"></i> Time: ${s.estimated_learning_time}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Recruiter Insights DOM Updates
+        if (analyzeData.recruiter_summary) {
+            document.getElementById('recruiter-impression').textContent = analyzeData.recruiter_summary.overall_impression;
+            const recEl = document.getElementById('recruiter-recommendation');
+            recEl.textContent = analyzeData.recruiter_summary.hiring_recommendation;
+            recEl.style.color = analyzeData.recruiter_summary.pass_ats ? '#10b981' : '#ef4444';
+        }
+        if (analyzeData.career_insights) {
+            document.getElementById('career-level').textContent = analyzeData.career_insights.career_level;
+            document.getElementById('career-roles').textContent = analyzeData.career_insights.best_job_roles.join(', ');
+            document.getElementById('career-roadmap-list').innerHTML = analyzeData.career_insights.learning_roadmap.map(s => `<li>${escapeHtml(s)}</li>`).join('');
+        }
+        if (analyzeData.interview_readiness) {
+            document.getElementById('interview-questions-list').innerHTML = analyzeData.interview_readiness.likely_questions.map(s => `<li>${escapeHtml(s)}</li>`).join('');
+        }
+
+        // Section Breakdown Bar Chart
+        if (analyzeData.ats_breakdown) {
+            const barCtx = document.getElementById('sectionBarChart')?.getContext('2d');
+            if (barCtx) {
+                if (window.myBarChart) window.myBarChart.destroy();
+                const bLabels = Object.keys(analyzeData.ats_breakdown).map(l => l.replace('_', ' '));
+                const bData = Object.values(analyzeData.ats_breakdown).map(v => v.score || v);
+                window.myBarChart = new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: bLabels,
+                        datasets: [{
+                            label: 'ATS Breakdown Score',
+                            data: bData,
+                            backgroundColor: 'rgba(79, 172, 254, 0.5)',
+                            borderColor: '#4facfe',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: true, max: 100, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+        }
+
+        // 6. Deep Analysis
+        if (analyzeData.project_analysis) {
+            document.getElementById('project-analysis-content').innerHTML = `
+                <p><strong>Complexity:</strong> ${analyzeData.project_analysis.complexity}</p>
+                <p><strong>Action Verbs Used:</strong> ${analyzeData.project_analysis.action_verbs_used}</p>
+                <p><strong>Missing Metrics:</strong> ${analyzeData.project_analysis.missing_metrics ? "Yes" : "No"}</p>
+                <p><strong>Suggestions:</strong> ${analyzeData.project_analysis.suggestions.join(', ')}</p>
+            `;
+        }
+        if (analyzeData.experience_analysis) {
+            document.getElementById('experience-analysis-content').innerHTML = `
+                <p><strong>Estimated YOE:</strong> ${analyzeData.experience_analysis.estimated_years}</p>
+                <p><strong>Achievements Found:</strong> ${analyzeData.experience_analysis.achievements_found}</p>
+                <p><strong>Leadership Detected:</strong> ${analyzeData.experience_analysis.leadership_detected ? "Yes" : "No"}</p>
+                <p><strong>Suggestions:</strong> ${analyzeData.experience_analysis.suggestions.join(', ')}</p>
+            `;
+        }
+        if (analyzeData.grammar_analysis) {
+            document.getElementById('grammar-analysis-content').innerHTML = `
+                <p><strong>Passive Voice Instances:</strong> ${analyzeData.grammar_analysis.passive_voice_instances}</p>
+                <p><strong>Capitalization Issues:</strong> ${analyzeData.grammar_analysis.capitalization_issues ? "Yes" : "No"}</p>
+                <p><strong>Bullet Consistency:</strong> ${analyzeData.grammar_analysis.bullet_consistency}</p>
+                <p><strong>Findings:</strong> ${analyzeData.grammar_analysis.findings.join(', ')}</p>
+            `;
+        }
+
+        // 7. Render Skills
         if (skillsGrid) {
             skillsGrid.innerHTML = analyzeData.skills.length > 0 
                 ? analyzeData.skills.map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join('')
                 : '<span class="skill-tag">No skills detected</span>';
         }
 
-        // Render Job Recommendations
+        // 8. Render Job Recommendations
         if (jobList) {
             if (recData.recommendations && recData.recommendations.length > 0) {
                 jobList.innerHTML = recData.recommendations.map(job => `
@@ -184,18 +398,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Render Suggestions (from analyzeData.suggestions)
-        if (suggestionsList && analyzeData.suggestions) {
-            suggestionsList.innerHTML = analyzeData.suggestions.length > 0
-                ? analyzeData.suggestions.map(s => `<li style="margin-bottom:8px; padding-left:20px; position:relative;"><i class="fa-solid fa-check text-accent" style="position:absolute; left:0; top:4px;"></i> ${escapeHtml(s)}</li>`).join('')
-                : '<li style="color:#10b981;">No suggestions! Your resume is looking great.</li>';
-        }
-
-        // Extracted Text Accordion
         if (extractedTextDisplay) {
             extractedTextDisplay.textContent = analyzeData.clean_text || "No text extracted.";
         }
     }
+
+    // Export PDF Logic
+    document.getElementById('export-pdf-btn')?.addEventListener('click', () => {
+        const element = document.getElementById('results-container');
+        const opt = {
+            margin:       0.5,
+            filename:     'resume-analysis.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+    });
 
     // JD Matching Flow
     if (jdMatchBtn) {

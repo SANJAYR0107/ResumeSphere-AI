@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Resume Analyzer - Next-Gen ATS Optimizer</title>
+    <!-- CDNs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- Modern Typography: Outfit & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,6 +28,10 @@
                 <span class="logo-text">ResumeSphere <span class="accent-text">AI</span></span>
             </div>
             <p class="subtitle">Extract text, calculate ATS scores, and find matched job recommendations instantly</p>
+            <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">
+                <button class="btn btn-primary" id="theme-toggle-btn" style="background: rgba(255,255,255,0.1); color: var(--text-primary); border: 1px solid var(--border-color); box-shadow: none;"><i class="fa-solid fa-moon"></i> Theme</button>
+                <button class="btn btn-primary" id="export-pdf-btn" style="display: none;"><i class="fa-solid fa-file-pdf"></i> Export Dashboard</button>
+            </div>
         </header>
 
         <!-- Main Workspace -->
@@ -65,58 +72,193 @@
 
             <!-- Results Section (Hidden by default) -->
             <section class="results-container hidden" id="results-container">
-                <div class="results-grid">
+                
+                <!-- HERO SUMMARY CARD -->
+                <div class="card" id="hero-summary-card" style="text-align: center; border-top: 4px solid var(--accent-blue);">
+                    <h2 class="card-title" style="justify-content: center;"><i class="fa-solid fa-chart-line"></i> AI Executive Summary</h2>
+                    <div style="display: flex; flex-wrap: wrap; justify-content: space-around; gap: 20px; margin-top: 20px;">
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">ATS Grade</p>
+                            <h3 id="hero-ats-grade" style="font-size: 2.5rem; color: var(--accent-cyan); font-family: var(--font-heading);">A+</h3>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">Hiring Probability</p>
+                            <h3 id="hero-hiring-prob" style="font-size: 1.8rem; color: #10b981; font-family: var(--font-heading); margin-top: 10px;">Excellent</h3>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">Resume Strength</p>
+                            <h3 id="hero-strength-index" style="font-size: 2.5rem; color: var(--accent-purple); font-family: var(--font-heading);">9.5</h3>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">Recruiter Confidence</p>
+                            <h3 id="hero-confidence" style="font-size: 1.8rem; color: var(--text-primary); font-family: var(--font-heading); margin-top: 10px;">Very High</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOP LEVEL: Score Gauges -->
+                <div class="results-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
                     
-                    <!-- Left: ATS Score Gauge -->
+                    <!-- Left: Overall Score Gauge -->
                     <div class="card result-card score-card">
-                        <h3 class="card-subtitle"><i class="fa-solid fa-chart-simple"></i> ATS Score</h3>
-                        <div class="gauge-wrapper">
-                            <svg class="progress-ring" width="200" height="200">
-                                <circle class="progress-ring-bg" stroke="rgba(255, 255, 255, 0.05)" stroke-width="12" fill="transparent" r="80" cx="100" cy="100"/>
-                                <circle class="progress-ring-bar" id="score-ring" stroke="url(#gradient-cyan-purple)" stroke-dasharray="502.6" stroke-dashoffset="502.6" stroke-width="12" stroke-linecap="round" fill="transparent" r="80" cx="100" cy="100"/>
+                        <h3 class="card-subtitle"><i class="fa-solid fa-trophy"></i> Overall Resume Score</h3>
+                        <div class="gauge-wrapper" style="width: 250px; height: 250px;">
+                            <svg class="progress-ring" width="250" height="250">
+                                <circle class="progress-ring-bg" stroke="rgba(255, 255, 255, 0.05)" stroke-width="15" fill="transparent" r="100" cx="125" cy="125"/>
+                                <circle class="progress-ring-bar" id="score-ring" stroke="url(#gradient-cyan-purple)" stroke-dasharray="628" stroke-dashoffset="628" stroke-width="15" stroke-linecap="round" fill="transparent" r="100" cx="125" cy="125"/>
                                 <defs>
                                     <linearGradient id="gradient-cyan-purple" x1="0%" y1="0%" x2="100%" y2="100%">
                                         <stop offset="0%" stop-color="#00f2fe" />
-                                        <stop offset="100%" stop-color="#4facfe" />
+                                        <stop offset="100%" stop-color="#e100ff" />
                                     </linearGradient>
                                 </defs>
                             </svg>
-                            <div class="gauge-text">
-                                <span class="score-number" id="score-number">0</span>
-                                <span class="score-percent">%</span>
+                            <div class="gauge-text" style="top: 50%; left: 50%;">
+                                <span class="score-number" id="score-number" style="font-size: 4.5rem;">0</span>
+                                <span class="score-percent" style="font-size: 2rem;">%</span>
                             </div>
                         </div>
                         <p class="score-evaluation" id="score-evaluation">Scanning complete.</p>
+                        <p id="score-explanation" style="text-align:center; color:var(--text-secondary); margin-top:10px; font-size:0.9rem;"></p>
                     </div>
 
-                    <!-- Right: Extracted Skills -->
-                    <div class="card result-card skills-card">
-                        <h3 class="card-subtitle"><i class="fa-solid fa-brain"></i> Extracted Skills</h3>
-                        <p class="card-desc">Keywords extracted using NLP Processing</p>
-                        <div class="skills-grid" id="skills-grid">
-                            <!-- Skill tags dynamically generated -->
+                    <!-- Middle: ATS Score Gauge -->
+                    <div class="card result-card score-card">
+                        <h3 class="card-subtitle"><i class="fa-solid fa-robot"></i> ATS Score</h3>
+                        <div class="gauge-wrapper" style="width: 250px; height: 250px;">
+                            <svg class="progress-ring" width="250" height="250">
+                                <circle class="progress-ring-bg" stroke="rgba(255, 255, 255, 0.05)" stroke-width="15" fill="transparent" r="100" cx="125" cy="125"/>
+                                <circle class="progress-ring-bar" id="ats-ring" stroke="url(#gradient-cyan-purple)" stroke-dasharray="628" stroke-dashoffset="628" stroke-width="15" stroke-linecap="round" fill="transparent" r="100" cx="125" cy="125"/>
+                            </svg>
+                            <div class="gauge-text" style="top: 50%; left: 50%;">
+                                <span class="score-number" id="ats-score-number" style="font-size: 4.5rem;">0</span>
+                                <span class="score-percent" style="font-size: 2rem;">%</span>
+                            </div>
+                        </div>
+                        <p class="score-evaluation" id="ats-score-evaluation">Scanning complete.</p>
+                    </div>
+
+                    <!-- Right: Interview Readiness Gauge -->
+                    <div class="card result-card score-card">
+                        <h3 class="card-subtitle"><i class="fa-solid fa-user-tie"></i> Interview Readiness</h3>
+                        <div class="gauge-wrapper" style="width: 250px; height: 250px;">
+                            <svg class="progress-ring" width="250" height="250">
+                                <circle class="progress-ring-bg" stroke="rgba(255, 255, 255, 0.05)" stroke-width="15" fill="transparent" r="100" cx="125" cy="125"/>
+                                <circle class="progress-ring-bar" id="interview-ring" stroke="url(#gradient-cyan-purple)" stroke-dasharray="628" stroke-dashoffset="628" stroke-width="15" stroke-linecap="round" fill="transparent" r="100" cx="125" cy="125"/>
+                            </svg>
+                            <div class="gauge-text" style="top: 50%; left: 50%;">
+                                <span class="score-number" id="interview-score-number" style="font-size: 4.5rem;">0</span>
+                                <span class="score-percent" style="font-size: 2rem;">%</span>
+                            </div>
+                        </div>
+                        <p class="score-evaluation" id="interview-score-evaluation" style="color: var(--accent-purple);">Scanning complete.</p>
+                    </div>
+                </div>
+
+                <!-- CHARTS ROW -->
+                <div class="results-grid" style="grid-template-columns: 1fr 1fr;">
+                    <!-- Skill Radar Chart -->
+                    <div class="card result-card">
+                        <h3 class="card-subtitle"><i class="fa-solid fa-chart-radar"></i> Skill Distribution</h3>
+                        <div style="position: relative; height: 300px; width: 100%;">
+                            <canvas id="skillRadarChart"></canvas>
                         </div>
                     </div>
+                    
+                    <!-- Section Breakdown Bar Chart -->
+                    <div class="card result-card">
+                        <h3 class="card-subtitle"><i class="fa-solid fa-chart-simple"></i> Score Comparison</h3>
+                        <div style="position: relative; height: 300px; width: 100%;">
+                            <canvas id="sectionBarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recruiter Insights Section -->
+                <div class="card" style="border-top: 4px solid var(--accent-purple);">
+                    <h3 class="card-subtitle" style="color: var(--accent-purple);"><i class="fa-solid fa-user-check"></i> Recruiter Insights</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 15px;">
+                        <div style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <h4 style="color: var(--accent-cyan); margin-bottom: 10px;"><i class="fa-solid fa-clipboard-user"></i> Recruiter Summary</h4>
+                            <p id="recruiter-impression" style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5;"></p>
+                            <p style="margin-top: 10px; font-weight: bold;">Recommendation: <span id="recruiter-recommendation"></span></p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <h4 style="color: var(--accent-blue); margin-bottom: 10px;"><i class="fa-solid fa-road"></i> Career Roadmap</h4>
+                            <p><strong>Level:</strong> <span id="career-level"></span></p>
+                            <p style="margin-top: 5px;"><strong>Best Roles:</strong> <span id="career-roles"></span></p>
+                            <ul id="career-roadmap-list" style="margin-top: 10px; padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem;"></ul>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <h4 style="color: var(--accent-pink); margin-bottom: 10px;"><i class="fa-solid fa-comments"></i> Interview Prep</h4>
+                            <p style="margin-top: 5px; font-size: 0.9rem;"><strong>Likely Questions:</strong></p>
+                            <ul id="interview-questions-list" style="margin-top: 5px; padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem;"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MIDDLE LEVEL: 10-Grid Section Scores -->
+                <div class="card">
+                    <h3 class="card-subtitle"><i class="fa-solid fa-chart-bar"></i> Detailed Breakdown</h3>
+                    <div class="section-scores-grid" id="section-scores-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+
+                <!-- STRENGTHS & WEAKNESSES -->
+                <div class="results-grid" style="grid-template-columns: 1fr 1fr;">
+                    <div class="card" style="border-top: 4px solid #10b981;">
+                        <h3 class="card-subtitle" style="color: #10b981;"><i class="fa-solid fa-arrow-trend-up"></i> Top Strengths</h3>
+                        <ul id="strengths-list" style="padding-left: 20px; color: #f1f3f9; line-height: 1.8;"></ul>
+                    </div>
+                    <div class="card" style="border-top: 4px solid #ef4444;">
+                        <h3 class="card-subtitle" style="color: #ef4444;"><i class="fa-solid fa-arrow-trend-down"></i> Areas for Improvement</h3>
+                        <ul id="weaknesses-list" style="padding-left: 20px; color: #f1f3f9; line-height: 1.8;"></ul>
+                    </div>
+                </div>
+
+                <!-- ACTIONABLE SUGGESTIONS -->
+                <div class="card suggestions-card">
+                    <h3 class="card-subtitle"><i class="fa-solid fa-list-check"></i> Actionable Suggestions</h3>
+                    <div id="actionable-suggestions-list" style="display: flex; flex-direction: column; gap: 10px;">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+
+                <!-- DEEP ANALYSIS ACCORDIONS -->
+                <div class="card">
+                    <h3 class="card-subtitle"><i class="fa-solid fa-microscope"></i> Deep NLP Analysis</h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        
+                        <details style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px;">
+                            <summary style="cursor: pointer; font-weight: 600; color: var(--accent-cyan);">Project Analysis</summary>
+                            <div id="project-analysis-content" style="margin-top: 10px; font-size: 0.9rem; color: var(--text-secondary);"></div>
+                        </details>
+                        
+                        <details style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px;">
+                            <summary style="cursor: pointer; font-weight: 600; color: var(--accent-cyan);">Experience Analysis</summary>
+                            <div id="experience-analysis-content" style="margin-top: 10px; font-size: 0.9rem; color: var(--text-secondary);"></div>
+                        </details>
+                        
+                        <details style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px;">
+                            <summary style="cursor: pointer; font-weight: 600; color: var(--accent-cyan);">Grammar & Tone</summary>
+                            <div id="grammar-analysis-content" style="margin-top: 10px; font-size: 0.9rem; color: var(--text-secondary);"></div>
+                        </details>
+                    </div>
+                </div>
+
+                <!-- Extracted Skills -->
+                <div class="card result-card skills-card">
+                    <h3 class="card-subtitle"><i class="fa-solid fa-brain"></i> Extracted Skills</h3>
+                    <div class="skills-grid" id="skills-grid"></div>
                 </div>
 
                 <!-- Job Recommendations -->
                 <div class="card recommendations-card">
                     <h3 class="card-subtitle"><i class="fa-solid fa-briefcase"></i> Job Recommendations</h3>
-                    <p class="card-desc">Top matched profiles based on resume skill analysis</p>
-                    <div class="job-list" id="job-list">
-                        <!-- Job cards dynamically generated -->
-                    </div>
+                    <div class="job-list" id="job-list"></div>
                 </div>
                 
-                <!-- Resume Suggestions -->
-                <div class="card suggestions-card">
-                    <h3 class="card-subtitle"><i class="fa-solid fa-wand-magic-sparkles"></i> Resume Suggestions</h3>
-                    <p class="card-desc">Actionable feedback to improve your ATS score</p>
-                    <ul class="suggestions-list" id="suggestions-list">
-                        <!-- Suggestions dynamically generated -->
-                    </ul>
-                </div>
-
                 <!-- Job Description Matching & Skill Gap -->
                 <div class="card jd-match-card">
                     <h3 class="card-subtitle"><i class="fa-solid fa-bullseye"></i> Job Description Match & Skill Gap</h3>

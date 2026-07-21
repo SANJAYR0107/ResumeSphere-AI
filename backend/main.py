@@ -19,6 +19,14 @@ import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
 
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+
+from backend.app.api.routes import router
+from backend.app.config import API_DESCRIPTION, API_TITLE, API_VERSION
+from backend.app.services.embedding_service import load_model as load_embedding_model
+
 # ---------------------------------------------------------------------------
 # Logging Configuration
 # ---------------------------------------------------------------------------
@@ -30,14 +38,6 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 logger = logging.getLogger(__name__)
-
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-
-from backend.app.api.routes import router
-from backend.app.config import API_DESCRIPTION, API_TITLE, API_VERSION
-from backend.app.services.embedding_service import load_model as load_embedding_model
 
 
 # ---------------------------------------------------------------------------
@@ -70,7 +70,8 @@ async def lifespan(application: FastAPI):
         # Log the error but do NOT crash the server — /api/upload still works
         # without the embedding model.  /api/analyze will return HTTP 500 if
         # the model failed to load.
-        logger.error("Startup WARNING: embedding model failed to load: %s", exc)
+        logger.error(
+            "Startup WARNING: embedding model failed to load: %s", exc)
 
     yield  # Server is now handling requests
 
@@ -100,7 +101,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],          # permits any origin — fine for local dev
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],          # GET, POST, OPTIONS, etc.
     allow_headers=["*"],          # Content-Type, Authorization, etc.
 )
@@ -122,4 +123,9 @@ FRONTEND_DIR: Path = Path(__file__).resolve().parent.parent / "frontend"
 if FRONTEND_DIR.is_dir():
     # Serve the frontend at / — must be mounted AFTER the API router so that
     # /api/* routes are not swallowed by the static file handler.
-    app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
+    app.mount(
+        "/",
+        StaticFiles(
+            directory=str(FRONTEND_DIR),
+            html=True),
+        name="frontend")

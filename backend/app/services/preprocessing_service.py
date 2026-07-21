@@ -64,10 +64,14 @@ _RE_HSPACE: re.Pattern = re.compile(r"[^\S\n]+")
 # Matches three or more consecutive newlines (with optional spaces between).
 _RE_EXCESS_BLANK: re.Pattern = re.compile(r"\n(\s*\n){2,}")
 
-# Bullet-point characters commonly produced by PDF renderers.
+# Matches a hyphen at the end of a line followed by a newline and optional
+# spaces
+_RE_HYPHENATED_NEWLINE: re.Pattern = re.compile(r"-\n\s*")
+
+# Bullet-point characters commonly produced by PDF renderers, plus standard ascii ones
 # Normalised to "- " (hyphen + space) for uniform downstream parsing.
 _RE_BULLETS: re.Pattern = re.compile(
-    r"^\s*[•▪◦‣▸►➤✓✔→]\s*",
+    r"^\s*(?:[•▪◦‣▸►➤✓✔→\*\+]|-(?!\w))\s*",
     re.MULTILINE,
 )
 
@@ -81,19 +85,34 @@ _RE_BULLETS: re.Pattern = re.compile(
 _TYPOGRAPHIC_MAP: dict[str, str] = {
     "\u2018": "'",   # LEFT SINGLE QUOTATION MARK
     "\u2019": "'",   # RIGHT SINGLE QUOTATION MARK
+    "\u201A": "'",   # SINGLE LOW-9 QUOTATION MARK
+    "\u201B": "'",   # SINGLE HIGH-REVERSED-9 QUOTATION MARK
     "\u201C": '"',   # LEFT DOUBLE QUOTATION MARK
     "\u201D": '"',   # RIGHT DOUBLE QUOTATION MARK
+    "\u201E": '"',   # DOUBLE LOW-9 QUOTATION MARK
+    "\u201F": '"',   # DOUBLE HIGH-REVERSED-9 QUOTATION MARK
+    "\u2010": "-",   # HYPHEN
+    "\u2011": "-",   # NON-BREAKING HYPHEN
+    "\u2012": "-",   # FIGURE DASH
     "\u2013": "-",   # EN DASH
     "\u2014": "-",   # EM DASH
     "\u2015": "-",   # HORIZONTAL BAR
-    "\u2026": "...", # HORIZONTAL ELLIPSIS
+    "\u2026": "...",  # HORIZONTAL ELLIPSIS
     "\u00A0": " ",   # NON-BREAKING SPACE
+    "\u2007": " ",   # FIGURE SPACE
+    "\u202F": " ",   # NARROW NO-BREAK SPACE
+    "\t": " ",       # TAB
     "\u200B": "",    # ZERO WIDTH SPACE
     "\u200C": "",    # ZERO WIDTH NON-JOINER
     "\u200D": "",    # ZERO WIDTH JOINER
+    "\u200E": "",    # LEFT-TO-RIGHT MARK
+    "\u200F": "",    # RIGHT-TO-LEFT MARK
     "\uFEFF": "",    # BYTE ORDER MARK
     "\u00AD": "",    # SOFT HYPHEN
-    "\u2022": "-",   # BULLET (extra safety — also caught by _RE_BULLETS)
+    "\u2022": "-",   # BULLET
+    "\u25E6": "-",   # WHITE BULLET
+    "\u25AA": "-",   # BLACK SMALL SQUARE
+    "\u25AB": "-",   # WHITE SMALL SQUARE
 }
 
 # Build a single translation table for O(n) substitution
@@ -128,19 +147,22 @@ def preprocess(raw_text: str) -> str:
     # the single precomposed character ä, and resolves ligatures like ﬁ→fi.
     text: str = unicodedata.normalize("NFC", raw_text)
 
-    # ── Step 2: Typographic substitutions ─────────────────────────────────
+    # ── Step 2: De-hyphenate words broken across lines ────────────────────
+    text = _RE_HYPHENATED_NEWLINE.sub("", text)
+
+    # ── Step 3: Typographic substitutions ─────────────────────────────────
     text = text.translate(_TRANS_TABLE)
 
-    # ── Step 3: Normalise bullet characters to "- " ───────────────────────
+    # ── Step 4: Normalise bullet characters to "- " ───────────────────────
     text = _RE_BULLETS.sub("- ", text)
 
-    # ── Step 4: Collapse horizontal whitespace on each line ────────────────
+    # ── Step 5: Collapse horizontal whitespace on each line ────────────────
     text = _RE_HSPACE.sub(" ", text)
 
-    # ── Step 5: Collapse excess blank lines ────────────────────────────────
+    # ── Step 6: Collapse excess blank lines ────────────────────────────────
     text = _RE_EXCESS_BLANK.sub("\n\n", text)
 
-    # ── Step 6: Strip overall leading/trailing whitespace ──────────────────
+    # ── Step 7: Strip overall leading/trailing whitespace ──────────────────
     text = text.strip()
 
     logger.debug("Preprocessing: output length=%d chars", len(text))

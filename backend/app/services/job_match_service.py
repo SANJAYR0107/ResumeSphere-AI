@@ -25,6 +25,7 @@ from backend.app.services.skill_extractor_service import extract_skills
 
 logger = logging.getLogger(__name__)
 
+
 def _cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
     """Return cosine similarity between two 1-D numpy arrays."""
     norm_a = float(np.linalg.norm(a))
@@ -32,6 +33,7 @@ def _cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
     if norm_a == 0.0 or norm_b == 0.0:
         return 0.0
     return float(np.dot(a, b) / (norm_a * norm_b))
+
 
 def match_job_description(
     resume_text: str,
@@ -85,8 +87,10 @@ def match_job_description(
     resume_lower: set[str] = {s.lower() for s in resume_skills}
     jd_lower: set[str] = {s.lower() for s in jd_skills}
 
-    matched_skills: list[str] = [s for s in jd_skills if s.lower() in resume_lower]
-    missing_skills: list[str] = [s for s in jd_skills if s.lower() not in resume_lower]
+    matched_skills: list[str] = [
+        s for s in jd_skills if s.lower() in resume_lower]
+    missing_skills: list[str] = [
+        s for s in jd_skills if s.lower() not in resume_lower]
 
     keyword_overlap: float = (
         len(matched_skills) / len(jd_skills) if jd_skills else 0.0

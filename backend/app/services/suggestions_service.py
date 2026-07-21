@@ -50,6 +50,7 @@ O(1) — constant number of rule checks regardless of text length.
 """
 
 import logging
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +59,7 @@ def generate_suggestions(
     sections: dict[str, str],
     skills: list[str],
     raw_text: str,
-    ats_breakdown: dict[str, int],
+    ats_breakdown: dict[str, Any],
 ) -> list[str]:
     """Generate actionable improvement suggestions for a resume.
 
@@ -70,7 +71,7 @@ def generate_suggestions(
         Skill names extracted by ``skill_extractor_service``.
     raw_text : str
         Preprocessed resume text.
-    ats_breakdown : dict[str, int]
+    ats_breakdown : dict[str, Any]
         Per-category score breakdown from ``ats_service.compute_ats_score()``.
 
     Returns
@@ -82,34 +83,30 @@ def generate_suggestions(
     suggestions: list[str] = []
     word_count: int = len(raw_text.split()) if raw_text else 0
     skill_count: int = len(skills)
-    ats_total: int = sum(ats_breakdown.values())
+    ats_total: int = sum(d["score"] for d in ats_breakdown.values()) if ats_breakdown else 0
 
     # ── High-impact rules ─────────────────────────────────────────────────
 
     if "summary" not in sections:
         suggestions.append(
             "Add a professional Summary section — a 3–5 sentence pitch highlighting "
-            "your key strengths, years of experience, and career goals."
-        )
+            "your key strengths, years of experience, and career goals.")
 
     if "experience" not in sections:
         suggestions.append(
             "Add a Work Experience section listing your past roles, employers, "
-            "dates, and key responsibilities."
-        )
+            "dates, and key responsibilities.")
     elif len(sections.get("experience", "")) < 200:
         suggestions.append(
             "Expand your Experience section with quantified achievements "
             "(e.g. 'Reduced API latency by 35 %', 'Led a team of 6 engineers'). "
-            "Numbers make bullet points 40 % more impactful."
-        )
+            "Numbers make bullet points 40 % more impactful.")
 
     if skill_count < 8:
         suggestions.append(
             f"Add more technical skills — only {skill_count} detected. "
             "ATS systems scan for keywords; aim for 12–20 relevant skills in a "
-            "dedicated Skills section."
-        )
+            "dedicated Skills section.")
 
     # ── Medium-impact rules ───────────────────────────────────────────────
 
@@ -128,8 +125,7 @@ def generate_suggestions(
     if "certifications" not in sections:
         suggestions.append(
             "Add relevant Certifications (e.g. AWS Solutions Architect, Google "
-            "Cloud, PMP, Kubernetes) to significantly boost recruiter confidence."
-        )
+            "Cloud, PMP, Kubernetes) to significantly boost recruiter confidence.")
 
     # ── Resume length ─────────────────────────────────────────────────────
 
@@ -148,16 +144,15 @@ def generate_suggestions(
 
     # ── Keyword density ───────────────────────────────────────────────────
 
-    if ats_breakdown.get("keyword_density", 5) < 3:
+    if ats_breakdown.get("keyword_density", {}).get("score", 50) < 30:
         suggestions.append(
             "Increase keyword density by listing your tools and technologies "
             "explicitly in a dedicated Skills section rather than burying them "
-            "in prose."
-        )
+            "in prose.")
 
     # ── Contact information ───────────────────────────────────────────────
 
-    if ats_breakdown.get("contact_info", 10) < 6:
+    if ats_breakdown.get("contact_info", {}).get("score", 100) < 60:
         suggestions.append(
             "Ensure your contact information is complete: professional email "
             "address, phone number, and your LinkedIn profile URL."
@@ -169,8 +164,7 @@ def generate_suggestions(
         suggestions.append(
             "Overall ATS compatibility is low. Tailor your resume to the specific "
             "job description you are applying for — mirror keywords from the posting "
-            "for significantly better pass rates."
-        )
+            "for significantly better pass rates.")
 
     logger.info(
         "suggestions_service: generated %d suggestion(s) "
