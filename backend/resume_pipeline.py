@@ -89,6 +89,9 @@ from backend.app.services.preprocessing_service import preprocess
 from backend.app.services.section_service import detect_sections
 from backend.app.services.skill_extractor_service import SkillMatch, extract_skills
 from backend.app.services.suggestions_service import generate_suggestions
+from backend.app.services.job_match_service import match_resume_to_jobs
+from backend.app.services.skill_gap_service import analyze_role_skill_gap
+from backend.app.services.recruiter_service import generate_career_roadmap, generate_interview_prep, CareerRoadmap, InterviewPreparation
 from backend.app.services.quality_service import QualityReport, analyze_quality
 from backend.app.services.score_service import calculate_section_scores, calculate_overall_score, SectionScore, OverallScoreResult
 from backend.app.services.insights_service import (
@@ -139,6 +142,11 @@ class ResumeAnalysis(TypedDict):
     suggestions: list[str]
     job_recommendations: list[dict]
     quality_report: QualityReport
+    # ── Phase 3 additions ───────────────────────────────────────────────
+    recommended_jobs: list[dict]
+    skill_gap: dict
+    career_roadmap: CareerRoadmap | dict
+    interview_preparation: list[InterviewPreparation] | list[dict]
     # ── Phase 2 fields ──────────────────────────────────────────────────
     overall_score: OverallScoreResult
     section_scores: dict[str, SectionScore]
@@ -327,10 +335,61 @@ def run_pipeline(
 
     # ── Stage 8: Job recommendations ──────────────────────────────────────
     t0 = time.perf_counter()
-    job_recs: list[dict] = get_job_recommendations(
+    job_recs = get_job_recommendations(
         resume_skills=skill_names,
-        resume_text=clean,
+        resume_text=clean
     )
+    
+    phase3_job_recs: list[dict] = match_resume_to_jobs(
+        resume_text=clean,
+        resume_skills=skill_names,
+        ats_score=ats_result["ats_score"],
+        resume_strength_index=ats_result.get("resume_strength_index", 5.0),
+        sections=sections
+    )
+    
+    # ── Stage 8.1: Skill Gap & Roadmap ────────────────────────────────────
+    skill_gap: dict = {}
+    roadmap: CareerRoadmap | dict = {}
+    interview_prep: list[InterviewPreparation] | list[dict] = []
+    
+    if phase3_job_recs:
+        top_job = phase3_job_recs[0]
+        skill_gap = analyze_role_skill_gap(
+            resume_skills=skill_names,
+            top_role_required_skills=[s for s in top_job["missing_skills"] if s in top_job["recommended_skills"]] + top_job["matched_skills"], 
+            top_role_preferred_skills=top_job["recommended_skills"]
+        )
+        # Using correct required and preferred from the top missing skills
+        
+        # We need a proper way to extract required and preferred skills.
+        # But analyze_skill_gap just takes lists. Let's pass the missing + matched to it properly.
+        # To get the raw required/preferred skills for the top role:
+        from backend.app.services.job_match_service import JOB_PROFILES
+        profile_req: list[str] = []
+        profile_pref: list[str] = []
+        for p in JOB_PROFILES:
+            if p["role_name"] == top_job["role_name"]:
+                profile_req = list(p["required_skills"])
+                profile_pref = list(p["preferred_skills"])
+                break
+                
+        skill_gap = analyze_role_skill_gap(
+            resume_skills=skill_names,
+            top_role_required_skills=profile_req,
+            top_role_preferred_skills=profile_pref
+        )
+        
+        roadmap = generate_career_roadmap(
+            experience_text=sections.get("experience", ""),
+            top_role_name=top_job["role_name"],
+            missing_skills=skill_gap["top_missing_skills"]
+        )
+        
+        interview_prep = generate_interview_prep(
+            recommended_jobs=phase3_job_recs,
+            ats_score=ats_result["ats_score"]
+        )
     logger.info(
         "Pipeline [8/10] Job recommendations — %d result(s)  (%.1f ms)",
         len(job_recs),
@@ -407,6 +466,10 @@ def run_pipeline(
         suggestions=suggestions,
         job_recommendations=job_recs,
         quality_report=quality_report,
+        recommended_jobs=phase3_job_recs,
+        skill_gap=skill_gap,
+        career_roadmap=roadmap,
+        interview_preparation=interview_prep,
         overall_score=overall_score_result,
         section_scores=section_scores,
         project_analysis=project_analysis,

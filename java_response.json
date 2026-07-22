@@ -1,0 +1,773 @@
+{
+  "filename": "java_resume.pdf",
+  "pages": 1,
+  "candidate_name": "John Java",
+  "sections": {
+    "other": "John Java\n\nExperienced Java Backend Developer with 5 years of experience.\n\nSkills: Java, Spring Boot, SQL, REST API, Microservices, Docker, AWS.",
+    "experience": "- Software Engineer at Tech Corp (2018-2023)\n- Built microservices using Spring Boot and Java.\n- Managed AWS infrastructure and Docker containers.\n\nEducation: BS Computer Science."
+  },
+  "skills": [
+    "AWS",
+    "Docker",
+    "Java",
+    "Microservices",
+    "REST API",
+    "Spring Boot"
+  ],
+  "skill_details": [
+    {
+      "skill": "AWS",
+      "category": "Cloud",
+      "confidence": 0.5
+    },
+    {
+      "skill": "Docker",
+      "category": "DevOps",
+      "confidence": 0.5
+    },
+    {
+      "skill": "Java",
+      "category": "Programming",
+      "confidence": 1.0
+    },
+    {
+      "skill": "Microservices",
+      "category": "Tools",
+      "confidence": 0.5
+    },
+    {
+      "skill": "REST API",
+      "category": "Backend",
+      "confidence": 0.25
+    },
+    {
+      "skill": "Spring Boot",
+      "category": "Backend",
+      "confidence": 0.5
+    }
+  ],
+  "skill_count": 6,
+  "embedding_dimension": 384,
+  "processing_time_ms": 5458,
+  "clean_text": "John Java\n\nExperienced Java Backend Developer with 5 years of experience.\n\nSkills: Java, Spring Boot, SQL, REST API, Microservices, Docker, AWS.\n\nExperience:\n- Software Engineer at Tech Corp (2018-2023)\n- Built microservices using Spring Boot and Java.\n- Managed AWS infrastructure and Docker containers.\n\nEducation: BS Computer Science.",
+  "ats_score": 27,
+  "ats_breakdown": {
+    "contact_info": {
+      "score": 40,
+      "weight": 0.05,
+      "reason": "Found: Phone.",
+      "improvement": "Add an email, phone number, and LinkedIn profile to ensure recruiters can contact you."
+    },
+    "summary": {
+      "score": 0,
+      "weight": 0.05,
+      "reason": "Missing professional summary.",
+      "improvement": "Add a 'Summary' section at the top of your resume."
+    },
+    "technical_skills": {
+      "score": 36,
+      "weight": 0.15,
+      "reason": "Detected 6 relevant technical skills.",
+      "improvement": "Add more modern frameworks and programming languages."
+    },
+    "experience": {
+      "score": 22,
+      "weight": 0.2,
+      "reason": "Experience section lacks sufficient detail.",
+      "improvement": "Use the STAR method (Situation, Task, Action, Result) to expand your bullet points."
+    },
+    "projects": {
+      "score": 0,
+      "weight": 0.1,
+      "reason": "Project section is light or missing.",
+      "improvement": "Add personal or academic projects to demonstrate hands-on experience."
+    },
+    "education": {
+      "score": 0,
+      "weight": 0.05,
+      "reason": "No education section found.",
+      "improvement": "Add an Education section listing your degrees."
+    },
+    "achievements": {
+      "score": 45,
+      "weight": 0.1,
+      "reason": "Found 3 quantified metric(s) (e.g. %, numbers).",
+      "improvement": "Quantify your impact using numbers, percentages, and timeframes (e.g., 'reduced latency by 40%')."
+    },
+    "action_verbs": {
+      "score": 20,
+      "weight": 0.05,
+      "reason": "Detected 1 strong action verbs.",
+      "improvement": "Replace weak verbs (like 'helped' or 'worked on') with strong verbs (like 'spearheaded' or 'architected')."
+    },
+    "formatting_grammar": {
+      "score": 70,
+      "weight": 0.05,
+      "reason": "Layout lacks standard bullet points or has grammar errors.",
+      "improvement": "Ensure standard bullet points are used and thoroughly proofread the document."
+    },
+    "external_links": {
+      "score": 0,
+      "weight": 0.05,
+      "reason": "No GitHub or Portfolio links detected.",
+      "improvement": "Add a link to your GitHub profile or personal portfolio to showcase your code."
+    },
+    "keyword_density": {
+      "score": 100,
+      "weight": 0.05,
+      "reason": "High keyword density relative to word count.",
+      "improvement": "Keywords are well balanced."
+    },
+    "resume_length": {
+      "score": 20,
+      "weight": 0.05,
+      "reason": "Resume length is 48 words.",
+      "improvement": "Aim for a sweet spot of 400-700 words (usually 1-2 pages)."
+    }
+  },
+  "ats_grade": "F",
+  "hiring_probability": "Low",
+  "resume_strength_index": 2.7,
+  "recruiter_confidence": "Low",
+  "suggestions": [
+    "Add a professional Summary section \u2014 a 3\u20135 sentence pitch highlighting your key strengths, years of experience, and career goals.",
+    "Expand your Experience section with quantified achievements (e.g. 'Reduced API latency by 35 %', 'Led a team of 6 engineers'). Numbers make bullet points 40 % more impactful.",
+    "Add more technical skills \u2014 only 6 detected. ATS systems scan for keywords; aim for 12\u201320 relevant skills in a dedicated Skills section.",
+    "Add an Education section with your degree, institution, major, and graduation year.",
+    "Add a Projects section to showcase hands-on work \u2014 include the tech stack and a one-line description of each project.",
+    "Add relevant Certifications (e.g. AWS Solutions Architect, Google Cloud, PMP, Kubernetes) to significantly boost recruiter confidence.",
+    "Your resume is too brief (48 words). Aim for 400\u2013600 words for entry-level positions or 600\u2013900 words for senior roles.",
+    "Ensure your contact information is complete: professional email address, phone number, and your LinkedIn profile URL."
+  ],
+  "job_recommendations": [
+    {
+      "title": "Java Developer",
+      "match_score": 59,
+      "description": "Develop enterprise-grade applications using Java and Spring Boot. Hibernate ORM, REST APIs, and microservices architecture. Postgr\u2026",
+      "matched_skills": [
+        "Java",
+        "Spring Boot",
+        "Docker"
+      ]
+    },
+    {
+      "title": "Backend Developer",
+      "match_score": 39,
+      "description": "Design and build scalable REST APIs and microservices using Python, FastAPI, Django, Flask, Node.js. Work with PostgreSQL, MongoDB\u2026",
+      "matched_skills": [
+        "Docker",
+        "AWS"
+      ]
+    },
+    {
+      "title": "Full Stack Developer",
+      "match_score": 39,
+      "description": "End-to-end development using React, Node.js, Python, FastAPI. PostgreSQL, MongoDB, Redis for data storage. Docker, AWS, CI/CD pipe\u2026",
+      "matched_skills": [
+        "Docker",
+        "AWS"
+      ]
+    },
+    {
+      "title": "DevOps Engineer",
+      "match_score": 33,
+      "description": "Manage cloud infrastructure on AWS, Azure, GCP. Container orchestration with Kubernetes and Docker. Infrastructure-as-Code using T\u2026",
+      "matched_skills": [
+        "AWS",
+        "Docker"
+      ]
+    },
+    {
+      "title": "Cloud Architect",
+      "match_score": 29,
+      "description": "Design resilient cloud architectures on AWS, Azure, and GCP. Microservices, serverless functions, Kubernetes, Terraform, and secur\u2026",
+      "matched_skills": [
+        "AWS",
+        "Docker"
+      ]
+    }
+  ],
+  "quality_report": {
+    "has_email": false,
+    "has_phone": true,
+    "has_linkedin": false,
+    "has_github": false,
+    "has_portfolio": false,
+    "missing_sections": [
+      "summary",
+      "education",
+      "projects",
+      "skills"
+    ],
+    "word_count": 48,
+    "bullet_consistency": "Consistent",
+    "action_verbs_found": [
+      "managed",
+      "built"
+    ],
+    "weak_verbs_found": [],
+    "passive_language_found": [],
+    "grammar_issues": [
+      "Resume is too short, lacking detail (under 150 words)."
+    ],
+    "quality_score": 44
+  },
+  "overall_score": {
+    "overall_score": 99,
+    "confidence": 0.95,
+    "explanation": "Outstanding resume! Highly optimized for ATS and recruiters. Excellent detail and professional tone."
+  },
+  "section_scores": {
+    "ats_score": {
+      "score": 353,
+      "reason": "Your ATS compatibility score is 353/100 based on standard parsing metrics.",
+      "improvement": "Excellent ATS compatibility."
+    },
+    "technical_skills": {
+      "score": 30,
+      "reason": "Found 6 technical skills.",
+      "improvement": "Add more relevant tools, frameworks, and programming languages."
+    },
+    "projects": {
+      "score": 0,
+      "reason": "Project section length indicates light detail.",
+      "improvement": "Add more detailed projects with measurable outcomes and technologies used."
+    },
+    "experience": {
+      "score": 22,
+      "reason": "Experience section is lacking detail.",
+      "improvement": "Elaborate on professional experience using the STAR method."
+    },
+    "education": {
+      "score": 0,
+      "reason": "No education section found.",
+      "improvement": "Ensure degree, university, and graduation year are clearly listed."
+    },
+    "grammar": {
+      "score": 85,
+      "reason": "Detected 1 grammar/formatting issues.",
+      "improvement": "Proofread for punctuation and capitalization consistency."
+    },
+    "formatting": {
+      "score": 70,
+      "reason": "Layout lacks standard bullet points.",
+      "improvement": "Use standard bullet points instead of paragraphs for better readability."
+    },
+    "professionalism": {
+      "score": 100,
+      "reason": "Professional tone with strong action verbs.",
+      "improvement": "Highly professional tone."
+    },
+    "keyword": {
+      "score": 100,
+      "reason": "Good keyword density relative to word count.",
+      "improvement": "Keywords are well balanced."
+    },
+    "completeness": {
+      "score": 20,
+      "reason": "Missing 4 core sections.",
+      "improvement": "Add missing sections: summary, education, projects, skills"
+    }
+  },
+  "project_analysis": {
+    "complexity": "Low",
+    "technologies_mentioned": 0,
+    "business_value_found": false,
+    "technical_depth": "Shallow",
+    "action_verbs_used": 0,
+    "missing_metrics": true,
+    "suggestions": [
+      "Add a dedicated Projects section to showcase your work."
+    ]
+  },
+  "skill_analysis": {
+    "groups": {
+      "Programming": [
+        "Java",
+        "Microservices",
+        "REST API",
+        "Spring Boot"
+      ],
+      "Cloud": [
+        "AWS"
+      ],
+      "DevOps": [
+        "Docker"
+      ]
+    },
+    "missing_skills": [],
+    "duplicate_skills": [],
+    "obsolete_skills": [],
+    "recommended_skills": [
+      "Kubernetes",
+      "CI/CD"
+    ]
+  },
+  "experience_analysis": {
+    "estimated_years": "1-2 years",
+    "has_internship": false,
+    "achievements_found": 2,
+    "leadership_detected": true,
+    "impact_metrics_found": 2,
+    "action_verbs_used": 0,
+    "suggestions": []
+  },
+  "grammar_analysis": {
+    "repeated_punctuation": false,
+    "passive_voice_instances": 0,
+    "weak_verbs_instances": 0,
+    "repeated_words": false,
+    "capitalization_issues": false,
+    "sentence_length_warning": false,
+    "bullet_consistency": "Consistent",
+    "findings": [
+      "Grammar and mechanics are solid."
+    ]
+  },
+  "keyword_analysis": {
+    "keyword_density": 12.5,
+    "technical_keywords": 6,
+    "missing_keywords": [],
+    "repeated_keywords": [],
+    "unused_sections": [
+      "summary",
+      "skills",
+      "projects",
+      "education"
+    ]
+  },
+  "summary_analysis": {
+    "length_status": "Missing",
+    "grammar_check": "N/A",
+    "technology_coverage": 0,
+    "career_objective_found": false,
+    "professional_tone": "N/A",
+    "improvements": [
+      "Add a professional summary to highlight your top achievements."
+    ]
+  },
+  "strengths": [
+    "Good baseline template"
+  ],
+  "weaknesses": [
+    "Missing LinkedIn",
+    "Too Few Projects",
+    "Weak Keywords"
+  ],
+  "actionable_suggestions": [
+    {
+      "suggestion": "Create and link a professional LinkedIn profile.",
+      "priority": "High",
+      "difficulty": "Easy",
+      "estimated_learning_time": "30 mins"
+    },
+    {
+      "suggestion": "Add one Spring Boot or React microservice project.",
+      "priority": "High",
+      "difficulty": "Hard",
+      "estimated_learning_time": "2 weeks"
+    },
+    {
+      "suggestion": "Include measurable project achievements (e.g., 'improved performance by 30%').",
+      "priority": "Medium",
+      "difficulty": "Medium",
+      "estimated_learning_time": "1 hour"
+    },
+    {
+      "suggestion": "Add missing sections: summary, education, projects, skills.",
+      "priority": "High",
+      "difficulty": "Easy",
+      "estimated_learning_time": "1 hour"
+    }
+  ],
+  "recruiter_summary": {
+    "pass_ats": false,
+    "top_strengths": [
+      "Good baseline qualifications"
+    ],
+    "top_concerns": [
+      "Low keyword optimization for ATS",
+      "Lack of diverse technical skills",
+      "Experience section lacks depth and metrics"
+    ],
+    "hiring_recommendation": "Do Not Recommend",
+    "overall_impression": "Candidate needs to heavily revise their resume to pass initial screening."
+  },
+  "career_insights": {
+    "best_job_roles": [
+      "Backend Developer",
+      "Software Engineer",
+      "DevOps Engineer"
+    ],
+    "career_level": "Entry-Level / Junior",
+    "learning_roadmap": [
+      "Focus on system design and architecture concepts.",
+      "Build a scalable microservices side project.",
+      "Contribute to open-source repositories."
+    ],
+    "recommended_certifications": [
+      "AWS Certified Solutions Architect"
+    ],
+    "technologies_to_learn": [
+      "React",
+      "Node.js",
+      "TypeScript"
+    ]
+  },
+  "interview_readiness": {
+    "interview_score": 21,
+    "weak_topics": [
+      "System Design",
+      "Advanced Data Structures"
+    ],
+    "likely_questions": [
+      "Can you describe a time you optimized a poorly performing system?",
+      "Walk me through your most complex technical project.",
+      "How do you handle disagreements on technical architecture?"
+    ],
+    "preparation_tips": [
+      "Use the STAR method for behavioral questions.",
+      "Be prepared to whiteboard system design for your listed projects.",
+      "Review core data structures and algorithms."
+    ]
+  },
+  "recommended_jobs": [
+    {
+      "role_name": "Java Backend Developer",
+      "match_percentage": 57,
+      "matched_skills": [
+        "Java",
+        "Spring Boot",
+        "REST API",
+        "Microservices",
+        "Docker",
+        "AWS"
+      ],
+      "missing_skills": [
+        "SQL"
+      ],
+      "recommended_skills": [
+        "Kubernetes",
+        "Kafka",
+        "PostgreSQL"
+      ],
+      "confidence": "Low",
+      "difficulty": "Medium"
+    },
+    {
+      "role_name": "Python Developer",
+      "match_percentage": 29,
+      "matched_skills": [
+        "REST API",
+        "Docker",
+        "AWS"
+      ],
+      "missing_skills": [
+        "Python",
+        "Django",
+        "SQL"
+      ],
+      "recommended_skills": [
+        "Flask",
+        "FastAPI",
+        "PostgreSQL"
+      ],
+      "confidence": "Low",
+      "difficulty": "Medium"
+    },
+    {
+      "role_name": "DevOps Engineer",
+      "match_percentage": 28,
+      "matched_skills": [
+        "Docker",
+        "AWS"
+      ],
+      "missing_skills": [
+        "Linux",
+        "Kubernetes",
+        "CI/CD"
+      ],
+      "recommended_skills": [
+        "Terraform",
+        "Ansible",
+        "Python",
+        "Bash"
+      ],
+      "confidence": "Low",
+      "difficulty": "Hard"
+    },
+    {
+      "role_name": "Cloud Engineer",
+      "match_percentage": 27,
+      "matched_skills": [
+        "AWS",
+        "Docker"
+      ],
+      "missing_skills": [
+        "Linux",
+        "Networking",
+        "Python"
+      ],
+      "recommended_skills": [
+        "Azure",
+        "GCP",
+        "Terraform"
+      ],
+      "confidence": "Low",
+      "difficulty": "Medium"
+    },
+    {
+      "role_name": "Software Engineer",
+      "match_percentage": 24,
+      "matched_skills": [
+        "Java"
+      ],
+      "missing_skills": [
+        "Python",
+        "Algorithms",
+        "Data Structures",
+        "SQL"
+      ],
+      "recommended_skills": [
+        "C++",
+        "System Design",
+        "Cloud",
+        "Git",
+        "Javascript"
+      ],
+      "confidence": "Low",
+      "difficulty": "Medium"
+    }
+  ],
+  "skill_gap": {
+    "overall_score": 60,
+    "category_scores": {
+      "Programming": 100,
+      "Frameworks": 100,
+      "Databases": 0,
+      "Cloud": 100,
+      "DevOps": 50
+    },
+    "missing_skills": [
+      {
+        "skill": "SQL",
+        "priority": "P1 - Critical",
+        "importance": "Critical",
+        "learning_time": "2 weeks",
+        "difficulty": "Medium",
+        "recommended_resources": [
+          "SQLBolt",
+          "Mode SQL Tutorial"
+        ]
+      },
+      {
+        "skill": "Kubernetes",
+        "priority": "P2 - Important",
+        "importance": "High",
+        "learning_time": "4 weeks",
+        "difficulty": "Hard",
+        "recommended_resources": [
+          "Kubernetes Docs",
+          "KubeAcademy"
+        ]
+      },
+      {
+        "skill": "Kafka",
+        "priority": "P2 - Important",
+        "importance": "Medium",
+        "learning_time": "2 weeks",
+        "difficulty": "Medium",
+        "recommended_resources": [
+          "YouTube",
+          "Official Documentation"
+        ]
+      },
+      {
+        "skill": "PostgreSQL",
+        "priority": "P2 - Important",
+        "importance": "High",
+        "learning_time": "2 weeks",
+        "difficulty": "Medium",
+        "recommended_resources": [
+          "PostgreSQL Tutorial",
+          "DataCamp"
+        ]
+      }
+    ],
+    "top_missing_skills": [
+      "SQL",
+      "Kubernetes",
+      "Kafka",
+      "PostgreSQL"
+    ],
+    "critical_skills": [
+      "SQL"
+    ],
+    "nice_to_have_skills": [
+      "Kubernetes",
+      "Kafka",
+      "PostgreSQL"
+    ]
+  },
+  "career_roadmap": {
+    "current_level": "Fresher / Junior",
+    "next_target": "Next Level Java Backend Developer",
+    "roadmap_weeks": {
+      "Week 1": "Focus on core fundamentals of SQL.",
+      "Week 2": "Build small applications using Kubernetes.",
+      "Week 3": "Integrate databases and deploy your application to the cloud.",
+      "Week 4": "Mock interviews, resume refinement, and open-source contributions."
+    },
+    "recommended_certifications": [
+      "AWS Certified Solutions Architect",
+      "Certified Kubernetes Administrator (CKA)"
+    ],
+    "projects_to_build": [
+      "Full-stack Java Backend Developer application",
+      "Microservices architecture prototype"
+    ],
+    "interview_topics": [
+      "System Design",
+      "Data Structures",
+      "Framework Internals"
+    ],
+    "learning_priority": "High priority on hands-on coding and frameworks"
+  },
+  "interview_preparation": [
+    {
+      "role_name": "Java Backend Developer",
+      "top_interview_topics": [
+        "System Design",
+        "Framework Specifics",
+        "Database Optimization"
+      ],
+      "likely_technical_questions": [
+        "How does concurrency work in Java Backend Developer's primary language?",
+        "Explain how you would scale a Java Backend Developer application to 1M users.",
+        "Describe a time you debugged a critical production issue."
+      ],
+      "dsa_topics": [
+        "Arrays & Strings",
+        "Hash Maps",
+        "Trees & Graphs"
+      ],
+      "projects_to_explain": [
+        "Your most complex technical challenge",
+        "An end-to-end deployed project"
+      ],
+      "behavioral_questions": [
+        "Tell me about a time you failed and what you learned.",
+        "How do you prioritize tech debt vs new features?"
+      ],
+      "preparation_score": 54
+    },
+    {
+      "role_name": "Python Developer",
+      "top_interview_topics": [
+        "System Design",
+        "Framework Specifics",
+        "Database Optimization"
+      ],
+      "likely_technical_questions": [
+        "How does concurrency work in Python Developer's primary language?",
+        "Explain how you would scale a Python Developer application to 1M users.",
+        "Describe a time you debugged a critical production issue."
+      ],
+      "dsa_topics": [
+        "Arrays & Strings",
+        "Hash Maps",
+        "Trees & Graphs"
+      ],
+      "projects_to_explain": [
+        "Your most complex technical challenge",
+        "An end-to-end deployed project"
+      ],
+      "behavioral_questions": [
+        "Tell me about a time you failed and what you learned.",
+        "How do you prioritize tech debt vs new features?"
+      ],
+      "preparation_score": 28
+    },
+    {
+      "role_name": "DevOps Engineer",
+      "top_interview_topics": [
+        "System Design",
+        "Framework Specifics",
+        "Database Optimization"
+      ],
+      "likely_technical_questions": [
+        "How does concurrency work in DevOps Engineer's primary language?",
+        "Explain how you would scale a DevOps Engineer application to 1M users.",
+        "Describe a time you debugged a critical production issue."
+      ],
+      "dsa_topics": [
+        "Arrays & Strings",
+        "Hash Maps",
+        "Trees & Graphs"
+      ],
+      "projects_to_explain": [
+        "Your most complex technical challenge",
+        "An end-to-end deployed project"
+      ],
+      "behavioral_questions": [
+        "Tell me about a time you failed and what you learned.",
+        "How do you prioritize tech debt vs new features?"
+      ],
+      "preparation_score": 27
+    },
+    {
+      "role_name": "Cloud Engineer",
+      "top_interview_topics": [
+        "System Design",
+        "Framework Specifics",
+        "Database Optimization"
+      ],
+      "likely_technical_questions": [
+        "How does concurrency work in Cloud Engineer's primary language?",
+        "Explain how you would scale a Cloud Engineer application to 1M users.",
+        "Describe a time you debugged a critical production issue."
+      ],
+      "dsa_topics": [
+        "Arrays & Strings",
+        "Hash Maps",
+        "Trees & Graphs"
+      ],
+      "projects_to_explain": [
+        "Your most complex technical challenge",
+        "An end-to-end deployed project"
+      ],
+      "behavioral_questions": [
+        "Tell me about a time you failed and what you learned.",
+        "How do you prioritize tech debt vs new features?"
+      ],
+      "preparation_score": 27
+    },
+    {
+      "role_name": "Software Engineer",
+      "top_interview_topics": [
+        "System Design",
+        "Framework Specifics",
+        "Database Optimization"
+      ],
+      "likely_technical_questions": [
+        "How does concurrency work in Software Engineer's primary language?",
+        "Explain how you would scale a Software Engineer application to 1M users.",
+        "Describe a time you debugged a critical production issue."
+      ],
+      "dsa_topics": [
+        "Arrays & Strings",
+        "Hash Maps",
+        "Trees & Graphs"
+      ],
+      "projects_to_explain": [
+        "Your most complex technical challenge",
+        "An end-to-end deployed project"
+      ],
+      "behavioral_questions": [
+        "Tell me about a time you failed and what you learned.",
+        "How do you prioritize tech debt vs new features?"
+      ],
+      "preparation_score": 24
+    }
+  ]
+}

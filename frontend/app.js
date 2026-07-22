@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentResumeText = '';
     let currentResumeSkills = [];
 
-    let API_URL = 'http://127.0.0.1:8000/api';
-    if (window.location.port === '8000' || (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && window.location.protocol !== 'file:')) {
+    let API_URL = 'http://127.0.0.1:8001/api';
+    if (window.location.port === '8001' || (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && window.location.protocol !== 'file:')) {
         API_URL = '/api';
     }
 
@@ -327,8 +327,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const barCtx = document.getElementById('sectionBarChart')?.getContext('2d');
             if (barCtx) {
                 if (window.myBarChart) window.myBarChart.destroy();
-                const bLabels = Object.keys(analyzeData.ats_breakdown).map(l => l.replace('_', ' '));
-                const bData = Object.values(analyzeData.ats_breakdown).map(v => v.score || v);
+                const bLabels = Object.keys(analyzeData.ats_breakdown).map(l => l.replace(/_/g, ' '));
+                const bData = Object.values(analyzeData.ats_breakdown).map(v => typeof v === 'object' && v !== null && 'score' in v ? v.score : (typeof v === 'number' ? v : 0));
                 window.myBarChart = new Chart(barCtx, {
                     type: 'bar',
                     data: {
@@ -352,49 +352,124 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 6. Deep Analysis
         if (analyzeData.project_analysis) {
+            const p = analyzeData.project_analysis;
             document.getElementById('project-analysis-content').innerHTML = `
-                <p><strong>Complexity:</strong> ${analyzeData.project_analysis.complexity}</p>
-                <p><strong>Action Verbs Used:</strong> ${analyzeData.project_analysis.action_verbs_used}</p>
-                <p><strong>Missing Metrics:</strong> ${analyzeData.project_analysis.missing_metrics ? "Yes" : "No"}</p>
-                <p><strong>Suggestions:</strong> ${analyzeData.project_analysis.suggestions.join(', ')}</p>
+                <p><strong>Complexity:</strong> ${escapeHtml(p.complexity || 'Standard')}</p>
+                <p><strong>Action Verbs Used:</strong> ${p.action_verbs_used ?? 0}</p>
+                <p><strong>Missing Metrics:</strong> ${p.missing_metrics ? "Yes" : "No"}</p>
+                <p><strong>Suggestions:</strong> ${escapeHtml((p.suggestions || []).join(', '))}</p>
             `;
         }
         if (analyzeData.experience_analysis) {
+            const e = analyzeData.experience_analysis;
             document.getElementById('experience-analysis-content').innerHTML = `
-                <p><strong>Estimated YOE:</strong> ${analyzeData.experience_analysis.estimated_years}</p>
-                <p><strong>Achievements Found:</strong> ${analyzeData.experience_analysis.achievements_found}</p>
-                <p><strong>Leadership Detected:</strong> ${analyzeData.experience_analysis.leadership_detected ? "Yes" : "No"}</p>
-                <p><strong>Suggestions:</strong> ${analyzeData.experience_analysis.suggestions.join(', ')}</p>
+                <p><strong>Estimated YOE:</strong> ${escapeHtml(String(e.estimated_years ?? 'N/A'))}</p>
+                <p><strong>Achievements Found:</strong> ${e.achievements_found ?? 0}</p>
+                <p><strong>Leadership Detected:</strong> ${e.leadership_detected ? "Yes" : "No"}</p>
+                <p><strong>Suggestions:</strong> ${escapeHtml((e.suggestions || []).join(', '))}</p>
             `;
         }
         if (analyzeData.grammar_analysis) {
+            const g = analyzeData.grammar_analysis;
             document.getElementById('grammar-analysis-content').innerHTML = `
-                <p><strong>Passive Voice Instances:</strong> ${analyzeData.grammar_analysis.passive_voice_instances}</p>
-                <p><strong>Capitalization Issues:</strong> ${analyzeData.grammar_analysis.capitalization_issues ? "Yes" : "No"}</p>
-                <p><strong>Bullet Consistency:</strong> ${analyzeData.grammar_analysis.bullet_consistency}</p>
-                <p><strong>Findings:</strong> ${analyzeData.grammar_analysis.findings.join(', ')}</p>
+                <p><strong>Passive Voice Instances:</strong> ${g.passive_voice_instances ?? 0}</p>
+                <p><strong>Capitalization Issues:</strong> ${g.capitalization_issues ? "Yes" : "No"}</p>
+                <p><strong>Bullet Consistency:</strong> ${escapeHtml(g.bullet_consistency || 'Good')}</p>
+                <p><strong>Findings:</strong> ${escapeHtml((g.findings || []).join(', '))}</p>
             `;
         }
 
         // 7. Render Skills
         if (skillsGrid) {
-            skillsGrid.innerHTML = analyzeData.skills.length > 0 
+            skillsGrid.innerHTML = (analyzeData.skills || []).length > 0 
                 ? analyzeData.skills.map(s => `<span class="skill-tag">${escapeHtml(s)}</span>`).join('')
                 : '<span class="skill-tag">No skills detected</span>';
         }
 
-        // 8. Render Job Recommendations
-        if (jobList) {
-            if (recData.recommendations && recData.recommendations.length > 0) {
-                jobList.innerHTML = recData.recommendations.map(job => `
-                    <div style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; margin-bottom: 0.75rem; border-left: 3px solid #00f2fe;">
-                        <h4 style="margin: 0 0 0.5rem 0; color: #fff;">${escapeHtml(job.title)} <span style="float: right; color: #00f2fe; font-size: 0.9rem;">${job.match_score}% Match</span></h4>
-                        <p style="margin: 0 0 0.5rem 0; font-size: 0.85rem; color: #9aa2b1;">${escapeHtml(job.description)}</p>
-                        <div style="font-size: 0.8rem; color: #10b981;"><i class="fa-solid fa-check"></i> Skills: ${job.matched_skills.slice(0,5).map(escapeHtml).join(', ')}</div>
+        // 8. Phase 3: Recommended Jobs & Skill Gap
+        if (analyzeData.recommended_jobs && analyzeData.recommended_jobs.length > 0) {
+            const jobs = analyzeData.recommended_jobs;
+            
+            // Job Cards
+            const cardsContainer = document.getElementById('job-cards-container');
+            if (cardsContainer) {
+                cardsContainer.innerHTML = jobs.map(job => `
+                    <div style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--accent-cyan);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <h4 style="margin: 0 0 0.5rem 0; color: #fff;">${escapeHtml(job.role_name)}</h4>
+                            <span style="background: rgba(0, 242, 254, 0.15); color: #00f2fe; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;">${job.match_percentage}% Match</span>
+                        </div>
+                        <div style="display: flex; gap: 15px; font-size: 0.8rem; margin-bottom: 8px;">
+                            <span style="color: var(--text-secondary);"><i class="fa-solid fa-bullseye"></i> Confidence: <span style="color: ${job.confidence === 'High' ? '#10b981' : (job.confidence === 'Medium' ? '#f59e0b' : '#ef4444')}">${job.confidence}</span></span>
+                            <span style="color: var(--text-secondary);"><i class="fa-solid fa-layer-group"></i> Difficulty: <span style="color: ${job.difficulty === 'Easy' ? '#10b981' : (job.difficulty === 'Medium' ? '#f59e0b' : '#ef4444')}">${job.difficulty}</span></span>
+                        </div>
+                        <div style="font-size: 0.8rem; color: #10b981; margin-bottom: 4px;"><i class="fa-solid fa-check"></i> Skills: ${escapeHtml((job.matched_skills || []).slice(0,5).join(', '))}</div>
                     </div>
                 `).join('');
-            } else {
-                jobList.innerHTML = '<p style="color:var(--text-secondary);">No recommendations found.</p>';
+            }
+
+            // Comparison Bars
+            const barsContainer = document.getElementById('job-comparison-bars');
+            if (barsContainer) {
+                barsContainer.innerHTML = jobs.map(job => `
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; color: var(--text-secondary);">
+                            <span>${escapeHtml(job.role_name)}</span>
+                            <span style="color: #fff; font-weight: bold;">${job.match_percentage}%</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden;">
+                            <div style="height: 100%; width: ${job.match_percentage}%; background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%); border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Skill Gap
+        if (analyzeData.skill_gap && analyzeData.skill_gap.skill_gap_details) {
+            const missingList = document.getElementById('missing-skills-list');
+            if (missingList) {
+                missingList.innerHTML = analyzeData.skill_gap.skill_gap_details.slice(0, 5).map(skill => {
+                    const resource = (skill.recommended_resources && skill.recommended_resources.length > 0) ? skill.recommended_resources[0] : 'Documentation';
+                    return `
+                    <li style="margin-bottom: 8px;">
+                        <strong style="color: #fff;">${escapeHtml(skill.skill)}</strong> 
+                        <span style="font-size: 0.75rem; background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 2px 6px; border-radius: 4px; margin-left: 5px;">${escapeHtml(skill.priority || 'Medium')}</span>
+                        <div style="font-size: 0.75rem; margin-top: 2px;">Time: ${escapeHtml(skill.learning_time || '1-2 Weeks')} | Resource: <a href="#" style="color: #4facfe;">${escapeHtml(resource)}</a></div>
+                    </li>
+                `}).join('');
+            }
+        }
+
+        // Career Roadmap
+        if (analyzeData.career_roadmap) {
+            const targetEl = document.getElementById('roadmap-target');
+            if (targetEl) targetEl.textContent = analyzeData.career_roadmap.next_target;
+            
+            const weeksContainer = document.getElementById('roadmap-weeks');
+            if (weeksContainer && analyzeData.career_roadmap.roadmap_weeks) {
+                weeksContainer.innerHTML = Object.entries(analyzeData.career_roadmap.roadmap_weeks).map(([week, task]) => `
+                    <div style="display: flex; gap: 10px; padding-left: 10px; border-left: 2px solid var(--border-color);">
+                        <strong style="color: #fff; min-width: 50px;">${escapeHtml(week)}</strong>
+                        <span>${escapeHtml(task)}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Interview Prep
+        if (analyzeData.interview_preparation && analyzeData.interview_preparation.length > 0) {
+            const prep = analyzeData.interview_preparation[0];
+            const roleEl = document.getElementById('interview-role');
+            if (roleEl) roleEl.textContent = prep.role_name;
+            
+            const qContainer = document.getElementById('interview-questions');
+            if (qContainer) {
+                qContainer.innerHTML = prep.likely_technical_questions.map(q => `
+                    <div style="background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 4px; margin-bottom: 8px; border-left: 2px solid var(--accent-purple);">
+                        ${escapeHtml(q)}
+                    </div>
+                `).join('');
             }
         }
 

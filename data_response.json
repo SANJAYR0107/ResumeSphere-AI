@@ -1,0 +1,769 @@
+{
+  "filename": "data_resume.pdf",
+  "pages": 1,
+  "candidate_name": "Alice Data",
+  "sections": {
+    "other": "Alice Data\n\nData Analyst with 3 years of experience.\n\nSkills: SQL, Python, Data Visualization, Excel, Tableau, Pandas.",
+    "experience": "- Data Analyst at Analytics Inc (2020-2023)\n- Analyzed large datasets using Python, Pandas, and SQL.\n- Created interactive dashboards in Tableau.\n\nEducation: BS Mathematics."
+  },
+  "skills": [
+    "Pandas",
+    "Python"
+  ],
+  "skill_details": [
+    {
+      "skill": "Pandas",
+      "category": "AI/ML",
+      "confidence": 1.0
+    },
+    {
+      "skill": "Python",
+      "category": "Programming",
+      "confidence": 1.0
+    }
+  ],
+  "skill_count": 2,
+  "embedding_dimension": 384,
+  "processing_time_ms": 840,
+  "clean_text": "Alice Data\n\nData Analyst with 3 years of experience.\n\nSkills: SQL, Python, Data Visualization, Excel, Tableau, Pandas.\n\nExperience:\n- Data Analyst at Analytics Inc (2020-2023)\n- Analyzed large datasets using Python, Pandas, and SQL.\n- Created interactive dashboards in Tableau.\n\nEducation: BS Mathematics.",
+  "ats_score": 22,
+  "ats_breakdown": {
+    "contact_info": {
+      "score": 40,
+      "weight": 0.05,
+      "reason": "Found: Phone.",
+      "improvement": "Add an email, phone number, and LinkedIn profile to ensure recruiters can contact you."
+    },
+    "summary": {
+      "score": 0,
+      "weight": 0.05,
+      "reason": "Missing professional summary.",
+      "improvement": "Add a 'Summary' section at the top of your resume."
+    },
+    "technical_skills": {
+      "score": 12,
+      "weight": 0.15,
+      "reason": "Detected 2 relevant technical skills.",
+      "improvement": "Add more modern frameworks and programming languages."
+    },
+    "experience": {
+      "score": 21,
+      "weight": 0.2,
+      "reason": "Experience section lacks sufficient detail.",
+      "improvement": "Use the STAR method (Situation, Task, Action, Result) to expand your bullet points."
+    },
+    "projects": {
+      "score": 0,
+      "weight": 0.1,
+      "reason": "Project section is light or missing.",
+      "improvement": "Add personal or academic projects to demonstrate hands-on experience."
+    },
+    "education": {
+      "score": 0,
+      "weight": 0.05,
+      "reason": "No education section found.",
+      "improvement": "Add an Education section listing your degrees."
+    },
+    "achievements": {
+      "score": 45,
+      "weight": 0.1,
+      "reason": "Found 3 quantified metric(s) (e.g. %, numbers).",
+      "improvement": "Quantify your impact using numbers, percentages, and timeframes (e.g., 'reduced latency by 40%')."
+    },
+    "action_verbs": {
+      "score": 0,
+      "weight": 0.05,
+      "reason": "Detected 0 strong action verbs.",
+      "improvement": "Replace weak verbs (like 'helped' or 'worked on') with strong verbs (like 'spearheaded' or 'architected')."
+    },
+    "formatting_grammar": {
+      "score": 70,
+      "weight": 0.05,
+      "reason": "Layout lacks standard bullet points or has grammar errors.",
+      "improvement": "Ensure standard bullet points are used and thoroughly proofread the document."
+    },
+    "external_links": {
+      "score": 0,
+      "weight": 0.05,
+      "reason": "No GitHub or Portfolio links detected.",
+      "improvement": "Add a link to your GitHub profile or personal portfolio to showcase your code."
+    },
+    "keyword_density": {
+      "score": 100,
+      "weight": 0.05,
+      "reason": "High keyword density relative to word count.",
+      "improvement": "Keywords are well balanced."
+    },
+    "resume_length": {
+      "score": 20,
+      "weight": 0.05,
+      "reason": "Resume length is 43 words.",
+      "improvement": "Aim for a sweet spot of 400-700 words (usually 1-2 pages)."
+    }
+  },
+  "ats_grade": "F",
+  "hiring_probability": "Low",
+  "resume_strength_index": 2.2,
+  "recruiter_confidence": "Low",
+  "suggestions": [
+    "Add a professional Summary section \u2014 a 3\u20135 sentence pitch highlighting your key strengths, years of experience, and career goals.",
+    "Expand your Experience section with quantified achievements (e.g. 'Reduced API latency by 35 %', 'Led a team of 6 engineers'). Numbers make bullet points 40 % more impactful.",
+    "Add more technical skills \u2014 only 2 detected. ATS systems scan for keywords; aim for 12\u201320 relevant skills in a dedicated Skills section.",
+    "Add an Education section with your degree, institution, major, and graduation year.",
+    "Add a Projects section to showcase hands-on work \u2014 include the tech stack and a one-line description of each project.",
+    "Add relevant Certifications (e.g. AWS Solutions Architect, Google Cloud, PMP, Kubernetes) to significantly boost recruiter confidence.",
+    "Your resume is too brief (43 words). Aim for 400\u2013600 words for entry-level positions or 600\u2013900 words for senior roles.",
+    "Ensure your contact information is complete: professional email address, phone number, and your LinkedIn profile URL."
+  ],
+  "job_recommendations": [
+    {
+      "title": "Data Scientist",
+      "match_score": 38,
+      "description": "Analyse large datasets using Python, Pandas, NumPy. Build predictive models with Scikit-learn and XGBoost. Data visualisation with\u2026",
+      "matched_skills": [
+        "Python",
+        "Pandas"
+      ]
+    },
+    {
+      "title": "ML Engineer",
+      "match_score": 29,
+      "description": "Develop and deploy machine learning models using Python, TensorFlow, PyTorch, Scikit-learn. Experience with NLP, computer vision, \u2026",
+      "matched_skills": [
+        "Python",
+        "Pandas"
+      ]
+    },
+    {
+      "title": "Full Stack Developer",
+      "match_score": 26,
+      "description": "End-to-end development using React, Node.js, Python, FastAPI. PostgreSQL, MongoDB, Redis for data storage. Docker, AWS, CI/CD pipe\u2026",
+      "matched_skills": [
+        "Python"
+      ]
+    },
+    {
+      "title": "Java Developer",
+      "match_score": 20,
+      "description": "Develop enterprise-grade applications using Java and Spring Boot. Hibernate ORM, REST APIs, and microservices architecture. Postgr\u2026",
+      "matched_skills": []
+    },
+    {
+      "title": "QA Engineer",
+      "match_score": 20,
+      "description": "Design and maintain automated test suites using Python, Selenium, pytest, and Cypress. API testing with Postman. CI/CD integration\u2026",
+      "matched_skills": [
+        "Python"
+      ]
+    }
+  ],
+  "quality_report": {
+    "has_email": false,
+    "has_phone": true,
+    "has_linkedin": false,
+    "has_github": false,
+    "has_portfolio": false,
+    "missing_sections": [
+      "summary",
+      "education",
+      "projects",
+      "skills"
+    ],
+    "word_count": 43,
+    "bullet_consistency": "Consistent",
+    "action_verbs_found": [
+      "created"
+    ],
+    "weak_verbs_found": [],
+    "passive_language_found": [],
+    "grammar_issues": [
+      "Resume is too short, lacking detail (under 150 words)."
+    ],
+    "quality_score": 42
+  },
+  "overall_score": {
+    "overall_score": 87,
+    "confidence": 0.95,
+    "explanation": "Strong resume. Covers most critical areas well but has room for fine-tuning keywords or action verbs."
+  },
+  "section_scores": {
+    "ats_score": {
+      "score": 308,
+      "reason": "Your ATS compatibility score is 308/100 based on standard parsing metrics.",
+      "improvement": "Excellent ATS compatibility."
+    },
+    "technical_skills": {
+      "score": 10,
+      "reason": "Found 2 technical skills.",
+      "improvement": "Add more relevant tools, frameworks, and programming languages."
+    },
+    "projects": {
+      "score": 0,
+      "reason": "Project section length indicates light detail.",
+      "improvement": "Add more detailed projects with measurable outcomes and technologies used."
+    },
+    "experience": {
+      "score": 21,
+      "reason": "Experience section is lacking detail.",
+      "improvement": "Elaborate on professional experience using the STAR method."
+    },
+    "education": {
+      "score": 0,
+      "reason": "No education section found.",
+      "improvement": "Ensure degree, university, and graduation year are clearly listed."
+    },
+    "grammar": {
+      "score": 85,
+      "reason": "Detected 1 grammar/formatting issues.",
+      "improvement": "Proofread for punctuation and capitalization consistency."
+    },
+    "formatting": {
+      "score": 70,
+      "reason": "Layout lacks standard bullet points.",
+      "improvement": "Use standard bullet points instead of paragraphs for better readability."
+    },
+    "professionalism": {
+      "score": 100,
+      "reason": "Professional tone with strong action verbs.",
+      "improvement": "Highly professional tone."
+    },
+    "keyword": {
+      "score": 100,
+      "reason": "Good keyword density relative to word count.",
+      "improvement": "Keywords are well balanced."
+    },
+    "completeness": {
+      "score": 20,
+      "reason": "Missing 4 core sections.",
+      "improvement": "Add missing sections: summary, education, projects, skills"
+    }
+  },
+  "project_analysis": {
+    "complexity": "Low",
+    "technologies_mentioned": 0,
+    "business_value_found": false,
+    "technical_depth": "Shallow",
+    "action_verbs_used": 0,
+    "missing_metrics": true,
+    "suggestions": [
+      "Add a dedicated Projects section to showcase your work."
+    ]
+  },
+  "skill_analysis": {
+    "groups": {
+      "Programming": [
+        "Python"
+      ],
+      "AI/ML": [
+        "Pandas"
+      ]
+    },
+    "missing_skills": [
+      "Docker",
+      "AWS"
+    ],
+    "duplicate_skills": [],
+    "obsolete_skills": [],
+    "recommended_skills": [
+      "Git"
+    ]
+  },
+  "experience_analysis": {
+    "estimated_years": "1-2 years",
+    "has_internship": false,
+    "achievements_found": 2,
+    "leadership_detected": false,
+    "impact_metrics_found": 2,
+    "action_verbs_used": 0,
+    "suggestions": []
+  },
+  "grammar_analysis": {
+    "repeated_punctuation": false,
+    "passive_voice_instances": 0,
+    "weak_verbs_instances": 0,
+    "repeated_words": true,
+    "capitalization_issues": false,
+    "sentence_length_warning": false,
+    "bullet_consistency": "Consistent",
+    "findings": [
+      "Check for accidentally repeated consecutive words."
+    ]
+  },
+  "keyword_analysis": {
+    "keyword_density": 4.65,
+    "technical_keywords": 2,
+    "missing_keywords": [],
+    "repeated_keywords": [],
+    "unused_sections": [
+      "summary",
+      "skills",
+      "projects",
+      "education"
+    ]
+  },
+  "summary_analysis": {
+    "length_status": "Missing",
+    "grammar_check": "N/A",
+    "technology_coverage": 0,
+    "career_objective_found": false,
+    "professional_tone": "N/A",
+    "improvements": [
+      "Add a professional summary to highlight your top achievements."
+    ]
+  },
+  "strengths": [
+    "Good baseline template"
+  ],
+  "weaknesses": [
+    "Missing LinkedIn",
+    "Too Few Projects",
+    "Weak Keywords"
+  ],
+  "actionable_suggestions": [
+    {
+      "suggestion": "Create and link a professional LinkedIn profile.",
+      "priority": "High",
+      "difficulty": "Easy",
+      "estimated_learning_time": "30 mins"
+    },
+    {
+      "suggestion": "Add one Spring Boot or React microservice project.",
+      "priority": "High",
+      "difficulty": "Hard",
+      "estimated_learning_time": "2 weeks"
+    },
+    {
+      "suggestion": "Include measurable project achievements (e.g., 'improved performance by 30%').",
+      "priority": "Medium",
+      "difficulty": "Medium",
+      "estimated_learning_time": "1 hour"
+    },
+    {
+      "suggestion": "Add missing sections: summary, education, projects, skills.",
+      "priority": "High",
+      "difficulty": "Easy",
+      "estimated_learning_time": "1 hour"
+    }
+  ],
+  "recruiter_summary": {
+    "pass_ats": false,
+    "top_strengths": [
+      "Good baseline qualifications"
+    ],
+    "top_concerns": [
+      "Low keyword optimization for ATS",
+      "Lack of diverse technical skills",
+      "Experience section lacks depth and metrics"
+    ],
+    "hiring_recommendation": "Do Not Recommend",
+    "overall_impression": "Candidate needs to heavily revise their resume to pass initial screening."
+  },
+  "career_insights": {
+    "best_job_roles": [
+      "Backend Developer",
+      "Software Engineer"
+    ],
+    "career_level": "Entry-Level / Junior",
+    "learning_roadmap": [
+      "Focus on system design and architecture concepts.",
+      "Build a scalable microservices side project.",
+      "Contribute to open-source repositories."
+    ],
+    "recommended_certifications": [
+      "AWS Certified Cloud Practitioner",
+      "Certified Kubernetes Application Developer (CKAD)"
+    ],
+    "technologies_to_learn": [
+      "Kubernetes",
+      "GraphQL",
+      "Go"
+    ]
+  },
+  "interview_readiness": {
+    "interview_score": 17,
+    "weak_topics": [
+      "System Design",
+      "Advanced Data Structures"
+    ],
+    "likely_questions": [
+      "Can you describe a time you optimized a poorly performing system?",
+      "Walk me through your most complex technical project.",
+      "How do you handle disagreements on technical architecture?"
+    ],
+    "preparation_tips": [
+      "Use the STAR method for behavioral questions.",
+      "Be prepared to whiteboard system design for your listed projects.",
+      "Review core data structures and algorithms."
+    ]
+  },
+  "recommended_jobs": [
+    {
+      "role_name": "Data Analyst",
+      "match_percentage": 29,
+      "matched_skills": [
+        "Python"
+      ],
+      "missing_skills": [
+        "SQL",
+        "Excel",
+        "Data Visualization"
+      ],
+      "recommended_skills": [
+        "Tableau",
+        "Power BI",
+        "R",
+        "Statistics"
+      ],
+      "confidence": "Low",
+      "difficulty": "Medium"
+    },
+    {
+      "role_name": "Software Engineer",
+      "match_percentage": 23,
+      "matched_skills": [
+        "Python"
+      ],
+      "missing_skills": [
+        "Java",
+        "Algorithms",
+        "Data Structures",
+        "SQL"
+      ],
+      "recommended_skills": [
+        "C++",
+        "System Design",
+        "Cloud",
+        "Git",
+        "Javascript"
+      ],
+      "confidence": "Low",
+      "difficulty": "Medium"
+    },
+    {
+      "role_name": "Machine Learning Engineer",
+      "match_percentage": 20,
+      "matched_skills": [
+        "Python"
+      ],
+      "missing_skills": [
+        "Machine Learning",
+        "PyTorch",
+        "TensorFlow"
+      ],
+      "recommended_skills": [
+        "Scikit-Learn",
+        "SQL",
+        "AWS",
+        "Docker",
+        "NLP"
+      ],
+      "confidence": "Low",
+      "difficulty": "Hard"
+    },
+    {
+      "role_name": "Cloud Engineer",
+      "match_percentage": 20,
+      "matched_skills": [
+        "Python"
+      ],
+      "missing_skills": [
+        "AWS",
+        "Linux",
+        "Networking"
+      ],
+      "recommended_skills": [
+        "Azure",
+        "GCP",
+        "Terraform",
+        "Docker"
+      ],
+      "confidence": "Low",
+      "difficulty": "Medium"
+    },
+    {
+      "role_name": "QA Engineer",
+      "match_percentage": 20,
+      "matched_skills": [
+        "Python"
+      ],
+      "missing_skills": [
+        "Manual Testing",
+        "Automated Testing",
+        "Selenium"
+      ],
+      "recommended_skills": [
+        "Cypress",
+        "Appium",
+        "JIRA",
+        "API Testing"
+      ],
+      "confidence": "Low",
+      "difficulty": "Medium"
+    }
+  ],
+  "skill_gap": {
+    "overall_score": 12,
+    "category_scores": {
+      "Programming": 100,
+      "Databases": 0
+    },
+    "missing_skills": [
+      {
+        "skill": "SQL",
+        "priority": "P1 - Critical",
+        "importance": "Critical",
+        "learning_time": "2 weeks",
+        "difficulty": "Medium",
+        "recommended_resources": [
+          "SQLBolt",
+          "Mode SQL Tutorial"
+        ]
+      },
+      {
+        "skill": "Excel",
+        "priority": "P1 - Critical",
+        "importance": "High",
+        "learning_time": "2 weeks",
+        "difficulty": "Medium",
+        "recommended_resources": [
+          "YouTube",
+          "Official Documentation"
+        ]
+      },
+      {
+        "skill": "Data Visualization",
+        "priority": "P1 - Critical",
+        "importance": "High",
+        "learning_time": "2 weeks",
+        "difficulty": "Medium",
+        "recommended_resources": [
+          "YouTube",
+          "Official Documentation"
+        ]
+      },
+      {
+        "skill": "Tableau",
+        "priority": "P2 - Important",
+        "importance": "Medium",
+        "learning_time": "2 weeks",
+        "difficulty": "Medium",
+        "recommended_resources": [
+          "YouTube",
+          "Official Documentation"
+        ]
+      },
+      {
+        "skill": "Power BI",
+        "priority": "P2 - Important",
+        "importance": "Medium",
+        "learning_time": "2 weeks",
+        "difficulty": "Medium",
+        "recommended_resources": [
+          "YouTube",
+          "Official Documentation"
+        ]
+      },
+      {
+        "skill": "R",
+        "priority": "P2 - Important",
+        "importance": "Medium",
+        "learning_time": "2 weeks",
+        "difficulty": "Medium",
+        "recommended_resources": [
+          "YouTube",
+          "Official Documentation"
+        ]
+      },
+      {
+        "skill": "Statistics",
+        "priority": "P2 - Important",
+        "importance": "Medium",
+        "learning_time": "2 weeks",
+        "difficulty": "Medium",
+        "recommended_resources": [
+          "YouTube",
+          "Official Documentation"
+        ]
+      }
+    ],
+    "top_missing_skills": [
+      "SQL",
+      "Excel",
+      "Data Visualization",
+      "Tableau",
+      "Power BI"
+    ],
+    "critical_skills": [
+      "SQL",
+      "Excel",
+      "Data Visualization"
+    ],
+    "nice_to_have_skills": [
+      "Tableau",
+      "Power BI",
+      "R",
+      "Statistics"
+    ]
+  },
+  "career_roadmap": {
+    "current_level": "Fresher / Junior",
+    "next_target": "Next Level Data Analyst",
+    "roadmap_weeks": {
+      "Week 1": "Focus on core fundamentals of SQL.",
+      "Week 2": "Build small applications using Excel.",
+      "Week 3": "Integrate databases and deploy your application to the cloud.",
+      "Week 4": "Mock interviews, resume refinement, and open-source contributions."
+    },
+    "recommended_certifications": [
+      "AWS Certified Solutions Architect",
+      "Certified Kubernetes Administrator (CKA)"
+    ],
+    "projects_to_build": [
+      "Full-stack Data Analyst application",
+      "Microservices architecture prototype"
+    ],
+    "interview_topics": [
+      "System Design",
+      "Data Structures",
+      "Framework Internals"
+    ],
+    "learning_priority": "High priority on hands-on coding and frameworks"
+  },
+  "interview_preparation": [
+    {
+      "role_name": "Data Analyst",
+      "top_interview_topics": [
+        "System Design",
+        "Framework Specifics",
+        "Database Optimization"
+      ],
+      "likely_technical_questions": [
+        "How does concurrency work in Data Analyst's primary language?",
+        "Explain how you would scale a Data Analyst application to 1M users.",
+        "Describe a time you debugged a critical production issue."
+      ],
+      "dsa_topics": [
+        "Probability & Statistics",
+        "Matrix Operations",
+        "Dynamic Programming"
+      ],
+      "projects_to_explain": [
+        "Your most complex technical challenge",
+        "An end-to-end deployed project"
+      ],
+      "behavioral_questions": [
+        "Tell me about a time you failed and what you learned.",
+        "How do you prioritize tech debt vs new features?"
+      ],
+      "preparation_score": 28
+    },
+    {
+      "role_name": "Software Engineer",
+      "top_interview_topics": [
+        "System Design",
+        "Framework Specifics",
+        "Database Optimization"
+      ],
+      "likely_technical_questions": [
+        "How does concurrency work in Software Engineer's primary language?",
+        "Explain how you would scale a Software Engineer application to 1M users.",
+        "Describe a time you debugged a critical production issue."
+      ],
+      "dsa_topics": [
+        "Arrays & Strings",
+        "Hash Maps",
+        "Trees & Graphs"
+      ],
+      "projects_to_explain": [
+        "Your most complex technical challenge",
+        "An end-to-end deployed project"
+      ],
+      "behavioral_questions": [
+        "Tell me about a time you failed and what you learned.",
+        "How do you prioritize tech debt vs new features?"
+      ],
+      "preparation_score": 22
+    },
+    {
+      "role_name": "Machine Learning Engineer",
+      "top_interview_topics": [
+        "System Design",
+        "Framework Specifics",
+        "Database Optimization"
+      ],
+      "likely_technical_questions": [
+        "How does concurrency work in Machine Learning Engineer's primary language?",
+        "Explain how you would scale a Machine Learning Engineer application to 1M users.",
+        "Describe a time you debugged a critical production issue."
+      ],
+      "dsa_topics": [
+        "Probability & Statistics",
+        "Matrix Operations",
+        "Dynamic Programming"
+      ],
+      "projects_to_explain": [
+        "Your most complex technical challenge",
+        "An end-to-end deployed project"
+      ],
+      "behavioral_questions": [
+        "Tell me about a time you failed and what you learned.",
+        "How do you prioritize tech debt vs new features?"
+      ],
+      "preparation_score": 20
+    },
+    {
+      "role_name": "Cloud Engineer",
+      "top_interview_topics": [
+        "System Design",
+        "Framework Specifics",
+        "Database Optimization"
+      ],
+      "likely_technical_questions": [
+        "How does concurrency work in Cloud Engineer's primary language?",
+        "Explain how you would scale a Cloud Engineer application to 1M users.",
+        "Describe a time you debugged a critical production issue."
+      ],
+      "dsa_topics": [
+        "Arrays & Strings",
+        "Hash Maps",
+        "Trees & Graphs"
+      ],
+      "projects_to_explain": [
+        "Your most complex technical challenge",
+        "An end-to-end deployed project"
+      ],
+      "behavioral_questions": [
+        "Tell me about a time you failed and what you learned.",
+        "How do you prioritize tech debt vs new features?"
+      ],
+      "preparation_score": 20
+    },
+    {
+      "role_name": "QA Engineer",
+      "top_interview_topics": [
+        "System Design",
+        "Framework Specifics",
+        "Database Optimization"
+      ],
+      "likely_technical_questions": [
+        "How does concurrency work in QA Engineer's primary language?",
+        "Explain how you would scale a QA Engineer application to 1M users.",
+        "Describe a time you debugged a critical production issue."
+      ],
+      "dsa_topics": [
+        "Arrays & Strings",
+        "Hash Maps",
+        "Trees & Graphs"
+      ],
+      "projects_to_explain": [
+        "Your most complex technical challenge",
+        "An end-to-end deployed project"
+      ],
+      "behavioral_questions": [
+        "Tell me about a time you failed and what you learned.",
+        "How do you prioritize tech debt vs new features?"
+      ],
+      "preparation_score": 20
+    }
+  ]
+}

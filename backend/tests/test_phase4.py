@@ -1,7 +1,7 @@
 from backend.app.services.ats_service import compute_ats_score
 from backend.app.services.job_match_service import match_job_description
 from backend.app.services.recommendation_service import get_job_recommendations
-from backend.app.services.skill_gap_service import analyze_skill_gap
+from backend.app.services.skill_gap_service import analyze_role_skill_gap
 
 
 def test_ats_scoring_with_formatting():
@@ -32,22 +32,25 @@ def test_ats_scoring_with_formatting():
 
 
 def test_skill_gap_analysis():
-    matched = ["Python", "Java"]
-    missing = ["AWS", "Docker", "Kubernetes"]
+    resume_skills = ["Python", "Java"]
+    req_skills = ["AWS", "Docker", "Python"]
+    pref_skills = ["Kubernetes"]
 
-    result = analyze_skill_gap(matched, missing)
+    result = analyze_role_skill_gap(resume_skills, req_skills, pref_skills)
 
-    assert result["matched_skills"] == matched
-    assert result["missing_skills"] == missing
-    assert "AWS" in result["recommended_skills"]
-    assert len(result["learning_suggestions"]) > 0
-    # Should recommend cloud certs for AWS/Docker
-    assert any("cloud" in s.lower() for s in result["learning_suggestions"])
+    assert "overall_score" in result
+    assert len(result["missing_skills"]) == 3  # AWS, Docker, Kubernetes
+    assert "AWS" in result["critical_skills"]
+    assert "Kubernetes" in result["nice_to_have_skills"]
 
 
-def test_job_match_service_structure():
-    from backend.app.services.embedding_service import load_model
-    load_model()
+from unittest.mock import patch
+
+@patch("backend.app.services.job_match_service.get_embedding")
+@patch("backend.app.services.job_match_service.get_raw_vector")
+def test_job_match_service_structure(mock_get_raw, mock_get_embed):
+    import numpy as np
+    mock_get_raw.return_value = np.zeros(384)
 
     resume_text = "I am a software engineer with Python and Java."
     jd_text = "Looking for a software engineer with Python, AWS, and Docker."

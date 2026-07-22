@@ -282,6 +282,11 @@ class AnalyzeResponse(BaseModel):
     recruiter_summary: Any
     career_insights: Any
     interview_readiness: Any
+    # ── Phase 3 fields ──────────────────────────────────────────────────
+    recommended_jobs: Any = None
+    skill_gap: Any = None
+    career_roadmap: Any = None
+    interview_preparation: Any = None
 
 
 @router.post(
@@ -454,6 +459,10 @@ async def analyze_resume(
         recruiter_summary=recruiter_data["recruiter_summary"],
         career_insights=recruiter_data["career_insights"],
         interview_readiness=recruiter_data["interview_readiness"],
+        recommended_jobs=analysis.get("recommended_jobs"),
+        skill_gap=analysis.get("skill_gap"),
+        career_roadmap=analysis.get("career_roadmap"),
+        interview_preparation=analysis.get("interview_preparation")
     )
 
 
