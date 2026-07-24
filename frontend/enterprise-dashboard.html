@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeSphere Enterprise - AI Recruitment</title>
+    <!-- CDNs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Typography & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="enterprise-dashboard.css">
+</head>
+<body>
+
+    <!-- AUTHENTICATION VIEW (Module D9) -->
+    <div id="auth-view" class="auth-wrapper">
+        <div class="auth-card">
+            <h2 style="text-align: center; margin-bottom: 20px;"><i class="fa-solid fa-building-user" style="color:var(--accent-indigo)"></i> Enterprise Login</h2>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" id="auth-email" class="form-control" placeholder="admin@resumesphere.com" value="admin@resumesphere.com">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" id="auth-password" class="form-control" placeholder="••••••••" value="admin">
+            </div>
+            <button class="btn btn-primary" id="login-btn" style="width: 100%; justify-content: center; margin-top: 10px;">Sign In</button>
+            <div style="margin-top: 15px; text-align: center; font-size: 12px; color: var(--text-secondary);">
+                Don't have an account? <a href="#" id="show-register" style="color:var(--accent-indigo)">Register</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD VIEW -->
+    <div id="dashboard-view" class="layout" style="display: none;">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-briefcase"></i> &nbsp; ResumeSphere Ent.
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-target="module-d1"><i class="fa-solid fa-house"></i> Dashboard</a>
+                <a href="#" class="nav-item" data-target="module-d2"><i class="fa-solid fa-users"></i> Candidates</a>
+                <a href="#" class="nav-item" data-target="module-d4"><i class="fa-solid fa-upload"></i> Bulk Process</a>
+                <a href="#" class="nav-item" data-target="module-d6"><i class="fa-solid fa-building"></i> Interview DB</a>
+                <a href="#" class="nav-item" data-target="module-d7"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+                <a href="#" class="nav-item" data-target="module-d5"><i class="fa-solid fa-comments"></i> Team Hub</a>
+            </nav>
+            <div style="padding: 20px; border-top: 1px solid var(--border-color); font-size: 12px; color: var(--text-secondary);">
+                <div id="user-info" style="margin-bottom: 10px; font-weight: 600;">Loading...</div>
+                <button class="btn btn-secondary" id="logout-btn" style="width: 100%; justify-content:center; font-size: 12px;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div style="font-weight: 600;" id="page-title">Enterprise Dashboard</div>
+                <div class="topbar-actions">
+                    <button class="btn btn-secondary" style="padding: 6px 10px;" id="theme-btn"><i class="fa-solid fa-moon"></i></button>
+                    <button class="btn btn-secondary" style="padding: 6px 10px;" id="notif-btn"><i class="fa-solid fa-bell"></i></button>
+                </div>
+            </header>
+
+            <div class="page-container">
+                
+                <!-- MODULE D1: Recruiter Dashboard -->
+                <section id="module-d1" class="module active">
+                    <div class="grid-3" style="margin-bottom: 20px;">
+                        <div class="card">
+                            <div class="form-label">Active Jobs</div>
+                            <h2 style="font-size: 2rem; color: var(--accent-blue);" id="d1-active-jobs">-</h2>
+                        </div>
+                        <div class="card">
+                            <div class="form-label">Total Candidates</div>
+                            <h2 style="font-size: 2rem; color: var(--accent-green);" id="d1-total-cand">-</h2>
+                        </div>
+                        <div class="card">
+                            <div class="form-label">Shortlisted</div>
+                            <h2 style="font-size: 2rem; color: var(--accent-warning);" id="d1-shortlisted">-</h2>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Job Postings</span>
+                            <button class="btn btn-primary" onclick="document.getElementById('job-modal').style.display='flex'"><i class="fa-solid fa-plus"></i> New Job</button>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table" id="jobs-table">
+                                <thead>
+                                    <tr><th>Title</th><th>Location</th><th>Status</th><th>Actions</th></tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE D2 & D3: Candidate Management & AI Ranking -->
+                <section id="module-d2" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Candidate Pipeline & Ranking</span>
+                            <div style="display:flex; gap:10px;">
+                                <input type="text" id="d2-search" class="form-control" placeholder="Search skills or location..." style="width: 250px;">
+                                <button class="btn btn-secondary" id="d2-search-btn"><i class="fa-solid fa-search"></i></button>
+                                <button class="btn btn-primary" id="d3-rank-btn"><i class="fa-solid fa-robot"></i> Rank (AI)</button>
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table" id="candidates-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Skills</th>
+                                        <th>AI Score</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE D4: Bulk Resume Processing -->
+                <section id="module-d4" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Bulk Resume Processing</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Select Target Job (for grouping)</label>
+                            <select id="d4-job-select" class="form-control">
+                                <!-- Populated by JS -->
+                            </select>
+                        </div>
+                        <div class="upload-zone" id="d4-upload-zone" onclick="document.getElementById('d4-file-input').click()">
+                            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 3rem; color: var(--accent-indigo); margin-bottom: 15px;"></i>
+                            <h3>Drag & Drop Resumes Here</h3>
+                            <p style="color: var(--text-secondary); font-size: 13px; margin-top: 5px;">Supports PDF (Batch upload 10-500 files)</p>
+                            <input type="file" id="d4-file-input" multiple accept=".pdf" style="display:none;">
+                        </div>
+                        <div style="margin-top: 15px; text-align:right;">
+                            <button class="btn btn-primary" id="d4-upload-btn" disabled>Upload & Process</button>
+                        </div>
+                        <div id="d4-progress" style="display:none; margin-top: 15px;">
+                            <div class="form-label">Processing... <span id="d4-progress-text">0/0</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE D6: Interview DB -->
+                <section id="module-d6" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Company Interview Knowledge Base</span>
+                        </div>
+                        <div class="grid-2" id="d6-container">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE D7: Enterprise Analytics -->
+                <section id="module-d7" class="module">
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-title">Hiring Funnel</div>
+                            <canvas id="chart-funnel" height="250"></canvas>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">Skill Demand Trend</div>
+                            <canvas id="chart-skills" height="250"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE D5: Team Collaboration Hub -->
+                <section id="module-d5" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Team Activity</span>
+                        </div>
+                        <div id="d5-activity-feed" style="display:flex; flex-direction:column; gap:10px;">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="job-modal">
+        <div class="modal-content">
+            <div class="modal-header">Create Job Posting</div>
+            <div class="form-group">
+                <label class="form-label">Job Title</label>
+                <input type="text" id="job-title" class="form-control">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Location</label>
+                <input type="text" id="job-location" class="form-control" placeholder="e.g. Remote, NY">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description & Requirements</label>
+                <textarea id="job-desc" class="form-control" rows="4"></textarea>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top: 20px;">
+                <button class="btn btn-secondary" onclick="document.getElementById('job-modal').style.display='none'">Cancel</button>
+                <button class="btn btn-primary" id="job-save-btn">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Dropdown (D8) -->
+    <div class="card" id="notif-dropdown" style="display:none; position:absolute; right:20px; top:60px; width:300px; z-index:500;">
+        <div class="card-header" style="margin-bottom:0;"><span class="card-title" style="font-size:1rem;">Notifications</span></div>
+        <div id="notif-list" style="max-height: 300px; overflow-y:auto; padding-top:10px;">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="enterprise-dashboard.js"></script>
+</body>
+</html>

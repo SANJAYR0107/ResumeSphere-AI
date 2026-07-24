@@ -28,9 +28,20 @@
                 <span class="logo-text">ResumeSphere <span class="accent-text">AI</span></span>
             </div>
             <p class="subtitle">Extract text, calculate ATS scores, and find matched job recommendations instantly</p>
-            <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">
+            <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
                 <button class="btn btn-primary" id="theme-toggle-btn" style="background: rgba(255,255,255,0.1); color: var(--text-primary); border: 1px solid var(--border-color); box-shadow: none;"><i class="fa-solid fa-moon"></i> Theme</button>
                 <button class="btn btn-primary" id="export-pdf-btn" style="display: none;"><i class="fa-solid fa-file-pdf"></i> Export Dashboard</button>
+                <a href="career-dashboard.html" class="btn btn-primary" style="background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); border: none; text-decoration: none;"><i class="fa-solid fa-rocket"></i> Career Assistant</a>
+                <a href="enterprise-dashboard.html" class="btn btn-primary" style="background: linear-gradient(135deg, #10b981, #06b6d4); border: none; text-decoration: none;"><i class="fa-solid fa-building-user"></i> Enterprise Login</a>
+                <a href="ecosystem-dashboard.html" class="btn btn-primary" style="background: linear-gradient(135deg, #f59e0b, #ef4444); border: none; text-decoration: none;"><i class="fa-solid fa-globe"></i> Career Ecosystem</a>
+                <a href="cloud-dashboard.html" class="btn btn-primary" style="background: linear-gradient(135deg, #6366f1, #a855f7); border: none; text-decoration: none;"><i class="fa-solid fa-cloud"></i> Global Career Cloud</a>
+                <a href="talent-dashboard.html" class="btn btn-primary" style="background: linear-gradient(135deg, #fbbf24, #d97706); border: none; text-decoration: none; color: black; font-weight:600;"><i class="fa-solid fa-brain"></i> Talent Intelligence</a>
+                <a href="learning-dashboard.html" class="btn btn-primary" style="background: linear-gradient(135deg, #8b5cf6, #ec4899); border: none; text-decoration: none;"><i class="fa-solid fa-graduation-cap"></i> AI Learning Hub</a>
+                <a href="marketplace-dashboard.html" class="btn btn-primary" style="background: linear-gradient(135deg, #14b8a6, #3b82f6); border: none; text-decoration: none; box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4);"><i class="fa-solid fa-store"></i> AI Marketplace</a>
+                <a href="network-dashboard.html" class="btn btn-primary" style="background: linear-gradient(135deg, #8b5cf6, #ec4899); border: none; text-decoration: none; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);"><i class="fa-solid fa-globe"></i> Global Network</a>
+                <a href="copilot-dashboard.html" class="btn btn-primary" style="background: linear-gradient(135deg, #0d9488, #0ea5e9); border: none; text-decoration: none; box-shadow: 0 4px 15px rgba(13, 148, 136, 0.4);"><i class="fa-solid fa-bot"></i> AI Copilot</a>
+                <a href="saas-dashboard.html" class="btn btn-primary" style="background: linear-gradient(135deg, #0284c7, #4f46e5); border: none; text-decoration: none; box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);"><i class="fa-solid fa-building"></i> Enterprise SaaS</a>
+                <a href="platform-dashboard.html" class="btn btn-primary" style="background: linear-gradient(135deg, #6366f1, #a855f7); border: none; text-decoration: none; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);"><i class="fa-solid fa-microchip"></i> AI Platform OS</a>
             </div>
         </header>
 
@@ -353,6 +364,301 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- PHASE 4: RESUME VS JOB DESCRIPTION OPTIMIZATION ENGINE -->
+                <section class="card phase4-card" id="phase4-optimization-card" style="border-top: 4px solid var(--accent-cyan); margin-top: 20px;">
+                    <h2 class="card-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Phase 4: Resume vs Job Description Optimization Engine</h2>
+                    <p class="card-desc">Compare your resume against any target Job Description (upload PDF or paste text) to generate ATS optimization suggestions, resume rewrites, interview preparation, and downloadable PDF reports.</p>
+
+                    <!-- JD Input Tabs -->
+                    <div style="display: flex; gap: 10px; margin-top: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+                        <button class="btn btn-secondary tab-btn active" id="jd-tab-paste" style="padding: 8px 16px; font-size: 0.9rem;"><i class="fa-solid fa-align-left"></i> Paste JD Text</button>
+                        <button class="btn btn-secondary tab-btn" id="jd-tab-upload" style="padding: 8px 16px; font-size: 0.9rem;"><i class="fa-solid fa-file-pdf"></i> Upload JD PDF</button>
+                    </div>
+
+                    <!-- Paste Text Input Container -->
+                    <div id="jd-paste-container" style="margin-top: 15px;">
+                        <textarea id="p4-jd-text-input" class="jd-textarea" placeholder="Paste target Job Description text here (e.g. required skills, responsibilities)..." rows="6" style="width:100%; background:rgba(255,255,255,0.03); color:white; border:1px solid var(--border-color); border-radius:8px; padding:12px; font-family:var(--font-body); font-size:0.95rem;"></textarea>
+                    </div>
+
+                    <!-- Upload PDF Input Container (Hidden by default) -->
+                    <div id="jd-upload-container" class="hidden" style="margin-top: 15px;">
+                        <div class="drop-zone" id="p4-jd-drop-zone" style="padding: 20px; text-align: center;">
+                            <p style="color: var(--text-secondary);"><i class="fa-solid fa-file-pdf" style="font-size: 2rem; color: var(--accent-cyan); margin-bottom: 8px;"></i></p>
+                            <p style="color: var(--text-primary); font-weight: 500;">Select or drag Job Description PDF</p>
+                            <button class="btn btn-primary" id="p4-jd-browse-btn" style="margin-top: 10px;"><i class="fa-solid fa-folder-open"></i> Browse JD PDF</button>
+                            <input type="file" id="p4-jd-file-input" accept="application/pdf" style="display: none;">
+                            <span id="p4-jd-filename-display" style="display: block; margin-top: 8px; color: var(--accent-cyan); font-size: 0.85rem;"></span>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <button class="btn btn-primary" id="p4-run-optimization-btn" style="margin-top: 15px; width: 100%; font-size: 1.05rem; padding: 14px; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple)); border: none;">
+                        <i class="fa-solid fa-bolt"></i> Run Phase 4 Optimization Engine
+                    </button>
+
+                    <!-- Phase 4 Results Output Dashboard (Hidden by default) -->
+                    <div id="p4-results-dashboard" class="hidden" style="margin-top: 25px; display: flex; flex-direction: column; gap: 20px;">
+                        
+                        <!-- Header & Download Report CTA -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color);">
+                            <div>
+                                <h3 id="p4-target-role-display" style="margin: 0; color: #fff; font-size: 1.3rem;">Target Role Optimization</h3>
+                                <span id="p4-confidence-badge" style="display: inline-block; margin-top: 4px; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; background: rgba(0,242,254,0.15); color: #00f2fe;">High Confidence</span>
+                            </div>
+                            <button class="btn btn-primary" id="p4-download-pdf-btn" style="background: linear-gradient(90deg, #10b981, #059669); border: none; font-size: 0.95rem;">
+                                <i class="fa-solid fa-file-pdf"></i> Download PDF Optimization Report
+                            </button>
+                        </div>
+
+                        <!-- 1. MATCH DASHBOARD (4 Score Cards) -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
+                            <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; text-align: center; border-bottom: 3px solid #00f2fe;">
+                                <span style="font-size: 0.8rem; color: var(--text-secondary);">Overall Match</span>
+                                <h2 id="p4-overall-match-text" style="font-size: 2rem; color: #00f2fe; margin: 5px 0 0 0;">0%</h2>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; text-align: center; border-bottom: 3px solid #4facfe;">
+                                <span style="font-size: 0.8rem; color: var(--text-secondary);">ATS Match</span>
+                                <h2 id="p4-ats-match-text" style="font-size: 2rem; color: #4facfe; margin: 5px 0 0 0;">0%</h2>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; text-align: center; border-bottom: 3px solid #7f00ff;">
+                                <span style="font-size: 0.8rem; color: var(--text-secondary);">Semantic Match</span>
+                                <h2 id="p4-semantic-match-text" style="font-size: 2rem; color: #7f00ff; margin: 5px 0 0 0;">0%</h2>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; text-align: center; border-bottom: 3px solid #e100ff;">
+                                <span style="font-size: 0.8rem; color: var(--text-secondary);">Keyword Match</span>
+                                <h2 id="p4-keyword-match-text" style="font-size: 2rem; color: #e100ff; margin: 5px 0 0 0;">0%</h2>
+                            </div>
+                        </div>
+
+                        <!-- 2. ATS IMPROVEMENT SIMULATOR CARD -->
+                        <div style="background: rgba(255,255,255,0.03); padding: 18px; border-radius: 10px; border: 1px solid var(--border-color);">
+                            <h3 style="margin-top: 0; color: #fff; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-gauge-high" style="color: var(--accent-cyan);"></i> ATS Improvement Simulator</h3>
+                            <div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: center; gap: 15px; margin: 15px 0; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+                                <div>
+                                    <span style="font-size: 0.85rem; color: var(--text-secondary);">Current ATS Score</span>
+                                    <h3 id="p4-sim-curr-score" style="margin: 3px 0 0 0; color: var(--text-primary); font-size: 1.6rem;">70</h3>
+                                </div>
+                                <div style="font-size: 1.5rem; color: #10b981;"><i class="fa-solid fa-arrow-right"></i></div>
+                                <div>
+                                    <span style="font-size: 0.85rem; color: var(--text-secondary);">Predicted ATS Score</span>
+                                    <h3 id="p4-sim-pred-score" style="margin: 3px 0 0 0; color: #00f2fe; font-size: 1.6rem;">88</h3>
+                                </div>
+                                <div style="background: rgba(16,185,129,0.15); padding: 6px 14px; border-radius: 20px; color: #10b981; font-weight: bold; font-size: 1rem;">
+                                    Expected Gain: +<span id="p4-sim-gain">18</span> Points
+                                </div>
+                            </div>
+                            <h4 style="margin: 10px 0 6px 0; color: var(--text-secondary); font-size: 0.9rem;">Score Boosting Actions:</h4>
+                            <div id="p4-sim-changes-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+                        </div>
+
+                        <!-- 3. KEYWORD ANALYSIS & COMPARISON HUB -->
+                        <div style="background: rgba(255,255,255,0.03); padding: 18px; border-radius: 10px; border: 1px solid var(--border-color);">
+                            <h3 style="margin-top: 0; color: #fff; font-size: 1.1rem;"><i class="fa-solid fa-tags" style="color: var(--accent-pink);"></i> Keyword Analysis & Categorization</h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-top: 12px;">
+                                <div style="background: rgba(16, 185, 129, 0.08); padding: 12px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2);">
+                                    <h4 style="color: #10b981; margin: 0 0 8px 0; font-size: 0.95rem;"><i class="fa-solid fa-check-circle"></i> Matched Keywords</h4>
+                                    <div id="p4-matched-kws-container" class="skills-grid"></div>
+                                </div>
+                                <div style="background: rgba(239, 68, 68, 0.08); padding: 12px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2);">
+                                    <h4 style="color: #ef4444; margin: 0 0 8px 0; font-size: 0.95rem;"><i class="fa-solid fa-triangle-exclamation"></i> Important Missing Keywords</h4>
+                                    <div id="p4-important-missing-kws-container" class="skills-grid"></div>
+                                </div>
+                                <div style="background: rgba(245, 158, 11, 0.08); padding: 12px; border-radius: 8px; border: 1px solid rgba(245, 158, 11, 0.2);">
+                                    <h4 style="color: #f59e0b; margin: 0 0 8px 0; font-size: 0.95rem;"><i class="fa-solid fa-times-circle"></i> Other Missing Keywords</h4>
+                                    <div id="p4-missing-kws-container" class="skills-grid"></div>
+                                </div>
+                                <div style="background: rgba(0, 242, 254, 0.08); padding: 12px; border-radius: 8px; border: 1px solid rgba(0, 242, 254, 0.2);">
+                                    <h4 style="color: #00f2fe; margin: 0 0 8px 0; font-size: 0.95rem;"><i class="fa-solid fa-plus-circle"></i> Extra Resume Skills</h4>
+                                    <div id="p4-extra-kws-container" class="skills-grid"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. SECTION-WISE ANALYSIS -->
+                        <div style="background: rgba(255,255,255,0.03); padding: 18px; border-radius: 10px; border: 1px solid var(--border-color);">
+                            <h3 style="margin-top: 0; color: #fff; font-size: 1.1rem;"><i class="fa-solid fa-layer-group" style="color: var(--accent-purple);"></i> Section-wise Compatibility Analysis</h3>
+                            <div id="p4-section-analysis-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-top: 12px;"></div>
+                        </div>
+
+                        <!-- 5. RESUME REWRITE SUGGESTIONS -->
+                        <div style="background: rgba(255,255,255,0.03); padding: 18px; border-radius: 10px; border: 1px solid var(--border-color);">
+                            <h3 style="margin-top: 0; color: #fff; font-size: 1.1rem;"><i class="fa-solid fa-pen-to-square" style="color: var(--accent-cyan);"></i> Resume Rewrite Suggestions</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 12px;">Pre-written, optimized text snippets tailored to your target job description. Copy and refine in your resume.</p>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                <div style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; border-left: 3px solid var(--accent-cyan);">
+                                    <h4 style="color: var(--accent-cyan); margin: 0 0 6px 0; font-size: 0.9rem;">Professional Summary Rewrite</h4>
+                                    <p id="p4-rewrite-summary" style="color: var(--text-primary); font-size: 0.9rem; line-height: 1.5; font-style: italic;"></p>
+                                </div>
+                                <div style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; border-left: 3px solid var(--accent-purple);">
+                                    <h4 style="color: var(--accent-purple); margin: 0 0 6px 0; font-size: 0.9rem;">Experience Bullets Rewrites</h4>
+                                    <ul id="p4-rewrite-bullets" style="padding-left: 18px; color: var(--text-primary); font-size: 0.9rem; line-height: 1.6;"></ul>
+                                </div>
+                                <div style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; border-left: 3px solid #10b981;">
+                                    <h4 style="color: #10b981; margin: 0 0 6px 0; font-size: 0.9rem;">Project Descriptions Rewrites</h4>
+                                    <ul id="p4-rewrite-projects" style="padding-left: 18px; color: var(--text-primary); font-size: 0.9rem; line-height: 1.6;"></ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 6. INTERVIEW ALIGNMENT & LEARNING ROADMAP -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+                            <div style="background: rgba(255,255,255,0.03); padding: 18px; border-radius: 10px; border: 1px solid var(--border-color);">
+                                <h3 style="margin-top: 0; color: #fff; font-size: 1.1rem;"><i class="fa-solid fa-user-ninja" style="color: #f59e0b;"></i> Target Interview Preparation</h3>
+                                <h4 style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 10px;">Likely Technical Questions:</h4>
+                                <ul id="p4-interview-tech-q" style="padding-left: 18px; color: var(--text-primary); font-size: 0.85rem; line-height: 1.5;"></ul>
+                                <h4 style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 10px;">Coding & System Design Topics:</h4>
+                                <ul id="p4-interview-coding-topics" style="padding-left: 18px; color: var(--text-primary); font-size: 0.85rem; line-height: 1.5;"></ul>
+                            </div>
+                            <div style="background: rgba(255,255,255,0.03); padding: 18px; border-radius: 10px; border: 1px solid var(--border-color);">
+                                <h3 style="margin-top: 0; color: #fff; font-size: 1.1rem;"><i class="fa-solid fa-graduation-cap" style="color: #10b981;"></i> Learning & Practice Roadmap</h3>
+                                <div id="p4-learning-roadmap-container" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- PHASE B: AI INTERVIEW PLATFORM & INTERACTIVE SIMULATOR -->
+                <section class="card phaseb-card" id="phaseb-interview-card" style="border-top: 4px solid var(--accent-purple); margin-top: 25px;">
+                    <h2 class="card-title"><i class="fa-solid fa-headset"></i> Phase B: Interactive AI Mock Interview Platform</h2>
+                    <p class="card-desc">Practice technical, HR, behavioral, and coding questions with real-time AI scoring out of 10, dynamic follow-up questions, code execution evaluation, and downloadable performance reports.</p>
+
+                    <!-- Setup Controls -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 15px;">
+                        <div>
+                            <label style="display:block; font-size:0.8rem; color:var(--text-secondary); margin-bottom:4px;">Target Role</label>
+                            <input type="text" id="pb-target-role-input" value="Software Engineer" style="width:100%; padding:8px 12px; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-color); border-radius:6px;">
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:0.8rem; color:var(--text-secondary); margin-bottom:4px;">Target Company</label>
+                            <input type="text" id="pb-target-company-input" value="Tech Corporation" style="width:100%; padding:8px 12px; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-color); border-radius:6px;">
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:0.8rem; color:var(--text-secondary); margin-bottom:4px;">Difficulty Level</label>
+                            <select id="pb-difficulty-select" style="width:100%; padding:8px 12px; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-color); border-radius:6px;">
+                                <option value="Easy">Easy</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="Hard">Hard</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:0.8rem; color:var(--text-secondary); margin-bottom:4px;">Question Count</label>
+                            <select id="pb-count-select" style="width:100%; padding:8px 12px; background:rgba(255,255,255,0.05); color:white; border:1px solid var(--border-color); border-radius:6px;">
+                                <option value="3">3 Questions (Quick)</option>
+                                <option value="5" selected>5 Questions (Standard)</option>
+                                <option value="10">10 Questions (Comprehensive)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Start Interview Button -->
+                    <button class="btn btn-primary" id="pb-start-interview-btn" style="margin-top: 15px; width: 100%; padding: 12px; background: linear-gradient(90deg, var(--accent-purple), var(--accent-pink)); border: none;">
+                        <i class="fa-solid fa-play"></i> Start Interactive AI Interview Session
+                    </button>
+
+                    <!-- Interactive Session Area (Hidden by default) -->
+                    <div id="pb-session-workspace" class="hidden" style="margin-top: 20px; background: rgba(0,0,0,0.25); padding: 20px; border-radius: 10px; border: 1px solid var(--border-color);">
+                        
+                        <!-- Progress Bar & Timer -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <span style="font-size: 0.9rem; color: var(--text-secondary);">Question <span id="pb-q-index-text">1</span> of <span id="pb-q-total-text">5</span></span>
+                            <span style="font-size: 0.9rem; color: var(--accent-cyan); font-weight: bold;"><i class="fa-solid fa-clock"></i> <span id="pb-q-timer-text">00:45</span></span>
+                        </div>
+                        <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-bottom: 15px;">
+                            <div id="pb-progress-fill" style="width: 20%; height: 100%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple)); transition: width 0.3s;"></div>
+                        </div>
+
+                        <!-- Question Card -->
+                        <div style="background: rgba(255,255,255,0.03); padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent-cyan); margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <span id="pb-q-category-badge" style="font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; background: rgba(0,242,254,0.15); color: #00f2fe; font-weight: bold;">Technical</span>
+                                <span id="pb-q-skill-badge" style="font-size: 0.75rem; color: var(--text-secondary);">Target: Java</span>
+                            </div>
+                            <h3 id="pb-q-text-display" style="margin: 6px 0; color: #fff; font-size: 1.1rem; line-height: 1.5;">Question text loading...</h3>
+                            <p id="pb-q-hint-display" style="margin: 4px 0 0 0; font-size: 0.8rem; color: var(--text-secondary); font-style: italic;"></p>
+                        </div>
+
+                        <!-- Candidate Answer Area -->
+                        <label style="display:block; font-size:0.85rem; color:var(--text-secondary); margin-bottom:6px;">Your Answer / Explanation:</label>
+                        <textarea id="pb-answer-input" rows="5" placeholder="Type your answer here or paste code implementation..." style="width:100%; padding:12px; background:rgba(255,255,255,0.03); color:white; border:1px solid var(--border-color); border-radius:8px; font-family:var(--font-body); font-size:0.95rem;"></textarea>
+
+                        <!-- Action Buttons (Submit, Skip) -->
+                        <div style="display: flex; gap: 10px; margin-top: 12px;">
+                            <button class="btn btn-primary" id="pb-submit-answer-btn" style="flex: 2; padding: 10px;"><i class="fa-solid fa-paper-plane"></i> Submit Answer for AI Evaluation</button>
+                            <button class="btn btn-secondary" id="pb-skip-q-btn" style="flex: 1; padding: 10px;"><i class="fa-solid fa-forward"></i> Skip Question</button>
+                        </div>
+
+                        <!-- Live Evaluation Output Card (Hidden by default) -->
+                        <div id="pb-eval-output-card" class="hidden" style="margin-top: 15px; background: rgba(16, 185, 129, 0.08); padding: 15px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2);">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <h4 style="margin: 0; color: #10b981; font-size: 1.1rem;"><i class="fa-solid fa-circle-check"></i> AI Answer Score: <span id="pb-eval-score-text">8.5</span> / 10</h4>
+                                <span id="pb-eval-comm-text" style="font-size: 0.8rem; color: var(--text-secondary);">Communication: 9.0/10</span>
+                            </div>
+                            <div style="margin-top: 10px; font-size: 0.85rem; color: var(--text-primary);">
+                                <strong style="color: #10b981;">Strengths:</strong>
+                                <ul id="pb-eval-strengths" style="margin: 4px 0 8px 18px; padding: 0;"></ul>
+                                <strong style="color: #ef4444;">Missing Concepts & Weaknesses:</strong>
+                                <ul id="pb-eval-weaknesses" style="margin: 4px 0 8px 18px; padding: 0;"></ul>
+                                <div id="pb-followup-box" style="background: rgba(0,242,254,0.1); padding: 10px; border-radius: 6px; margin-top: 8px; border-left: 3px solid #00f2fe;">
+                                    <strong style="color: #00f2fe; font-size: 0.85rem;"><i class="fa-solid fa-comments"></i> Dynamic AI Follow-up:</strong>
+                                    <p id="pb-followup-text" style="margin: 4px 0 0 0; font-size: 0.85rem; color: #fff;"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Download Report CTA -->
+                        <div style="margin-top: 15px; text-align: right;">
+                            <button class="btn btn-primary" id="pb-download-interview-report-btn" style="background: linear-gradient(90deg, #10b981, #059669); border: none; font-size: 0.9rem;">
+                                <i class="fa-solid fa-file-pdf"></i> Download PDF Interview Report
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHASE C: AI CAREER ASSISTANT HUB -->
+                <section class="card phasec-card" id="phasec-career-card" style="border-top: 4px solid #f59e0b; margin-top: 25px;">
+                    <h2 class="card-title"><i class="fa-solid fa-robot" style="color: #f59e0b;"></i> Phase C: AI Career Assistant & Growth Hub</h2>
+                    <p class="card-desc">AI Career Coach 6-month roadmap, RAG-style Resume Chat Assistant, Cover Letter Generator, Job Readiness Index, and Job Application Tracker.</p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 15px;">
+                        
+                        <!-- 1. AI Resume Chat Assistant Widget -->
+                        <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between; height: 350px;">
+                            <div>
+                                <h3 style="margin-top: 0; color: #f59e0b; font-size: 1.05rem;"><i class="fa-solid fa-comments"></i> AI Resume Chat Assistant</h3>
+                                <div id="pc-chat-box" style="height: 220px; overflow-y: auto; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.85rem; line-height: 1.5; color: var(--text-primary);">
+                                    <p style="margin: 0; color: var(--text-secondary); font-style: italic;">Ask me anything about your ATS score, missing skills, or interview prep!</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                                <input type="text" id="pc-chat-input" placeholder="e.g. Why is my ATS score low?" style="flex: 1; padding: 8px 12px; background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.85rem;">
+                                <button class="btn btn-primary" id="pc-chat-send-btn" style="padding: 8px 14px; background: #f59e0b; border: none; font-size: 0.85rem;"><i class="fa-solid fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- 2. AI Cover Letter Generator Widget -->
+                        <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 10px; border: 1px solid var(--border-color);">
+                            <h3 style="margin-top: 0; color: var(--accent-cyan); font-size: 1.05rem;"><i class="fa-solid fa-envelope-open-text"></i> AI Cover Letter Generator</h3>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px;">
+                                <input type="text" id="pc-cl-candidate" placeholder="Your Name" value="Jane Doe" style="padding: 6px 10px; background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.8rem;">
+                                <input type="text" id="pc-cl-company" placeholder="Company Name" value="Tech Corporation" style="padding: 6px 10px; background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.8rem;">
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
+                                <input type="text" id="pc-cl-role" placeholder="Target Role" value="Software Engineer" style="padding: 6px 10px; background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.8rem;">
+                                <select id="pc-cl-type" style="padding: 6px 10px; background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.8rem;">
+                                    <option value="Experienced">Experienced</option>
+                                    <option value="Fresher">Fresher</option>
+                                    <option value="Internship">Internship</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary" id="pc-cl-generate-btn" style="width: 100%; margin-top: 10px; padding: 8px; background: var(--accent-cyan); color: #0f172a; border: none; font-weight: bold; font-size: 0.85rem;">Generate Cover Letter</button>
+                            <div id="pc-cl-output-preview" class="hidden" style="margin-top: 10px; max-height: 120px; overflow-y: auto; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 6px; font-size: 0.8rem; line-height: 1.4; color: var(--text-primary);"></div>
+                        </div>
+
+                    </div>
+                </section>
             </section>
         </main>
 

@@ -1,0 +1,98 @@
+/* ==========================================================================
+   RESUMESPHERE AI - GLOBAL CLOUD DASHBOARD STYLES (Phase F)
+   ========================================================================== */
+
+:root {
+    --bg-dark: #09090b;
+    --bg-panel: #18181b;
+    --bg-glass: rgba(24, 24, 27, 0.7);
+    --text-primary: #f4f4f5;
+    --text-secondary: #a1a1aa;
+    --border-color: #27272a;
+    
+    /* Accents */
+    --accent-blue: #3b82f6;
+    --accent-indigo: #6366f1;
+    --accent-purple: #a855f7;
+    --accent-emerald: #10b981;
+    --accent-rose: #f43f5e;
+    --accent-amber: #f59e0b;
+    
+    /* Gradients */
+    --gradient-cloud: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+    --gradient-glow: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.2));
+
+    /* Layout */
+    --sidebar-width: 250px;
+    --header-height: 65px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+
+    --font-main: 'Inter', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font-main); background-color: var(--bg-dark); color: var(--text-primary); overflow: hidden; font-size: 14px; letter-spacing: -0.01em; }
+
+/* Layout */
+.layout { display: flex; height: 100vh; width: 100vw; }
+.sidebar { width: var(--sidebar-width); background: var(--bg-panel); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; z-index: 10; }
+.sidebar-header { height: var(--header-height); display: flex; align-items: center; padding: 0 24px; border-bottom: 1px solid var(--border-color); font-weight: 700; font-size: 1.1rem; gap: 10px; }
+.sidebar-header i { color: var(--accent-blue); }
+.nav-menu { flex: 1; padding: 20px 0; overflow-y: auto; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 24px; color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: 0.2s; position: relative; }
+.nav-item i { width: 18px; text-align: center; }
+.nav-item:hover { color: var(--text-primary); background: rgba(255,255,255,0.03); }
+.nav-item.active { color: white; background: var(--gradient-glow); }
+.nav-item.active::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent-blue); }
+
+.main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+.main-content::before { content: ''; position: absolute; top: -100px; left: -100px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%); z-index: 0; pointer-events: none; }
+.topbar { height: var(--header-height); background: rgba(9, 9, 11, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; z-index: 10; }
+
+.page-container { flex: 1; overflow-y: auto; padding: 30px; z-index: 1; position: relative; }
+.module { display: none; animation: fadeIn 0.3s ease; }
+.module.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Cards & UI Elements */
+.card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.card-title { font-size: 1.2rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+
+.btn { padding: 8px 16px; border-radius: 6px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; border: none; font-size: 13px; transition: 0.2s; }
+.btn-primary { background: var(--accent-blue); color: white; }
+.btn-primary:hover { background: #2563eb; }
+.btn-secondary { background: var(--border-color); color: var(--text-primary); }
+.btn-secondary:hover { background: #3f3f46; }
+.btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-primary); }
+.btn-outline:hover { background: rgba(255,255,255,0.05); }
+
+.badge { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+.badge-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+.badge-emerald { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+.badge-purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; margin-bottom: 6px; font-weight: 500; color: var(--text-secondary); font-size: 13px; }
+.form-control { width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary); font-family: var(--font-main); }
+.form-control:focus { outline: none; border-color: var(--accent-blue); }
+
+/* Cloud Specific */
+.provider-btn { width: 100%; padding: 12px; border-radius: 8px; background: var(--border-color); border: 1px solid transparent; color: white; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: 0.2s; font-size: 14px; margin-bottom: 12px; }
+.provider-btn:hover { background: #3f3f46; border-color: #52525b; }
+.provider-google:hover { border-color: #ea4335; }
+.provider-github:hover { border-color: #a855f7; }
+.provider-microsoft:hover { border-color: #06b6d4; }
+
+.metric-value { font-size: 2.2rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+
+/* Toast */
+.toast-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 9999; }
+.toast { background: var(--bg-panel); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--accent-blue); box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 12px; animation: slideIn 0.3s forwards; transform: translateX(100%); }
+.toast.toast-success { border-left-color: var(--accent-emerald); }
+@keyframes slideIn { to { transform: translateX(0); } }

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform OS - ResumeSphere</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="platform-dashboard.css">
+</head>
+<body class="platform-theme">
+    
+    <!-- Top Navigation -->
+    <nav class="platform-nav">
+        <div class="nav-brand">
+            <i class='bx bx-terminal'></i>
+            <span>ResumeSphere <strong>Platform OS</strong></span>
+        </div>
+        <div class="nav-actions">
+            <span class="badge badge-os">v14.0.0</span>
+            <div class="user-avatar">
+                <img src="https://ui-avatars.com/api/?name=Dev&background=6366f1&color=fff" alt="Dev">
+            </div>
+        </div>
+    </nav>
+
+    <div class="platform-layout">
+        <!-- Sidebar -->
+        <aside class="platform-sidebar">
+            <ul class="sidebar-menu">
+                <li class="active" data-view="apps"><i class='bx bx-store'></i> App Ecosystem</li>
+                <li data-view="workflows"><i class='bx bx-git-repo-forked'></i> Workflows & Agents</li>
+                <li data-view="functions"><i class='bx bx-code-block'></i> Custom Functions</li>
+                <li data-view="bi"><i class='bx bx-data'></i> Data & BI</li>
+                <li><a href="index.html" style="color:inherit; text-decoration:none;"><i class='bx bx-exit'></i> Exit OS</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="platform-main">
+            
+            <!-- App Ecosystem View -->
+            <div id="view-apps" class="view-section active">
+                <div class="header-action">
+                    <h2>Plugin Marketplace</h2>
+                    <button class="btn btn-primary"><i class='bx bx-upload'></i> Publish Plugin</button>
+                </div>
+                
+                <div class="app-grid" id="app-grid">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+
+            <!-- Workflows View -->
+            <div id="view-workflows" class="view-section hidden">
+                <div class="header-action">
+                    <h2>Agent Orchestrator</h2>
+                    <button class="btn btn-primary" id="btn-run-workflow"><i class='bx bx-play'></i> Execute Workflow</button>
+                </div>
+                
+                <div class="workflow-canvas">
+                    <!-- Conceptual visual workflow builder -->
+                    <div class="node node-start">Trigger: New Resume</div>
+                    <div class="connector"><i class='bx bx-down-arrow-alt'></i></div>
+                    
+                    <div class="node-group">
+                        <div class="node node-action">Agent: Parsing</div>
+                        <div class="node node-action">Agent: Scoring</div>
+                    </div>
+                    
+                    <div class="connector"><i class='bx bx-down-arrow-alt'></i></div>
+                    <div class="node node-end">Save to Data Lake</div>
+                </div>
+                
+                <div class="execution-log" id="workflow-logs">
+                    <div>Waiting for execution...</div>
+                </div>
+            </div>
+
+            <!-- Custom Functions View -->
+            <div id="view-functions" class="view-section hidden">
+                <div class="header-action">
+                    <h2>Serverless Sandbox</h2>
+                    <button class="btn btn-primary" id="btn-run-function"><i class='bx bx-play-circle'></i> Run Function</button>
+                </div>
+                
+                <div class="editor-layout">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <span>main.py</span>
+                            <span class="badge badge-outline">Python 3.10</span>
+                        </div>
+                        <textarea id="function-code" spellcheck="false">
+def handler(event, context):
+    print("Initializing custom webhook processing...")
+    resume_id = event.get("resume_id")
+    
+    # Custom business logic here
+    if resume_id:
+        return {"status": "processed", "id": resume_id}
+        
+    return {"status": "error", "message": "Missing ID"}
+                        </textarea>
+                    </div>
+                    <div class="terminal-output" id="function-terminal">
+                        $ Output will appear here...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Intelligence View -->
+            <div id="view-bi" class="view-section hidden">
+                <div class="header-action">
+                    <h2>Data Warehouse BI Console</h2>
+                </div>
+                
+                <div class="bi-chat-box">
+                    <div class="bi-output" id="bi-output">
+                        Welcome to the OS Data Platform. Ask a natural language question to query the cluster.
+                    </div>
+                    <div class="bi-input-area">
+                        <input type="text" id="bi-input" placeholder="E.g., What was our total invoice revenue this month?">
+                        <button class="btn btn-primary" id="btn-bi-send"><i class='bx bx-send'></i></button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="platform-dashboard.js"></script>
+</body>
+</html>

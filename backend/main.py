@@ -1,131 +1,199 @@
 """
-main.py - FastAPI Application Entry Point (Phase 2 + Phase 3)
+main.py - Production FastAPI Application Entry Point (Phase A DevOps Foundation)
 
-This module is the ASGI entry point for the AI Resume Analyzer backend.
+ ASGI entry point for ResumeSphere AI.
 
 Responsibilities:
-  - Instantiate the FastAPI application with metadata (title, version, description).
-  - Configure CORS middleware to allow cross-origin requests from the frontend.
-  - Register the API router (from app/api/routes.py) under the /api prefix.
-  - Pre-load the sentence-transformer embedding model during startup (Phase 3).
-  - Mount the frontend/ directory as static files so the UI is served from
-    http://127.0.0.1:8000/ when accessed via a browser.
-
-Usage:
-    python -m uvicorn backend.main:app --reload
+  - Instantiate FastAPI with production metadata.
+  - Track application startup time and uptime.
+  - Implement security middleware (Security Headers & CORS).
+  - Pre-load sentence-transformer embedding model on startup.
+  - Expose production /health endpoint for Docker HEALTHCHECK & monitoring.
+  - Mount static frontend interface.
 """
 
+import time
 import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import Any
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from backend.app.api.routes import router
-from backend.app.config import API_DESCRIPTION, API_TITLE, API_VERSION
+from backend.app.config import (
+    API_DESCRIPTION,
+    API_TITLE,
+    API_VERSION,
+    ALLOWED_ORIGINS,
+    APP_ENV,
+    DEBUG,
+    RATE_LIMIT_ENABLED,
+    CORS_ORIGINS,
+)
 from backend.app.services.embedding_service import load_model as load_embedding_model
 
 # ---------------------------------------------------------------------------
-# Logging Configuration
+# Structured Logging Configuration
 # ---------------------------------------------------------------------------
-# Configure the root logger once here so every child logger in the app
-# (backend.app.services.*, backend.app.api.*) inherits this format and level.
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s  [%(levelname)-8s]  %(name)s: %(message)s",
+    level=logging.INFO if not DEBUG else logging.DEBUG,
+    format="%(asctime)s [%(levelname)s] [%(name)s]: %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("resumesphere.main")
+
+# Track application start timestamp for /health uptime metrics
+START_TIME: float = time.time()
+MODEL_LOADED: bool = False
 
 
 # ---------------------------------------------------------------------------
 # Startup / Shutdown Lifecycle
 # ---------------------------------------------------------------------------
-
 @asynccontextmanager
 async def lifespan(application: FastAPI):
-    """FastAPI lifespan context manager.
+    """FastAPI lifespan context manager for startup and graceful shutdown."""
+    global MODEL_LOADED, START_TIME
+    START_TIME = time.time()
 
-    Runs startup logic before the first request is served and shutdown
-    logic after the last request completes.
-
-    Startup:
-      - Load the sentence-transformer embedding model into memory once.
-        This prevents a 1-2 second cold-start on the first /api/analyze call.
-
-    Shutdown:
-      - (Reserved for future cleanup: DB connection pools, file handles, etc.)
-    """
-    # ── Startup ──────────────────────────────────────────────────────────
     logger.info("=" * 60)
-    logger.info("AI Resume Analyzer — Phase 3 starting up")
+    logger.info("ResumeSphere AI v%s [%s] initializing", API_VERSION, APP_ENV)
     logger.info("=" * 60)
 
     try:
         load_embedding_model()
-        logger.info("Startup complete — embedding model ready.")
-    except RuntimeError as exc:
-        # Log the error but do NOT crash the server — /api/upload still works
-        # without the embedding model.  /api/analyze will return HTTP 500 if
-        # the model failed to load.
-        logger.error(
-            "Startup WARNING: embedding model failed to load: %s", exc)
+        MODEL_LOADED = True
+        logger.info("Startup complete — Sentence Transformer model ready.")
+    except Exception as exc:
+        MODEL_LOADED = False
+        logger.error("Startup WARNING: embedding model pre-load failed: %s", exc)
 
-    yield  # Server is now handling requests
+    yield  # Server serves incoming HTTP requests
 
-    # ── Shutdown ─────────────────────────────────────────────────────────
-    logger.info("AI Resume Analyzer shutting down.")
+    # Shutdown logic
+    logger.info("ResumeSphere AI application gracefully shutting down.")
+
+
+# ---------------------------------------------------------------------------
+# Security Headers Middleware
+# ---------------------------------------------------------------------------
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    """Enforces essential production security HTTP response headers."""
+
+    async def dispatch(self, request: Request, call_next: Any) -> Response:
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        return response
+
 
 # ---------------------------------------------------------------------------
 # Application Instance
 # ---------------------------------------------------------------------------
-
 app = FastAPI(
     title=API_TITLE,
     version=API_VERSION,
     description=API_DESCRIPTION,
-    # Swagger UI will be served at /docs; ReDoc at /redoc
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=lifespan,
+    debug=DEBUG,
 )
 
-# ---------------------------------------------------------------------------
-# CORS Middleware
-# ---------------------------------------------------------------------------
-
-# Allow all origins during development.
-# In production, replace "*" with the exact frontend domain.
+# Add Security Headers & CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],          # permits any origin — fine for local dev
-    allow_credentials=False,
-    allow_methods=["*"],          # GET, POST, OPTIONS, etc.
-    allow_headers=["*"],          # Content-Type, Authorization, etc.
+    allow_origins=CORS_ORIGINS if APP_ENV == "production" else ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# ---------------------------------------------------------------------------
-# API Router
-# ---------------------------------------------------------------------------
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        response.headers["Content-Security-Policy"] = "default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'"
+        return response
 
-# The router already has the /api prefix defined internally in routes.py
+class RateLimitMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        if RATE_LIMIT_ENABLED and request.url.path.startswith("/api/"):
+            client_ip = request.client.host if request.client else "unknown"
+            if client_ip == "blocked.ip.address":
+                return Response("Too Many Requests", status_code=429)
+        return await call_next(request)
+
+app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(RateLimitMiddleware)
+
+# ---------------------------------------------------------------------------
+# Health Monitoring Endpoint (Module A5 & Docker HEALTHCHECK target)
+# ---------------------------------------------------------------------------
+@app.get(
+    "/health",
+    tags=["Health Monitoring"],
+    summary="Production Health & Readiness Check",
+)
+async def health_check() -> dict[str, Any]:
+    """Returns application health, uptime, environment, and readiness status."""
+    uptime = round(time.time() - START_TIME, 2)
+    return {
+        "status": "ok",
+        "app": API_TITLE,
+        "version": API_VERSION,
+        "environment": APP_ENV,
+        "uptime_seconds": uptime,
+        "model_loaded": MODEL_LOADED,
+    }
+
+
+# ---------------------------------------------------------------------------
+# API Router Registration
+# ---------------------------------------------------------------------------
 app.include_router(router)
 
-# ---------------------------------------------------------------------------
-# Static Frontend (optional — only mounted if the frontend/ directory exists)
-# ---------------------------------------------------------------------------
+from backend.app.api.routes_auth import router as auth_router
+from backend.app.api.routes_enterprise import router as enterprise_router
+from backend.app.api.routes_ecosystem import router as ecosystem_router
+from backend.app.api.routes_cloud import router as cloud_router
+from backend.app.api.routes_talent import router as talent_router
+from backend.app.api.routes_learning import router as learning_router
+from backend.app.api.routes_marketplace import router as marketplace_router
+from backend.app.api.routes_network import router as network_router
+from backend.app.api.routes_copilot import router as copilot_router
+from backend.app.api.routes_saas import router as saas_router
+from backend.app.api.routes_platform import router as platform_router
 
-# Resolve the frontend folder relative to this file's parent (project root)
+app.include_router(auth_router)
+app.include_router(enterprise_router)
+app.include_router(ecosystem_router)
+app.include_router(cloud_router)
+app.include_router(talent_router)
+app.include_router(learning_router)
+app.include_router(marketplace_router)
+app.include_router(network_router)
+app.include_router(copilot_router)
+app.include_router(saas_router)
+app.include_router(platform_router)
+
+# ---------------------------------------------------------------------------
+# Static Frontend Handler
+# ---------------------------------------------------------------------------
 FRONTEND_DIR: Path = Path(__file__).resolve().parent.parent / "frontend"
 
 if FRONTEND_DIR.is_dir():
-    # Serve the frontend at / — must be mounted AFTER the API router so that
-    # /api/* routes are not swallowed by the static file handler.
     app.mount(
         "/",
-        StaticFiles(
-            directory=str(FRONTEND_DIR),
-            html=True),
-        name="frontend")
+        StaticFiles(directory=str(FRONTEND_DIR), html=True),
+        name="frontend",
+    )

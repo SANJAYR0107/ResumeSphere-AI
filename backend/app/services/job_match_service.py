@@ -164,6 +164,24 @@ def match_job_description(
     }
 
 
+_JOB_PROFILE_VECS: dict[str, np.ndarray] = {}
+
+
+def _get_job_profile_vector(profile: dict) -> np.ndarray:
+    """Return cached embedding vector for static job profile to avoid redundant model inference."""
+    role_name = profile["role_name"]
+    if role_name not in _JOB_PROFILE_VECS:
+        req_skills = profile["required_skills"]
+        profile_text = f"{profile['role_name']} {' '.join(profile['keywords'])} {' '.join(req_skills)}"
+        get_embedding(profile_text)
+        vec = get_raw_vector()
+        if vec is not None:
+            _JOB_PROFILE_VECS[role_name] = vec.copy()
+        else:
+            return np.zeros(384, dtype=np.float32)
+    return _JOB_PROFILE_VECS[role_name]
+
+
 def match_resume_to_jobs(
     resume_text: str,
     resume_skills: list[str],
@@ -201,10 +219,8 @@ def match_resume_to_jobs(
         if pref_skills:
             skill_score += (len(pref_matched) / len(pref_skills)) * 40
             
-        # 2. Semantic Match
-        profile_text = f"{profile['role_name']} {' '.join(profile['keywords'])} {' '.join(req_skills)}"
-        get_embedding(profile_text)
-        prof_vec = get_raw_vector()
+        # 2. Semantic Match using cached job profile vector
+        prof_vec = _get_job_profile_vector(profile)
         semantic_sim = _cosine_similarity(resume_vec, prof_vec) if resume_vec is not None and prof_vec is not None else 0.0
         
         # 3. Overall match calculation incorporating ATS & RSI

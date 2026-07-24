@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Admin - ResumeSphere AI</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="saas-dashboard.css">
+</head>
+<body class="enterprise-theme">
+    
+    <!-- Top Navigation -->
+    <nav class="enterprise-nav">
+        <div class="nav-brand">
+            <i class='bx bx-building-house'></i>
+            <span>ResumeSphere <strong>Enterprise</strong></span>
+        </div>
+        <div class="tenant-switcher">
+            <select id="tenant-select" class="form-select">
+                <option value="tenant_1">Acme Corp</option>
+                <option value="tenant_2">Global Tech University</option>
+                <option value="new">+ Provision New Workspace</option>
+            </select>
+        </div>
+        <div class="nav-actions">
+            <span class="badge badge-pro">Enterprise Plan</span>
+            <div class="user-avatar">
+                <img src="https://ui-avatars.com/api/?name=Admin&background=0284c7&color=fff" alt="Admin">
+            </div>
+        </div>
+    </nav>
+
+    <div class="admin-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar">
+            <ul class="sidebar-menu">
+                <li class="active" data-view="dashboard"><i class='bx bxs-dashboard'></i> Dashboard</li>
+                <li data-view="billing"><i class='bx bx-credit-card'></i> Billing & Usage</li>
+                <li data-view="api"><i class='bx bx-code-alt'></i> API Credentials</li>
+                <li data-view="sso"><i class='bx bx-shield-quarter'></i> Identity & SSO</li>
+                <li data-view="compliance"><i class='bx bx-check-shield'></i> Compliance</li>
+                <li><a href="index.html" style="color:inherit; text-decoration:none;"><i class='bx bx-exit'></i> Exit Admin</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="admin-main">
+            
+            <!-- Dashboard View -->
+            <div id="view-dashboard" class="view-section active">
+                <div class="header-action">
+                    <h2>Acme Corp Overview</h2>
+                    <button class="btn btn-primary" id="btn-refresh-analytics"><i class='bx bx-refresh'></i> Refresh Insights</button>
+                </div>
+                
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-title">Total Users</div>
+                        <div class="kpi-value">1,245</div>
+                        <div class="kpi-trend up"><i class='bx bx-trending-up'></i> 12% this month</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-title">API Calls (MTD)</div>
+                        <div class="kpi-value">84,020</div>
+                        <div class="kpi-trend up"><i class='bx bx-trending-up'></i> 5% this month</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-title">AI Parse Credits</div>
+                        <div class="kpi-value">12,500 / 50,000</div>
+                        <div class="kpi-trend neutral"><i class='bx bx-minus'></i> Normal usage</div>
+                    </div>
+                </div>
+
+                <div class="card mt-2" id="ai-insight-panel">
+                    <h3><i class='bx bx-brain text-accent'></i> AI Cost Optimizer</h3>
+                    <p id="ai-optimization-text">Loading insights...</p>
+                </div>
+            </div>
+
+            <!-- API Credentials View -->
+            <div id="view-api" class="view-section hidden">
+                <div class="header-action">
+                    <h2>Enterprise API Keys</h2>
+                    <button class="btn btn-primary" id="btn-create-key"><i class='bx bx-plus'></i> Generate New Key</button>
+                </div>
+                <div class="card mt-2">
+                    <table class="enterprise-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Prefix</th>
+                                <th>Created</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="api-key-list">
+                            <tr>
+                                <td>Production Integration</td>
+                                <td>rs_live_...</td>
+                                <td>2026-01-15</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td><button class="btn btn-danger btn-sm">Revoke</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Provisioning Modal -->
+    <div id="modal-provision" class="modal hidden">
+        <div class="modal-content">
+            <h3>Provision Workspace</h3>
+            <div class="form-group">
+                <label>Organization Name</label>
+                <input type="text" id="prov-name" class="form-control" placeholder="e.g. Globex Inc.">
+            </div>
+            <div class="form-group">
+                <label>Custom Domain (Optional)</label>
+                <input type="text" id="prov-domain" class="form-control" placeholder="careers.globex.com">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="btn-prov-cancel">Cancel</button>
+                <button class="btn btn-primary" id="btn-prov-submit">Create Tenant</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="saas-dashboard.js"></script>
+</body>
+</html>

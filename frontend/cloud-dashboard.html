@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeSphere AI - Global Career Cloud</title>
+    <!-- CDNs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="cloud-dashboard.css">
+</head>
+<body>
+
+    <!-- AUTHENTICATION VIEW (Module F1) -->
+    <div id="auth-view" style="height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg-dark);">
+        <div class="card" style="width: 400px; padding: 40px; text-align: center;">
+            <i class="fa-solid fa-cloud" style="font-size: 3rem; color: var(--accent-blue); margin-bottom: 20px;"></i>
+            <h2 style="margin-bottom: 10px;">Global Career Cloud</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 30px; font-size: 13px;">Multi-Cloud Single Sign-On</p>
+            
+            <button class="provider-btn provider-google" onclick="mockOAuth('Google', 'g_123')">
+                <i class="fa-brands fa-google"></i> Continue with Google
+            </button>
+            <button class="provider-btn provider-github" onclick="mockOAuth('GitHub', 'gh_123')">
+                <i class="fa-brands fa-github"></i> Continue with GitHub
+            </button>
+            <button class="provider-btn provider-microsoft" onclick="mockOAuth('Microsoft', 'ms_123')">
+                <i class="fa-brands fa-microsoft"></i> Continue with Microsoft
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN CLOUD DASHBOARD -->
+    <div id="cloud-view" class="layout" style="display: none;">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-cloud"></i> Career Cloud
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-target="module-overview"><i class="fa-solid fa-layer-group"></i> Cloud Overview</a>
+                <a href="#" class="nav-item" data-target="module-f2"><i class="fa-solid fa-server"></i> Storage Hub</a>
+                <a href="#" class="nav-item" data-target="module-f3"><i class="fa-brands fa-github"></i> Live GitHub Sync</a>
+                <a href="#" class="nav-item" data-target="module-f4"><i class="fa-solid fa-briefcase"></i> Job Connectors</a>
+                <a href="#" class="nav-item" data-target="module-f5"><i class="fa-solid fa-calendar"></i> Smart Calendar</a>
+                <a href="#" class="nav-item" data-target="module-f7"><i class="fa-solid fa-code"></i> Developer API</a>
+                <a href="#" class="nav-item" data-target="module-f8"><i class="fa-solid fa-robot"></i> Automations</a>
+                <a href="#" class="nav-item" data-target="module-f9"><i class="fa-solid fa-chart-line"></i> Observability</a>
+            </nav>
+            <div style="padding: 20px; border-top: 1px solid var(--border-color);">
+                <a href="index.html" class="btn btn-outline" style="width: 100%; justify-content:center;"><i class="fa-solid fa-arrow-left"></i> Core Platform</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div style="font-weight: 600;" id="page-title">Global Cloud Overview</div>
+                <div class="topbar-actions">
+                    <span id="user-name" style="font-weight: 500; font-size: 13px;">User</span>
+                    <button class="btn btn-secondary" onclick="logout()" style="padding: 6px 12px;"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+            </header>
+
+            <div class="page-container">
+                
+                <!-- MODULE OVERVIEW -->
+                <section id="module-overview" class="module active">
+                    <div class="grid-4" style="margin-bottom: 24px;">
+                        <div class="card" style="margin-bottom:0;">
+                            <div class="form-label">Storage Used</div>
+                            <div class="metric-value" style="color:var(--accent-blue);">45<span style="font-size:1rem;color:var(--text-secondary);">MB</span></div>
+                        </div>
+                        <div class="card" style="margin-bottom:0;">
+                            <div class="form-label">API Requests (24h)</div>
+                            <div class="metric-value" style="color:var(--accent-emerald);">1.2<span style="font-size:1rem;color:var(--text-secondary);">k</span></div>
+                        </div>
+                        <div class="card" style="margin-bottom:0;">
+                            <div class="form-label">Automations Active</div>
+                            <div class="metric-value" style="color:var(--accent-purple);">3</div>
+                        </div>
+                        <div class="card" style="margin-bottom:0;">
+                            <div class="form-label">System Health</div>
+                            <div class="metric-value" style="color:var(--accent-emerald);">99.9<span style="font-size:1rem;color:var(--text-secondary);">%</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE F2: Cloud Storage -->
+                <section id="module-f2" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title"><i class="fa-solid fa-hard-drive"></i> Unified Cloud Storage</span>
+                            <button class="btn btn-primary" onclick="document.getElementById('f2-file').click()"><i class="fa-solid fa-upload"></i> Upload File</button>
+                            <input type="file" id="f2-file" style="display:none;">
+                        </div>
+                        <div id="f2-files" class="grid-3">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE F3: Live GitHub Sync -->
+                <section id="module-f3" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title"><i class="fa-brands fa-github"></i> GitHub Live Synchronization</span>
+                            <button class="btn btn-primary" id="f3-sync-btn"><i class="fa-solid fa-rotate"></i> Force Sync</button>
+                        </div>
+                        <div class="form-group" style="max-width:300px;">
+                            <label class="form-label">Connect Account</label>
+                            <input type="text" id="f3-user" class="form-control" placeholder="GitHub Username">
+                        </div>
+                        <div class="grid-2" style="margin-top:20px;">
+                            <div class="card" style="margin-bottom:0;">
+                                <div class="form-label">Total Commits</div>
+                                <div class="metric-value" id="f3-commits">-</div>
+                            </div>
+                            <div class="card" style="margin-bottom:0;">
+                                <div class="form-label">Developer Score</div>
+                                <div class="metric-value" id="f3-score" style="color:var(--accent-purple);">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE F4: Job Connectors -->
+                <section id="module-f4" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title"><i class="fa-solid fa-network-wired"></i> External Job Connectors</span>
+                            <button class="btn btn-secondary" id="f4-sync-btn"><i class="fa-solid fa-rotate"></i> Sync Platforms</button>
+                        </div>
+                        <table style="width:100%; border-collapse:collapse; text-align:left;">
+                            <thead>
+                                <tr style="border-bottom:1px solid var(--border-color); color:var(--text-secondary);">
+                                    <th style="padding:10px;">Role</th>
+                                    <th style="padding:10px;">Company</th>
+                                    <th style="padding:10px;">Source</th>
+                                    <th style="padding:10px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="f4-jobs">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- MODULE F5: Calendar -->
+                <section id="module-f5" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title"><i class="fa-regular fa-calendar-check"></i> Interview Schedule</span>
+                            <button class="btn btn-primary" id="f5-add-btn"><i class="fa-solid fa-plus"></i> Add Event</button>
+                        </div>
+                        <div id="f5-events" style="display:flex; flex-direction:column; gap:10px;">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE F7: Developer API -->
+                <section id="module-f7" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title"><i class="fa-solid fa-key"></i> API Keys & Webhooks</span>
+                            <button class="btn btn-primary" id="f7-key-btn">Generate New Key</button>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Your Active API Key</label>
+                            <input type="text" id="f7-key-val" class="form-control" readonly style="font-family:monospace; color:var(--accent-emerald);" value="No key generated yet.">
+                        </div>
+                        <hr style="border:0; border-top:1px solid var(--border-color); margin:20px 0;">
+                        <h4 style="margin-bottom:15px;">Register Webhook</h4>
+                        <div style="display:flex; gap:10px;">
+                            <input type="text" id="f7-hook-url" class="form-control" placeholder="https://your-domain.com/webhook">
+                            <button class="btn btn-secondary" id="f7-hook-btn">Save</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE F8: Automations -->
+                <section id="module-f8" class="module">
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-title" style="margin-bottom:15px;">Available Workflows</div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border-color);">
+                                <span>Weekly Resume Review Generator</span>
+                                <button class="btn btn-outline" onclick="triggerAuto('Weekly Review')">Run Now</button>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0;">
+                                <span>LinkedIn Connection Automation Sync</span>
+                                <button class="btn btn-outline" onclick="triggerAuto('LinkedIn Sync')">Run Now</button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title" style="margin-bottom:15px;"><i class="fa-solid fa-envelope"></i> Email & Execution Logs (F6/F8)</div>
+                            <div id="f6-logs" style="font-size:12px; color:var(--text-secondary); max-height:200px; overflow-y:auto;">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE F9: Observability -->
+                <section id="module-f9" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title"><i class="fa-solid fa-server"></i> Real-time System Metrics</span>
+                            <span class="badge badge-emerald">Live</span>
+                        </div>
+                        <div style="height: 300px; width:100%;">
+                            <canvas id="metrics-chart"></canvas>
+                        </div>
+                        <div class="grid-4" style="margin-top:20px; text-align:center;" id="f9-metrics-text">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="cloud-dashboard.js"></script>
+</body>
+</html>

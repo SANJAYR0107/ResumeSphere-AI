@@ -571,4 +571,501 @@ document.addEventListener('DOMContentLoaded', () => {
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     }
+
+    // =========================================================================
+    // Phase 4: Intelligent Resume vs Job Description Optimization Engine Logic
+    // =========================================================================
+    const jdTabPaste = document.getElementById('jd-tab-paste');
+    const jdTabUpload = document.getElementById('jd-tab-upload');
+    const jdPasteContainer = document.getElementById('jd-paste-container');
+    const jdUploadContainer = document.getElementById('jd-upload-container');
+    const p4JdBrowseBtn = document.getElementById('p4-jd-browse-btn');
+    const p4JdFileInput = document.getElementById('p4-jd-file-input');
+    const p4JdFilenameDisplay = document.getElementById('p4-jd-filename-display');
+    const p4RunOptimizationBtn = document.getElementById('p4-run-optimization-btn');
+    const p4ResultsDashboard = document.getElementById('p4-results-dashboard');
+    const p4DownloadPdfBtn = document.getElementById('p4-download-pdf-btn');
+
+    let p4SelectedJdFile = null;
+    let lastP4AnalysisData = null;
+
+    if (jdTabPaste && jdTabUpload) {
+        jdTabPaste.addEventListener('click', () => {
+            jdTabPaste.classList.add('active');
+            jdTabUpload.classList.remove('active');
+            jdPasteContainer.classList.remove('hidden');
+            jdUploadContainer.classList.add('hidden');
+        });
+
+        jdTabUpload.addEventListener('click', () => {
+            jdTabUpload.classList.add('active');
+            jdTabPaste.classList.remove('active');
+            jdUploadContainer.classList.remove('hidden');
+            jdPasteContainer.classList.add('hidden');
+        });
+    }
+
+    if (p4JdBrowseBtn && p4JdFileInput) {
+        p4JdBrowseBtn.addEventListener('click', () => p4JdFileInput.click());
+        p4JdFileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                p4SelectedJdFile = e.target.files[0];
+                p4JdFilenameDisplay.innerHTML = `<i class="fa-solid fa-file-pdf"></i> ${p4SelectedJdFile.name}`;
+            }
+        });
+    }
+
+    if (p4RunOptimizationBtn) {
+        p4RunOptimizationBtn.addEventListener('click', () => {
+            const pastedJdText = document.getElementById('p4-jd-text-input')?.value.trim();
+
+            if (!currentResumeText) {
+                alert("Please upload a PDF resume first at the top of the page.");
+                return;
+            }
+
+            if (!pastedJdText && !p4SelectedJdFile) {
+                alert("Please paste Job Description text or select a JD PDF file.");
+                return;
+            }
+
+            const origHtml = p4RunOptimizationBtn.innerHTML;
+            p4RunOptimizationBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Running Optimization Engine...`;
+            p4RunOptimizationBtn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('resume_text', currentResumeText);
+            
+            if (p4SelectedJdFile && jdTabUpload.classList.contains('active')) {
+                formData.append('jd_file', p4SelectedJdFile);
+            } else {
+                formData.append('jd_text', pastedJdText);
+            }
+
+            fetch(`${API_URL}/jd-analysis`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => {
+                if (!res.ok) return res.json().then(err => { throw new Error(err.detail || 'Analysis failed'); });
+                return res.json();
+            })
+            .then(data => {
+                lastP4AnalysisData = data;
+                renderPhase4Results(data);
+            })
+            .catch(err => {
+                alert("Phase 4 Optimization Failed: " + err.message);
+            })
+            .finally(() => {
+                p4RunOptimizationBtn.innerHTML = origHtml;
+                p4RunOptimizationBtn.disabled = false;
+            });
+        });
+    }
+
+    function renderPhase4Results(data) {
+        if (!p4ResultsDashboard) return;
+        p4ResultsDashboard.classList.remove('hidden');
+
+        document.getElementById('p4-target-role-display').textContent = data.role_title || "Target Role Optimization";
+        
+        const confBadge = document.getElementById('p4-confidence-badge');
+        if (confBadge) confBadge.textContent = (data.match_scores?.confidence || "High") + " Confidence";
+
+        // 1. Scores
+        document.getElementById('p4-overall-match-text').textContent = (data.match_scores?.overall_match || 0) + "%";
+        document.getElementById('p4-ats-match-text').textContent = (data.match_scores?.ats_match || 0) + "%";
+        document.getElementById('p4-semantic-match-text').textContent = (data.match_scores?.semantic_match || 0) + "%";
+        document.getElementById('p4-keyword-match-text').textContent = (data.match_scores?.keyword_match || 0) + "%";
+
+        // 2. ATS Simulator
+        const sim = data.ats_simulator || {};
+        document.getElementById('p4-sim-curr-score').textContent = sim.current_ats_score || 70;
+        document.getElementById('p4-sim-pred-score').textContent = sim.predicted_ats_score || 88;
+        document.getElementById('p4-sim-gain').textContent = sim.expected_improvement || 18;
+
+        const simList = document.getElementById('p4-sim-changes-list');
+        if (simList && sim.score_boosting_changes) {
+            simList.innerHTML = sim.score_boosting_changes.map(item => `
+                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:8px 12px; border-radius:6px;">
+                    <span style="font-size:0.85rem; color:var(--text-primary);"><i class="fa-solid fa-circle-plus" style="color:#10b981;"></i> ${escapeHtml(item.change)}</span>
+                    <span style="font-size:0.8rem; font-weight:bold; color:#10b981; background:rgba(16,185,129,0.15); padding:2px 8px; border-radius:10px;">+${item.score_boost} pts</span>
+                </div>
+            `).join('');
+        }
+
+        // 3. Keywords
+        const kw = data.keyword_analysis || {};
+        const skillTag = s => `<span class="skill-tag" style="font-size:0.8rem; margin:2px;">${escapeHtml(s)}</span>`;
+        
+        document.getElementById('p4-matched-kws-container').innerHTML = (kw.matched_keywords || []).map(skillTag).join('') || 'None';
+        document.getElementById('p4-important-missing-kws-container').innerHTML = (kw.important_missing_keywords || []).map(skillTag).join('') || 'None';
+        document.getElementById('p4-missing-kws-container').innerHTML = (kw.missing_keywords || []).map(skillTag).join('') || 'None';
+        document.getElementById('p4-extra-kws-container').innerHTML = (kw.extra_resume_skills || []).map(skillTag).join('') || 'None';
+
+        // 4. Section Analysis
+        const secGrid = document.getElementById('p4-section-analysis-grid');
+        if (secGrid && data.section_analysis) {
+            secGrid.innerHTML = Object.entries(data.section_analysis).map(([name, sec]) => {
+                const color = sec.score >= 80 ? '#10b981' : (sec.score >= 60 ? '#f59e0b' : '#ef4444');
+                return `
+                    <div style="background:rgba(255,255,255,0.03); padding:12px; border-radius:8px; border:1px solid var(--border-color);">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                            <strong style="color:#fff; font-size:0.9rem;">${escapeHtml(name)}</strong>
+                            <span style="color:${color}; font-weight:bold; font-size:0.9rem;">${sec.score}%</span>
+                        </div>
+                        <p style="font-size:0.8rem; color:var(--text-secondary); margin:0 0 6px 0;">${escapeHtml(sec.explanation)}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 5. Rewrites
+        const rw = data.rewrite_suggestions || {};
+        document.getElementById('p4-rewrite-summary').textContent = rw.professional_summary || '';
+        document.getElementById('p4-rewrite-bullets').innerHTML = (rw.experience_bullets || []).map(b => `<li style="margin-bottom:4px;">${escapeHtml(b)}</li>`).join('');
+        document.getElementById('p4-rewrite-projects').innerHTML = (rw.project_descriptions || []).map(p => `<li style="margin-bottom:4px;">${escapeHtml(p)}</li>`).join('');
+
+        // 6. Interview & Learning
+        const ia = data.interview_alignment || {};
+        document.getElementById('p4-interview-tech-q').innerHTML = (ia.technical_questions || []).map(q => `<li>${escapeHtml(q)}</li>`).join('');
+        document.getElementById('p4-interview-coding-topics').innerHTML = (ia.coding_topics || []).concat(ia.system_design_topics || []).map(t => `<li>${escapeHtml(t)}</li>`).join('');
+
+        const lrContainer = document.getElementById('p4-learning-roadmap-container');
+        if (lrContainer && data.learning_recommendations) {
+            lrContainer.innerHTML = data.learning_recommendations.map(lr => `
+                <div style="background:rgba(0,0,0,0.2); padding:10px; border-radius:6px;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <strong style="color:#fff; font-size:0.85rem;">${escapeHtml(lr.skill)}</strong>
+                        <span style="font-size:0.75rem; color:#10b981;">${escapeHtml(lr.estimated_learning_time)}</span>
+                    </div>
+                    <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:4px;">Resource: <a href="#" style="color:#4facfe;">${escapeHtml((lr.recommended_free_resources||[])[0]||'Docs')}</a></div>
+                </div>
+            `).join('');
+        }
+
+        // Scroll smooth to dashboard
+        p4ResultsDashboard.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    if (p4DownloadPdfBtn) {
+        p4DownloadPdfBtn.addEventListener('click', () => {
+            if (!lastP4AnalysisData) {
+                alert("Please run Phase 4 Optimization Engine first.");
+                return;
+            }
+
+            p4DownloadPdfBtn.disabled = true;
+            p4DownloadPdfBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Generating PDF...`;
+
+            fetch(`${API_URL}/download-report`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(lastP4AnalysisData)
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to generate PDF report.");
+                return res.blob();
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'ResumeSphere_Optimization_Report.pdf';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(err => alert("Error downloading PDF: " + err.message))
+            .finally(() => {
+                p4DownloadPdfBtn.disabled = false;
+                p4DownloadPdfBtn.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Download PDF Optimization Report`;
+            });
+        });
+    }
+
+    // =========================================================================
+    // Phase B: AI Interview Platform & Interactive Simulator Logic
+    // =========================================================================
+    const pbStartBtn = document.getElementById('pb-start-interview-btn');
+    const pbSessionWorkspace = document.getElementById('pb-session-workspace');
+    const pbQIndexText = document.getElementById('pb-q-index-text');
+    const pbQTotalText = document.getElementById('pb-q-total-text');
+    const pbQTimerText = document.getElementById('pb-q-timer-text');
+    const pbProgressFill = document.getElementById('pb-progress-fill');
+    const pbQCategoryBadge = document.getElementById('pb-q-category-badge');
+    const pbQSkillBadge = document.getElementById('pb-q-skill-badge');
+    const pbQTextDisplay = document.getElementById('pb-q-text-display');
+    const pbQHintDisplay = document.getElementById('pb-q-hint-display');
+    const pbAnswerInput = document.getElementById('pb-answer-input');
+    const pbSubmitAnswerBtn = document.getElementById('pb-submit-answer-btn');
+    const pbSkipQBtn = document.getElementById('pb-skip-q-btn');
+    const pbEvalOutputCard = document.getElementById('pb-eval-output-card');
+    const pbDownloadReportBtn = document.getElementById('pb-download-interview-report-btn');
+
+    let currentPbSession = null;
+    let pbTimerInterval = null;
+    let pbTimerSeconds = 45;
+
+    if (pbStartBtn) {
+        pbStartBtn.addEventListener('click', () => {
+            const targetRole = document.getElementById('pb-target-role-input')?.value || "Software Engineer";
+            const targetCompany = document.getElementById('pb-target-company-input')?.value || "Tech Corporation";
+            const difficulty = document.getElementById('pb-difficulty-select')?.value || "Medium";
+            const count = parseInt(document.getElementById('pb-count-select')?.value || "5", 10);
+
+            const origHtml = pbStartBtn.innerHTML;
+            pbStartBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Initializing Session...`;
+            pbStartBtn.disabled = true;
+
+            fetch(`${API_URL}/interview/session/start`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    resume_skills: extractedSkillsList || ["Python", "SQL"],
+                    missing_skills: [],
+                    interview_type: "Experienced",
+                    difficulty: difficulty,
+                    question_count: count,
+                    target_role: targetRole,
+                    target_company: targetCompany
+                })
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to start interview session.");
+                return res.json();
+            })
+            .then(session => {
+                currentPbSession = session;
+                renderPbQuestion(0);
+                pbSessionWorkspace.classList.remove('hidden');
+                pbSessionWorkspace.scrollIntoView({ behavior: 'smooth' });
+            })
+            .catch(err => alert("Error: " + err.message))
+            .finally(() => {
+                pbStartBtn.innerHTML = origHtml;
+                pbStartBtn.disabled = false;
+            });
+        });
+    }
+
+    function renderPbQuestion(idx) {
+        if (!currentPbSession || !currentPbSession.questions[idx]) return;
+        const q = currentPbSession.questions[idx];
+
+        pbQIndexText.textContent = idx + 1;
+        pbQTotalText.textContent = currentPbSession.total_questions;
+        pbProgressFill.style.width = `${((idx + 1) / currentPbSession.total_questions) * 100}%`;
+
+        pbQCategoryBadge.textContent = q.category;
+        pbQSkillBadge.textContent = `Target: ${q.target_skill}`;
+        pbQTextDisplay.textContent = q.question_text;
+        pbQHintDisplay.textContent = q.sample_answer_hint ? `Hint: ${q.sample_answer_hint}` : '';
+        pbAnswerInput.value = '';
+        pbEvalOutputCard.classList.add('hidden');
+
+        startPbTimer();
+    }
+
+    function startPbTimer() {
+        clearInterval(pbTimerInterval);
+        pbTimerSeconds = 45;
+        pbQTimerText.textContent = `00:45`;
+
+        pbTimerInterval = setInterval(() => {
+            pbTimerSeconds--;
+            const secs = pbTimerSeconds < 10 ? `0${pbTimerSeconds}` : pbTimerSeconds;
+            pbQTimerText.textContent = `00:${secs}`;
+
+            if (pbTimerSeconds <= 0) {
+                clearInterval(pbTimerInterval);
+            }
+        }, 1000);
+    }
+
+    function handleAnswerSubmit(isSkip = false) {
+        if (!currentPbSession) return;
+        const currentIdx = currentPbSession.current_question_index || 0;
+        const q = currentPbSession.questions[currentIdx];
+        const answerText = pbAnswerInput.value.trim();
+
+        if (!isSkip && !answerText) {
+            alert("Please type your answer or click 'Skip Question'.");
+            return;
+        }
+
+        clearInterval(pbTimerInterval);
+
+        pbSubmitAnswerBtn.disabled = true;
+        pbSubmitAnswerBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Evaluating...`;
+
+        fetch(`${API_URL}/interview/session/submit-answer`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                session_id: currentPbSession.session_id,
+                question_id: q.question_id,
+                candidate_answer: answerText,
+                time_spent_seconds: 45 - pbTimerSeconds,
+                skip: isSkip
+            })
+        })
+        .then(res => {
+            if (!res.ok) throw new Error("Failed to evaluate answer.");
+            return res.json();
+        })
+        .then(data => {
+            renderEvaluationFeedback(data.evaluation);
+            currentPbSession.current_question_index = data.current_question_index;
+
+            if (data.status === "COMPLETED") {
+                alert("🎉 Interview Session Completed! You can download your PDF performance report below.");
+            }
+        })
+        .catch(err => alert("Error: " + err.message))
+        .finally(() => {
+            pbSubmitAnswerBtn.disabled = false;
+            pbSubmitAnswerBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Submit Answer for AI Evaluation`;
+        });
+    }
+
+    if (pbSubmitAnswerBtn) pbSubmitAnswerBtn.addEventListener('click', () => handleAnswerSubmit(false));
+    if (pbSkipQBtn) pbSkipQBtn.addEventListener('click', () => handleAnswerSubmit(true));
+
+    function renderEvaluationFeedback(evalRes) {
+        if (!evalRes || !pbEvalOutputCard) return;
+
+        document.getElementById('pb-eval-score-text').textContent = evalRes.overall_score || 0;
+        document.getElementById('pb-eval-comm-text').textContent = `Communication: ${evalRes.communication_score || 0}/10`;
+
+        document.getElementById('pb-eval-strengths').innerHTML = (evalRes.strengths || []).map(s => `<li>${escapeHtml(s)}</li>`).join('');
+        document.getElementById('pb-eval-weaknesses').innerHTML = (evalRes.weaknesses || []).map(w => `<li>${escapeHtml(w)}</li>`).join('');
+        
+        const followupBox = document.getElementById('pb-followup-box');
+        if (evalRes.follow_up_question) {
+            document.getElementById('pb-followup-text').textContent = evalRes.follow_up_question;
+            followupBox.classList.remove('hidden');
+        } else {
+            followupBox.classList.add('hidden');
+        }
+
+        pbEvalOutputCard.classList.remove('hidden');
+    }
+
+    if (pbDownloadReportBtn) {
+        pbDownloadReportBtn.addEventListener('click', () => {
+            if (!currentPbSession) {
+                alert("Please start an interview session first.");
+                return;
+            }
+
+            pbDownloadReportBtn.disabled = true;
+            pbDownloadReportBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Generating PDF...`;
+
+            fetch(`${API_URL}/interview/download-report`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ session_id: currentPbSession.session_id })
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to generate PDF interview report.");
+                return res.blob();
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'ResumeSphere_Interview_Report.pdf';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(err => alert("Error downloading PDF: " + err.message))
+            .finally(() => {
+                pbDownloadReportBtn.disabled = false;
+                pbDownloadReportBtn.innerHTML = `<i class="fa-solid fa-file-pdf"></i> Download PDF Interview Report`;
+            });
+        });
+    }
+
+    // =========================================================================
+    // Phase C: AI Career Assistant Chat & Cover Letter Logic
+    // =========================================================================
+    const pcChatInput = document.getElementById('pc-chat-input');
+    const pcChatSendBtn = document.getElementById('pc-chat-send-btn');
+    const pcChatBox = document.getElementById('pc-chat-box');
+
+    if (pcChatSendBtn && pcChatInput) {
+        pcChatSendBtn.addEventListener('click', () => {
+            const query = pcChatInput.value.trim();
+            if (!query) return;
+
+            // Append User Message
+            pcChatBox.innerHTML += `<div style="text-align: right; margin-bottom: 8px;"><span style="background: rgba(245, 158, 11, 0.2); padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; color: #f59e0b;">${escapeHtml(query)}</span></div>`;
+            pcChatInput.value = '';
+            pcChatBox.scrollTop = pcChatBox.scrollHeight;
+
+            fetch(`${API_URL}/career/chat`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    query: query,
+                    resume_skills: extractedSkillsList || ["Python", "SQL"],
+                    ats_score: 75,
+                    missing_skills: ["Docker", "AWS"],
+                    target_role: "Software Engineer"
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                const respText = data.assistant_response || "No response received.";
+                pcChatBox.innerHTML += `<div style="text-align: left; margin-bottom: 8px;"><span style="background: rgba(255,255,255,0.08); padding: 6px 10px; border-radius: 12px; font-size: 0.8rem; color: #fff; display: inline-block;">${escapeHtml(respText).replace(/\n/g, '<br/>')}</span></div>`;
+                pcChatBox.scrollTop = pcChatBox.scrollHeight;
+            })
+            .catch(err => {
+                pcChatBox.innerHTML += `<div style="color: #ef4444; font-size: 0.8rem;">Error: ${err.message}</div>`;
+            });
+        });
+    }
+
+    const pcClGenerateBtn = document.getElementById('pc-cl-generate-btn');
+    const pcClOutputPreview = document.getElementById('pc-cl-output-preview');
+
+    if (pcClGenerateBtn) {
+        pcClGenerateBtn.addEventListener('click', () => {
+            const candidate = document.getElementById('pc-cl-candidate')?.value || "Jane Doe";
+            const company = document.getElementById('pc-cl-company')?.value || "Tech Corporation";
+            const role = document.getElementById('pc-cl-role')?.value || "Software Engineer";
+            const type = document.getElementById('pc-cl-type')?.value || "Experienced";
+
+            pcClGenerateBtn.disabled = true;
+            pcClGenerateBtn.textContent = "Generating Cover Letter...";
+
+            fetch(`${API_URL}/career/cover-letter/generate`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    candidate_name: candidate,
+                    company_name: company,
+                    target_role: role,
+                    experience_type: type,
+                    resume_skills: extractedSkillsList || ["Java", "Spring Boot"]
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                pcClOutputPreview.innerHTML = `<strong>Generated Cover Letter:</strong><br/>${escapeHtml(data.cover_letter_text).replace(/\n/g, '<br/>')}`;
+                pcClOutputPreview.classList.remove('hidden');
+            })
+            .catch(err => alert("Error: " + err.message))
+            .finally(() => {
+                pcClGenerateBtn.disabled = false;
+                pcClGenerateBtn.textContent = "Generate Cover Letter";
+            });
+        });
+    }
 });
+

@@ -1,11 +1,12 @@
-"""
-config.py - Application Configuration
-
-Central configuration module for the AI Resume Analyzer backend.
-Defines constants and automatically creates required directories on startup.
-"""
-
+import os
 from pathlib import Path
+
+# Load .env file if available
+try:
+    from dotenv import load_dotenv  # type: ignore[import-not-found,import-untyped]
+    load_dotenv()
+except ImportError:
+    pass
 
 # ---------------------------------------------------------------------------
 # Base Paths
@@ -29,38 +30,52 @@ UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 # ---------------------------------------------------------------------------
 
 # Only PDF files are accepted by the upload endpoint
-# single value for equality checks
 ALLOWED_CONTENT_TYPE: str = "application/pdf"
 ALLOWED_EXTENSIONS: tuple[str, ...] = (".pdf",)
 
 # ---------------------------------------------------------------------------
-# API Metadata (used in main.py)
+# MODULE P4 & P6: PERFORMANCE & OBSERVABILITY CONFIG (Phase P)
+# ---------------------------------------------------------------------------
+PROMETHEUS_ENABLED: bool = os.getenv("PROMETHEUS_ENABLED", "True").lower() == "true"
+RATE_LIMIT_ENABLED: bool = os.getenv("RATE_LIMIT_ENABLED", "True").lower() == "true"
+REDIS_CACHE_URL: str = os.getenv("REDIS_CACHE_URL", "redis://localhost:6379/0")
+CORS_ORIGINS: list = os.getenv("CORS_ORIGINS", "https://app.resumesphere.com,https://api.resumesphere.com").split(",")
+
+# ---------------------------------------------------------------------------
+# API Metadata & Environment Configuration
 # ---------------------------------------------------------------------------
 
-API_TITLE: str = "AI Resume Analyzer"
-API_VERSION: str = "4.0.0"
+API_TITLE: str = "ResumeSphere AI"
+API_VERSION: str = "15.0.0"
 API_DESCRIPTION: str = (
-    "Phase 4 - ATS Scoring & AI-Powered Resume Analysis. "
-    "Upload a PDF resume to receive ATS score, skill breakdown, "
-    "job recommendations, improvement suggestions, and JD matching — "
-    "powered by sentence-transformers and NLP."
+    "Production AI Resume Analyzer & ATS Optimization Platform. "
+    "Upload PDF resumes, score against ATS standards, extract skills, "
+    "and compute dense semantic vector matches against target Job Descriptions."
 )
 
+APP_ENV: str = os.getenv("APP_ENV", "production")
+DEBUG: bool = os.getenv("DEBUG", "false").lower() in ("true", "1", "t")
+PORT: int = int(os.getenv("PORT", "8000"))
+
+# Parse CORS Origins from environment variable (comma-separated or wildcard)
+ALLOWED_ORIGINS_RAW: str = os.getenv("ALLOWED_ORIGINS", "*")
+ALLOWED_ORIGINS: list[str] = [
+    origin.strip() for origin in ALLOWED_ORIGINS_RAW.split(",") if origin.strip()
+]
+
 # ---------------------------------------------------------------------------
-# Phase 3 — NLP Pipeline Configuration
+# Phase 3 & 4 — NLP Pipeline & Security Configuration
 # ---------------------------------------------------------------------------
 
-# Root of the project (two levels above backend/app/config.py)
 PROJECT_ROOT: Path = BASE_DIR.parent
-
-# Directory that holds all dataset files (e.g. skills.csv)
 DATASETS_DIR: Path = PROJECT_ROOT / "datasets"
-
-# Absolute path to the skills taxonomy CSV
 SKILLS_CSV_PATH: Path = DATASETS_DIR / "skills.csv"
 
-# Maximum upload size enforced by the /api/analyze endpoint (10 MB)
-MAX_UPLOAD_BYTES: int = 10 * 1024 * 1024  # 10 MB
+# Maximum upload size enforced by API endpoints (10 MB default)
+MAX_UPLOAD_BYTES: int = int(os.getenv("MAX_UPLOAD_BYTES", str(10 * 1024 * 1024)))
 
 # HuggingFace model identifier for sentence embeddings
-EMBEDDING_MODEL_NAME: str = "sentence-transformers/all-MiniLM-L6-v2"
+EMBEDDING_MODEL_NAME: str = os.getenv(
+    "EMBEDDING_MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2"
+)
+

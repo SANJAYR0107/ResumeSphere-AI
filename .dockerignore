@@ -1,0 +1,34 @@
+# Python bytecode and cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+ENV/
+env/
+
+# Git & CI/CD
+.git/
+.gitignore
+.github/
+
+# Local uploads and temporary files
+backend/uploads/*
+!backend/uploads/.gitkeep
+*.log
+data_response.json
+java_response.json
+payload.json
+test.pdf
+
+# IDE and OS metadata
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db

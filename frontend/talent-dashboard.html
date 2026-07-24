@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeSphere AI - Talent Intelligence Platform</title>
+    <!-- CDNs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="talent-dashboard.css">
+</head>
+<body>
+
+    <div class="layout">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-brain"></i> AI Talent Intelligence
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-target="module-g8"><i class="fa-solid fa-chart-pie"></i> Executive Dashboard</a>
+                <a href="#" class="nav-item" data-target="module-g1"><i class="fa-solid fa-circle-nodes"></i> Talent Knowledge Graph</a>
+                <a href="#" class="nav-item" data-target="module-g2"><i class="fa-solid fa-ranking-star"></i> AI Candidate Ranking</a>
+                <a href="#" class="nav-item" data-target="module-g3"><i class="fa-solid fa-crystal-ball"></i> Predictive Hiring</a>
+                <a href="#" class="nav-item" data-target="module-g4"><i class="fa-solid fa-money-bill-trend-up"></i> Salary Benchmarking</a>
+                <a href="#" class="nav-item" data-target="module-g5"><i class="fa-solid fa-bolt"></i> Skill Intelligence</a>
+                <a href="#" class="nav-item" data-target="module-g6"><i class="fa-solid fa-map-location-dot"></i> Talent Heatmaps</a>
+                <a href="#" class="nav-item" data-target="module-g7"><i class="fa-solid fa-users-viewfinder"></i> Workforce Planning</a>
+            </nav>
+            <div style="padding: 20px; border-top: 1px solid var(--border-color);">
+                <a href="index.html" class="btn btn-secondary" style="width: 100%; justify-content:center;"><i class="fa-solid fa-arrow-left"></i> Exit to Hub</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div style="font-weight: 600; font-size:1.2rem; color:var(--accent-gold);" id="page-title">Executive Dashboard</div>
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <span id="user-name" style="font-weight: 500;">Enterprise Admin</span>
+                    <i class="fa-solid fa-user-shield" style="color:var(--accent-gold); font-size:1.2rem;"></i>
+                </div>
+            </header>
+
+            <div class="page-container">
+                
+                <!-- MODULE G8: Executive Dashboard -->
+                <section id="module-g8" class="module active">
+                    <div class="grid-4">
+                        <div class="metric-box">
+                            <div class="metric-val" id="dash-active">-</div>
+                            <div style="color:var(--text-secondary); font-size:13px; font-weight:500;">Active Candidates</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-val" id="dash-reqs" style="color:var(--accent-blue);">-</div>
+                            <div style="color:var(--text-secondary); font-size:13px; font-weight:500;">Open Requisitions</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-val" id="dash-match" style="color:var(--accent-emerald);">-</div>
+                            <div style="color:var(--text-secondary); font-size:13px; font-weight:500;">AI Match Efficiency</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-val" id="dash-cph" style="color:var(--accent-rose);">-</div>
+                            <div style="color:var(--text-secondary); font-size:13px; font-weight:500;">Avg Cost Per Hire</div>
+                        </div>
+                    </div>
+                    <div class="grid-2" style="margin-top:25px;">
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Hiring Velocity (Q1-Q4)</span></div>
+                            <canvas id="chart-velocity" style="max-height: 250px;"></canvas>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Diversity Index Breakdown</span></div>
+                            <canvas id="chart-diversity" style="max-height: 250px;"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE G1: Talent Knowledge Graph -->
+                <section id="module-g1" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title"><i class="fa-solid fa-circle-nodes"></i> Global Talent Graph</span>
+                            <button class="btn btn-primary" id="g1-refresh"><i class="fa-solid fa-rotate"></i> Sync Graph</button>
+                        </div>
+                        <p style="color:var(--text-secondary); margin-bottom:20px;">Visualize hidden relationships between skills, candidates, and market requirements.</p>
+                        <div id="network-container"></div>
+                    </div>
+                </section>
+
+                <!-- MODULE G2: AI Candidate Ranking Engine -->
+                <section id="module-g2" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title"><i class="fa-solid fa-ranking-star"></i> Intelligent Candidate Ranking</span>
+                        </div>
+                        <div style="display:flex; gap:15px; margin-bottom:25px;">
+                            <input type="text" id="g2-role" class="form-control" placeholder="Target Job Role (e.g. Senior Data Scientist)" style="max-width:400px;">
+                            <button class="btn btn-primary" id="g2-rank-btn">Generate Ranks</button>
+                        </div>
+                        <div class="card" style="background:rgba(0,0,0,0.3); border:none;" id="g2-results-container">
+                            <!-- Populated by JS -->
+                            <div style="text-align:center; color:var(--text-secondary); padding:20px;">Awaiting query...</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE G3: Predictive Hiring -->
+                <section id="module-g3" class="module">
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header"><span class="card-title">Predictive AI Forecast</span></div>
+                            <div style="display:flex; flex-direction:column; gap:20px;">
+                                <div>
+                                    <div style="color:var(--text-secondary); font-size:12px;">Predicted Time-to-Fill</div>
+                                    <div style="font-size:2rem; font-weight:700; color:var(--accent-blue);" id="g3-ttf">-</div>
+                                </div>
+                                <div>
+                                    <div style="color:var(--text-secondary); font-size:12px;">Offer Acceptance Probability</div>
+                                    <div style="font-size:2rem; font-weight:700; color:var(--accent-emerald);" id="g3-offer">-</div>
+                                </div>
+                                <div>
+                                    <div style="color:var(--text-secondary); font-size:12px;">Flight Risk Candidates Detected</div>
+                                    <div style="font-size:2rem; font-weight:700; color:var(--accent-rose);" id="g3-risk">-</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><span class="card-title"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Recommendation</span></div>
+                            <div style="background:rgba(16, 185, 129, 0.1); border:1px solid rgba(16, 185, 129, 0.3); padding:20px; border-radius:8px; line-height:1.6; color:var(--text-primary);" id="g3-rec">
+                                Loading recommendation...
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE G4: Salary Benchmarking -->
+                <section id="module-g4" class="module">
+                    <div class="card">
+                        <div class="card-header"><span class="card-title"><i class="fa-solid fa-money-bill-trend-up"></i> Salary Benchmarking</span></div>
+                        <div class="grid-3" style="align-items:end;">
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label class="form-label">Job Role</label>
+                                <input type="text" id="g4-role" class="form-control" value="Software Engineer">
+                            </div>
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label class="form-label">Location/Region</label>
+                                <input type="text" id="g4-loc" class="form-control" value="Remote">
+                            </div>
+                            <button class="btn btn-primary" id="g4-btn" style="height:45px; justify-content:center;">Fetch Benchmark</button>
+                        </div>
+                        
+                        <div id="g4-result" style="display:none; margin-top:30px;">
+                            <div class="grid-3 text-center">
+                                <div class="metric-box">
+                                    <div class="metric-val" id="g4-min" style="color:var(--text-secondary); font-size:1.8rem;">-</div>
+                                    <div style="color:var(--text-secondary); font-size:12px;">Minimum (USD)</div>
+                                </div>
+                                <div class="metric-box" style="border-color:var(--accent-gold);">
+                                    <div class="metric-val" id="g4-avg">-</div>
+                                    <div style="color:var(--text-secondary); font-size:12px;">Market Average (USD)</div>
+                                </div>
+                                <div class="metric-box">
+                                    <div class="metric-val" id="g4-max" style="color:var(--text-secondary); font-size:1.8rem;">-</div>
+                                    <div style="color:var(--text-secondary); font-size:12px;">Maximum (USD)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE G5: Skill Intelligence -->
+                <section id="module-g5" class="module">
+                    <div class="card">
+                        <div class="card-header"><span class="card-title">Skill Market Intelligence</span></div>
+                        <div class="grid-3">
+                            <div style="background:rgba(255,255,255,0.03); padding:20px; border-radius:8px;">
+                                <h4 style="color:var(--accent-emerald); margin-bottom:15px;"><i class="fa-solid fa-arrow-trend-up"></i> Trending Up</h4>
+                                <ul id="g5-up" style="padding-left:20px; color:var(--text-secondary); line-height:1.8;"></ul>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.03); padding:20px; border-radius:8px;">
+                                <h4 style="color:var(--accent-rose); margin-bottom:15px;"><i class="fa-solid fa-arrow-trend-down"></i> Trending Down</h4>
+                                <ul id="g5-down" style="padding-left:20px; color:var(--text-secondary); line-height:1.8;"></ul>
+                            </div>
+                            <div style="background:rgba(255,255,255,0.03); padding:20px; border-radius:8px;">
+                                <h4 style="color:var(--accent-gold); margin-bottom:15px;"><i class="fa-solid fa-triangle-exclamation"></i> Org Skill Gaps</h4>
+                                <ul id="g5-gaps" style="padding-left:20px; color:var(--text-secondary); line-height:1.8;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE G6: Talent Heatmaps -->
+                <section id="module-g6" class="module">
+                    <div class="card">
+                        <div class="card-header"><span class="card-title"><i class="fa-solid fa-map"></i> Global Talent Density Heatmap</span></div>
+                        <div class="heatmap-grid" id="g6-heat">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE G7: Workforce Planning -->
+                <section id="module-g7" class="module">
+                    <div class="card">
+                        <div class="card-header"><span class="card-title">Workforce Resource Planning</span></div>
+                        <div class="grid-2">
+                            <div>
+                                <div class="form-group">
+                                    <label class="form-label">Department</label>
+                                    <select class="form-control" id="g7-dept">
+                                        <option>Engineering</option>
+                                        <option>Product</option>
+                                        <option>Sales</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Forecasted Hires</label>
+                                    <input type="number" id="g7-hires" class="form-control" value="10">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Target Quarter</label>
+                                    <input type="text" id="g7-q" class="form-control" value="Q4 2026">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Allocated Budget (USD)</label>
+                                    <input type="number" id="g7-budget" class="form-control" value="1500000">
+                                </div>
+                                <button class="btn btn-primary" id="g7-btn">Save Workforce Plan</button>
+                            </div>
+                            <div style="display:flex; align-items:center; justify-content:center; border:1px dashed var(--border-color); border-radius:8px; color:var(--text-secondary);">
+                                <div style="text-align:center;">
+                                    <i class="fa-solid fa-network-wired" style="font-size:3rem; margin-bottom:15px; color:var(--accent-gold);"></i>
+                                    <p>AI Strategy Modeler</p>
+                                    <p style="font-size:12px;">Will activate upon plan save.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="talent-dashboard.js"></script>
+</body>
+</html>

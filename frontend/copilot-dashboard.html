@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Career Copilot - ResumeSphere</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="copilot-dashboard.css">
+</head>
+<body class="dark-theme">
+    
+    <nav class="navbar glass-panel-nav">
+        <div class="nav-brand">
+            <i class='bx bx-bot'></i>
+            <span>ResumeSphere <strong>Copilot</strong></span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html"><i class='bx bx-home'></i> Home</a>
+            <a href="#planner" class="active"><i class='bx bx-calendar'></i> Planner</a>
+            <a href="#automations"><i class='bx bx-slider'></i> Automations</a>
+        </div>
+        <div class="nav-actions">
+            <!-- Voice Activation Button -->
+            <button id="btn-voice-trigger" class="voice-btn">
+                <i class='bx bx-microphone'></i>
+            </button>
+            <div class="user-avatar">
+                <img src="https://ui-avatars.com/api/?name=User&background=0d9488&color=fff" alt="User">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Voice Copilot Visualizer (Hidden by default) -->
+    <div id="voice-overlay" class="voice-overlay hidden">
+        <div class="voice-orb">
+            <div class="orb-ring ring-1"></div>
+            <div class="orb-ring ring-2"></div>
+            <div class="orb-core"><i class='bx bx-microphone'></i></div>
+        </div>
+        <div class="voice-status">Listening...</div>
+        <div class="voice-transcript" id="voice-transcript">"How can I help with your career today?"</div>
+        <button id="btn-voice-close" class="btn-outline">Cancel</button>
+    </div>
+
+    <div class="copilot-layout">
+        <!-- Left: Planner & Goals -->
+        <aside class="sidebar-left">
+            <div class="glass-panel planner-card">
+                <div class="planner-header">
+                    <h4><i class='bx bx-calendar-check'></i> Daily Planner</h4>
+                    <span class="date-badge">Today</span>
+                </div>
+                <div class="task-list">
+                    <label class="task-item">
+                        <input type="checkbox">
+                        <span>Review Frontend Dev job matches (3 new)</span>
+                    </label>
+                    <label class="task-item">
+                        <input type="checkbox" checked>
+                        <span>Complete Mock Interview for 'React'</span>
+                    </label>
+                    <label class="task-item">
+                        <input type="checkbox">
+                        <span>Read "Salary Negotiation" AI article</span>
+                    </label>
+                </div>
+                <button class="btn-outline btn-full mt-1">Generate AI Plan</button>
+            </div>
+
+            <div class="glass-panel metrics-card">
+                <h4><i class='bx bx-line-chart'></i> Copilot Analytics</h4>
+                <div class="metric-grid">
+                    <div class="metric-box">
+                        <strong>85%</strong>
+                        <span>Profile Health</span>
+                    </div>
+                    <div class="metric-box">
+                        <strong>$140k</strong>
+                        <span>Market Median</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main: Multi-Agent Chat -->
+        <main class="chat-column glass-panel">
+            <div class="chat-header">
+                <div class="active-agent">
+                    <i class='bx bx-bot'></i>
+                    <div>
+                        <strong>Multi-Agent Coordinator</strong>
+                        <small>Routing to: <span id="current-agent-label">Career Coach</span></small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="copilot-chat">
+                <div class="msg-bubble incoming">
+                    <strong>Career Coach:</strong> Hello! I am your AI Copilot. I manage specialized agents for Salary Negotiation, Resume Review, and Skill Planning. What do you want to achieve today?
+                </div>
+            </div>
+            
+            <div class="chat-input-area">
+                <input type="text" id="copilot-input" placeholder="E.g., What is the average salary for a DevOps engineer in NY?">
+                <button id="btn-copilot-send"><i class='bx bxs-send'></i></button>
+            </div>
+        </main>
+
+        <!-- Right: Automations & Insights -->
+        <aside class="sidebar-right">
+            <div class="glass-panel automation-card">
+                <h4><i class='bx bx-cog'></i> Smart Automations</h4>
+                <div class="automation-list">
+                    <div class="auto-item">
+                        <div class="auto-info">
+                            <strong>Weekly Skill Report</strong>
+                            <small>Sent every Monday</small>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="auto-item">
+                        <div class="auto-info">
+                            <strong>Job Auto-Scout</strong>
+                            <small>Flags jobs > 90% match</small>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="auto-item">
+                        <div class="auto-info">
+                            <strong>Auto-Draft Outreach</strong>
+                            <small>Drafts DMs to recruiters</small>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script src="copilot-dashboard.js"></script>
+</body>
+</html>

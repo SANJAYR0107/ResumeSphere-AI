@@ -618,3 +618,19 @@ body {
     50% { transform: scale(1.25); }
     100% { transform: scale(1); }
 }
+
+/* Phase 4 Tab Buttons */
+.tab-btn {
+    background: transparent;
+    color: var(--text-secondary);
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+.tab-btn.active {
+    color: var(--accent-cyan);
+    border-bottom: 2px solid var(--accent-cyan);
+    background: rgba(0, 242, 254, 0.1);
+}
+

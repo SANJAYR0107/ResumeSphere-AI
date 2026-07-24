@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeSphere AI - Learning Platform</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="learning-dashboard.css">
+</head>
+<body>
+
+    <div class="layout">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-graduation-cap"></i> AI Learning Hub
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-target="module-h9"><i class="fa-solid fa-trophy"></i> Gamification & Profile</a>
+                <a href="#" class="nav-item" data-target="module-h1"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Course Generator</a>
+                <a href="#" class="nav-item" data-target="module-h2"><i class="fa-solid fa-book"></i> Course Library</a>
+                <a href="#" class="nav-item" data-target="module-h3"><i class="fa-solid fa-laptop-code"></i> Interactive Code Lab</a>
+                <a href="#" class="nav-item" data-target="module-h4"><i class="fa-solid fa-clipboard-question"></i> AI Quiz Engine</a>
+                <a href="#" class="nav-item" data-target="module-h5"><i class="fa-solid fa-certificate"></i> Certifications</a>
+                <a href="#" class="nav-item" data-target="module-h6"><i class="fa-solid fa-chart-line"></i> Learning Analytics</a>
+                <a href="#" class="nav-item" data-target="module-h7"><i class="fa-solid fa-users"></i> Study Groups</a>
+                <a href="#" class="nav-item" data-target="module-h8"><i class="fa-solid fa-robot"></i> Copilot Assistant</a>
+            </nav>
+            <div style="padding: 20px; border-top: 1px solid var(--border-color);">
+                <a href="index.html" class="btn btn-secondary" style="width: 100%; justify-content:center;"><i class="fa-solid fa-arrow-left"></i> Core Platform</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div style="font-weight: 600; font-size:1.2rem;" id="page-title">Gamification & Profile</div>
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <div style="background:rgba(139, 92, 246, 0.2); padding:5px 10px; border-radius:20px; font-size:12px; font-weight:600; color:var(--accent-primary);">
+                        <i class="fa-solid fa-fire" style="color:var(--accent-warning);"></i> <span id="top-streak">0</span> Day Streak
+                    </div>
+                    <span id="user-name" style="font-weight: 500;">Learner</span>
+                    <img src="https://ui-avatars.com/api/?name=Learner&background=8b5cf6&color=fff" style="width:36px; height:36px; border-radius:50%;">
+                </div>
+            </header>
+
+            <div class="page-container">
+                
+                <!-- MODULE H9: Gamification & Profile -->
+                <section id="module-h9" class="module active">
+                    <div class="grid-3" style="margin-bottom:25px;">
+                        <div class="stat-box">
+                            <div class="stat-val" id="h9-xp">-</div>
+                            <div style="color:var(--text-secondary); font-size:13px; font-weight:500;">Total XP Points</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-val" id="h9-lvl" style="color:var(--accent-info);">-</div>
+                            <div style="color:var(--text-secondary); font-size:13px; font-weight:500;">Current Level</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-val" id="h9-streak" style="color:var(--accent-warning);">-</div>
+                            <div style="color:var(--text-secondary); font-size:13px; font-weight:500;">Learning Streak (Days)</div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span class="card-title"><i class="fa-solid fa-medal"></i> Global Leaderboard</span></div>
+                        <table style="width:100%; border-collapse:collapse; text-align:left;">
+                            <thead>
+                                <tr style="border-bottom:1px solid var(--border-color); color:var(--text-secondary);">
+                                    <th style="padding:10px;">Rank</th>
+                                    <th style="padding:10px;">User</th>
+                                    <th style="padding:10px;">Level</th>
+                                    <th style="padding:10px;">XP Points</th>
+                                </tr>
+                            </thead>
+                            <tbody id="h9-lb">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- MODULE H1: AI Course Generator -->
+                <section id="module-h1" class="module">
+                    <div class="card">
+                        <div class="card-header"><span class="card-title"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Learning Path Generator</span></div>
+                        <p style="color:var(--text-secondary); margin-bottom:20px;">Let ResumeSphere AI design a personalized curriculum to bridge your skill gaps.</p>
+                        <div class="grid-2">
+                            <div>
+                                <div class="form-group">
+                                    <label class="form-label">Target Career Role</label>
+                                    <input type="text" id="h1-role" class="form-control" placeholder="e.g. Senior Machine Learning Engineer">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Current Weaknesses (Comma Separated)</label>
+                                    <input type="text" id="h1-skills" class="form-control" placeholder="e.g. PyTorch, MLOps, System Design">
+                                </div>
+                                <button class="btn btn-primary" id="h1-btn">Generate & Enroll</button>
+                            </div>
+                            <div style="display:flex; align-items:center; justify-content:center; border:1px dashed var(--border-color); border-radius:8px; background:rgba(0,0,0,0.2);">
+                                <div style="text-align:center; color:var(--text-secondary);" id="h1-status">
+                                    <i class="fa-solid fa-robot" style="font-size:3rem; margin-bottom:15px; color:var(--accent-primary);"></i>
+                                    <p>AI Engine Ready.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE H2: Course Management -->
+                <section id="module-h2" class="module">
+                    <div class="card-header"><span class="card-title">My Enrolled Courses</span></div>
+                    <div class="grid-3" id="h2-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- MODULE H3: Interactive Coding Lab -->
+                <section id="module-h3" class="module">
+                    <div class="editor-container">
+                        <div class="editor-header">
+                            <div><i class="fa-brands fa-python" style="color:#f59e0b;"></i> main.py</div>
+                            <div style="display:flex; gap:10px;">
+                                <button class="btn btn-secondary" style="padding:4px 10px; font-size:12px;">Reset</button>
+                                <button class="btn btn-success" id="h3-run" style="padding:4px 10px; font-size:12px;"><i class="fa-solid fa-play"></i> Run Code</button>
+                            </div>
+                        </div>
+                        <div class="editor-body">
+                            <div class="line-numbers">1<br>2<br>3<br>4<br>5</div>
+                            <textarea class="code-area" id="h3-code" rows="5">def two_sum(nums, target):
+    # Write your solution here
+    pass
+
+print(two_sum([2, 7, 11, 15], 9))</textarea>
+                        </div>
+                        <div class="terminal" id="h3-term">
+                            $ Server is ready. Waiting for execution...
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE H4: AI Quiz Engine -->
+                <section id="module-h4" class="module">
+                    <div class="card" style="max-width:600px; margin:0 auto;">
+                        <div class="card-header"><span class="card-title">Adaptive Quiz Evaluation</span></div>
+                        <h3 style="margin-bottom:15px; line-height:1.5;">Which of the following data structures provides O(1) average time complexity for lookups?</h3>
+                        <div id="h4-options">
+                            <div class="quiz-option" onclick="selectOpt(this)">A) Linked List</div>
+                            <div class="quiz-option" onclick="selectOpt(this)">B) Binary Search Tree</div>
+                            <div class="quiz-option" onclick="selectOpt(this)">C) Hash Table</div>
+                            <div class="quiz-option" onclick="selectOpt(this)">D) Array List</div>
+                        </div>
+                        <button class="btn btn-primary" id="h4-submit" style="width:100%; justify-content:center; margin-top:15px;">Submit Answer</button>
+                        
+                        <div id="h4-feedback" style="display:none; margin-top:20px; padding:15px; border-radius:8px; border:1px solid var(--border-color);"></div>
+                    </div>
+                </section>
+
+                <!-- MODULE H5: Certification -->
+                <section id="module-h5" class="module">
+                    <div class="grid-2">
+                        <div class="card" style="text-align:center; padding:40px 20px;">
+                            <i class="fa-solid fa-certificate" style="font-size:4rem; color:var(--accent-primary); margin-bottom:15px;"></i>
+                            <h3>Advanced System Design</h3>
+                            <p style="color:var(--text-secondary); margin-bottom:20px;">Completion Certificate</p>
+                            <button class="btn btn-primary" onclick="verifyCert('c123')">Verify Digital Credential</button>
+                        </div>
+                        <div class="card" id="h5-result" style="display:none; background:rgba(16, 185, 129, 0.05); border-color:rgba(16, 185, 129, 0.3);">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE H6: Analytics -->
+                <section id="module-h6" class="module">
+                    <div class="card">
+                        <div class="card-header"><span class="card-title">Learning Trajectory</span></div>
+                        <div class="grid-2">
+                            <canvas id="chart-analytics"></canvas>
+                            <div id="h6-text" style="display:flex; flex-direction:column; justify-content:center; padding:20px;">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE H7: Study Groups -->
+                <section id="module-h7" class="module">
+                    <div class="card-header"><span class="card-title">Active Learning Communities</span></div>
+                    <div class="grid-3" id="h7-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- MODULE H8: Copilot -->
+                <section id="module-h8" class="module">
+                    <div class="card" style="display:flex; flex-direction:column; height:500px; padding:0;">
+                        <div class="card-header" style="padding:20px; margin-bottom:0; background:rgba(0,0,0,0.2); border-bottom:1px solid var(--border-color);">
+                            <span class="card-title"><i class="fa-solid fa-robot"></i> AI Study Copilot</span>
+                        </div>
+                        <div style="flex:1; padding:20px; overflow-y:auto; display:flex; flex-direction:column; gap:15px;" id="h8-chat">
+                            <div style="background:rgba(139, 92, 246, 0.1); padding:15px; border-radius:8px; border:1px solid rgba(139, 92, 246, 0.3); max-width:80%;">
+                                Hello! I'm your AI Study Copilot. What concept can I help explain today?
+                            </div>
+                        </div>
+                        <div style="padding:15px; border-top:1px solid var(--border-color); display:flex; gap:10px;">
+                            <input type="text" class="form-control" id="h8-input" placeholder="Explain polymorphism like I'm 5..." style="margin-bottom:0;">
+                            <button class="btn btn-primary" id="h8-btn"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="learning-dashboard.js"></script>
+</body>
+</html>

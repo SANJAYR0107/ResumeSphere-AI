@@ -1,0 +1,128 @@
+/* ==========================================================================
+   ResumeSphere SaaS - Enterprise Theme (v13.0.0)
+   ========================================================================== */
+
+:root {
+    --bg-main: #0f172a; /* Slate 900 */
+    --bg-card: #1e293b; /* Slate 800 */
+    --bg-hover: #334155; /* Slate 700 */
+    
+    --brand-primary: #0284c7; /* Sky 600 */
+    --brand-primary-hover: #0369a1; /* Sky 700 */
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    
+    --accent: #8b5cf6;
+    --success: #10b981;
+    --danger: #ef4444;
+    
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --transition: all 0.2s ease;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body.enterprise-theme {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Nav --- */
+.enterprise-nav {
+    background: #0b1120;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+.nav-brand { display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-heading); font-size: 1.3rem; }
+.nav-brand i { color: var(--brand-primary); font-size: 1.6rem; }
+.tenant-switcher select {
+    background: var(--bg-card); color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 0.5rem 1rem; border-radius: var(--radius-sm);
+    font-size: 0.9rem; cursor: pointer;
+}
+.nav-actions { display: flex; align-items: center; gap: 1rem; }
+.user-avatar img { width: 32px; height: 32px; border-radius: 50%; }
+
+/* --- Layout --- */
+.admin-layout {
+    display: flex; flex: 1; overflow: hidden;
+}
+.admin-sidebar {
+    width: 250px; background: #0b1120;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    padding: 1.5rem 0;
+}
+.sidebar-menu { list-style: none; }
+.sidebar-menu li {
+    padding: 0.8rem 1.5rem; display: flex; align-items: center; gap: 0.8rem;
+    color: var(--text-secondary); cursor: pointer; transition: var(--transition);
+}
+.sidebar-menu li:hover { background: rgba(255,255,255,0.05); color: white; }
+.sidebar-menu li.active {
+    background: rgba(2, 132, 199, 0.1);
+    color: var(--brand-primary); border-right: 3px solid var(--brand-primary);
+}
+
+.admin-main {
+    flex: 1; padding: 2rem; overflow-y: auto; background: var(--bg-main);
+}
+
+/* --- Components --- */
+.view-section { display: none; }
+.view-section.active { display: block; animation: fadeIn 0.3s; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.header-action { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+.header-action h2 { font-family: var(--font-heading); font-weight: 600; }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.kpi-card { background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.05); }
+.kpi-title { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem; }
+.kpi-value { font-size: 2rem; font-weight: 700; font-family: var(--font-heading); }
+.kpi-trend { font-size: 0.85rem; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.3rem; }
+.kpi-trend.up { color: var(--success); }
+.kpi-trend.neutral { color: var(--text-secondary); }
+
+.card { background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.05); }
+.mt-2 { margin-top: 2rem; }
+.text-accent { color: var(--accent); }
+
+/* --- Tables --- */
+.enterprise-table { width: 100%; border-collapse: collapse; }
+.enterprise-table th { text-align: left; padding: 1rem; color: var(--text-secondary); font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.enterprise-table td { padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+/* --- Buttons & Badges --- */
+.btn { padding: 0.6rem 1.2rem; border-radius: var(--radius-sm); border: none; cursor: pointer; font-size: 0.9rem; transition: var(--transition); display: inline-flex; align-items: center; gap: 0.4rem; }
+.btn-primary { background: var(--brand-primary); color: white; }
+.btn-primary:hover { background: var(--brand-primary-hover); }
+.btn-danger { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+.btn-danger:hover { background: rgba(239, 68, 68, 0.4); }
+.btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; }
+.btn-sm { padding: 0.3rem 0.6rem; font-size: 0.8rem; }
+
+.badge { padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+.badge-pro { background: rgba(139, 92, 246, 0.2); color: var(--accent); }
+.badge-success { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+
+/* --- Modal --- */
+.modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+.modal.hidden { display: none; }
+.modal-content { background: var(--bg-main); padding: 2rem; border-radius: var(--radius-md); width: 400px; border: 1px solid rgba(255,255,255,0.1); }
+.form-group { margin-top: 1rem; margin-bottom: 1.5rem; }
+.form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-secondary); }
+.form-control { width: 100%; padding: 0.6rem; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.2); border-radius: var(--radius-sm); color: white; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 1rem; }

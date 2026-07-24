@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeSphere Ecosystem (Phase E)</title>
+    <!-- CDNs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="ecosystem-dashboard.css">
+</head>
+<body>
+
+    <div id="ecosystem-view" class="layout">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-globe"></i> &nbsp; Career Ecosystem
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-target="module-e9"><i class="fa-solid fa-compass"></i> Dashboard</a>
+                <a href="#" class="nav-item" data-target="module-e1"><i class="fa-solid fa-address-card"></i> Portfolio Builder</a>
+                <a href="#" class="nav-item" data-target="module-e2"><i class="fa-brands fa-github"></i> GitHub Analyzer</a>
+                <a href="#" class="nav-item" data-target="module-e3"><i class="fa-brands fa-linkedin"></i> LinkedIn Optimizer</a>
+                <a href="#" class="nav-item" data-target="module-e4"><i class="fa-solid fa-briefcase"></i> Job Discovery</a>
+                <a href="#" class="nav-item" data-target="module-e5"><i class="fa-solid fa-chalkboard-user"></i> Mentor Connect</a>
+                <a href="#" class="nav-item" data-target="module-e6"><i class="fa-solid fa-users-rays"></i> Community Hub</a>
+                <a href="#" class="nav-item" data-target="module-e8"><i class="fa-solid fa-brain"></i> AI Insights</a>
+            </nav>
+            <div style="padding: 20px; border-top: 1px solid var(--border-color); text-align: center;">
+                <a href="index.html" class="btn btn-secondary" style="width: 100%; justify-content:center;"><i class="fa-solid fa-arrow-left"></i> Core Platform</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div style="font-size: 1.1rem; font-weight: 600;" id="page-title">Unified Career Dashboard</div>
+                <div class="topbar-actions">
+                    <button class="btn btn-secondary" style="border-radius: 50%; width:40px; height:40px; padding:0; justify-content:center;" id="notif-btn">
+                        <i class="fa-solid fa-bell"></i>
+                    </button>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <img src="https://ui-avatars.com/api/?name=User&background=8b5cf6&color=fff" style="width:36px; height:36px; border-radius:50%;">
+                        <span id="user-name" style="font-weight: 500;">User</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-container">
+                
+                <!-- MODULE E9: Unified Career Dashboard -->
+                <section id="module-e9" class="module active">
+                    <div class="grid-4">
+                        <div class="card" style="margin-bottom:0; text-align:center;">
+                            <i class="fa-brands fa-github" style="font-size:2.5rem; color:var(--text-secondary); margin-bottom:10px;"></i>
+                            <div class="form-label">GitHub Score</div>
+                            <h2 style="font-size:2rem; color:var(--accent-purple);" id="dash-gh">-</h2>
+                        </div>
+                        <div class="card" style="margin-bottom:0; text-align:center;">
+                            <i class="fa-brands fa-linkedin" style="font-size:2.5rem; color:var(--text-secondary); margin-bottom:10px;"></i>
+                            <div class="form-label">LinkedIn Score</div>
+                            <h2 style="font-size:2rem; color:var(--accent-blue);" id="dash-li">-</h2>
+                        </div>
+                        <div class="card" style="margin-bottom:0; text-align:center;">
+                            <i class="fa-solid fa-graduation-cap" style="font-size:2.5rem; color:var(--text-secondary); margin-bottom:10px;"></i>
+                            <div class="form-label">Learning Progress</div>
+                            <h2 style="font-size:2rem; color:var(--accent-green);" id="dash-learn">-</h2>
+                        </div>
+                        <div class="card" style="margin-bottom:0; text-align:center;">
+                            <i class="fa-solid fa-briefcase" style="font-size:2.5rem; color:var(--text-secondary); margin-bottom:10px;"></i>
+                            <div class="form-label">Active Applications</div>
+                            <h2 style="font-size:2rem; color:var(--accent-cyan);" id="dash-apps">-</h2>
+                        </div>
+                    </div>
+                    <div class="grid-2" style="margin-top:25px;">
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Recent Activity Feed</span>
+                            </div>
+                            <div id="dash-activity" style="color:var(--text-secondary); font-size:14px;">
+                                <p><i class="fa-solid fa-check text-green-500"></i> Updated Portfolio template to Modern.</p>
+                                <p><i class="fa-solid fa-check text-green-500"></i> Booked a session with Mentor 'Alex'.</p>
+                                <p><i class="fa-solid fa-check text-green-500"></i> Analyzed GitHub repository 'AI-Core'.</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Profile Completion</span>
+                            </div>
+                            <div style="height: 200px; display:flex; align-items:center; justify-content:center;">
+                                <canvas id="chart-completion"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE E1: Portfolio Builder -->
+                <section id="module-e1" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title"><i class="fa-solid fa-palette"></i> Portfolio Configuration</span>
+                            <button class="btn btn-primary" id="btn-export-port"><i class="fa-solid fa-download"></i> Export HTML</button>
+                        </div>
+                        <div class="grid-2">
+                            <div>
+                                <div class="form-group">
+                                    <label class="form-label">Select Theme</label>
+                                    <select class="form-control" id="port-theme">
+                                        <option value="modern">Modern Minimal</option>
+                                        <option value="cyber">Cyberpunk</option>
+                                        <option value="glass">Glassmorphism</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Top Skills (Comma separated)</label>
+                                    <input type="text" class="form-control" id="port-skills" placeholder="React, Node.js, Python">
+                                </div>
+                                <button class="btn btn-secondary" id="btn-save-port">Save Configuration</button>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.2); border-radius:var(--radius-md); border:1px solid var(--border-color); padding:20px; display:flex; align-items:center; justify-content:center; color:var(--text-secondary);">
+                                <i class="fa-solid fa-laptop-code" style="font-size:4rem; opacity:0.5;"></i>
+                                <div style="margin-left:20px;">Live Preview Rendering Engine (V6)</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE E2: GitHub Analyzer -->
+                <section id="module-e2" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title"><i class="fa-brands fa-github"></i> AI Repository Analysis</span>
+                        </div>
+                        <div style="display:flex; gap:15px; margin-bottom: 25px;">
+                            <input type="text" id="gh-username" class="form-control" placeholder="Enter GitHub Username..." style="max-width:300px;">
+                            <button class="btn btn-primary" id="btn-analyze-gh">Analyze Profile</button>
+                        </div>
+                        <div id="gh-results" style="display:none;" class="grid-2">
+                            <div class="card" style="box-shadow:none;">
+                                <div class="score-circle" id="gh-score">0</div>
+                                <p style="text-align:center; color:var(--text-secondary);">Repository Quality Score</p>
+                            </div>
+                            <div class="card" style="box-shadow:none;">
+                                <h4>AI Recommendations</h4>
+                                <ul id="gh-recs" style="padding-left:20px; color:var(--text-secondary); margin-top:10px; line-height:1.6;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE E3: LinkedIn Optimizer -->
+                <section id="module-e3" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title"><i class="fa-brands fa-linkedin"></i> LinkedIn Profile Optimizer</span>
+                        </div>
+                        <div style="display:flex; gap:15px; margin-bottom: 25px;">
+                            <input type="url" id="li-url" class="form-control" placeholder="https://linkedin.com/in/username" style="max-width:400px;">
+                            <button class="btn btn-primary" id="btn-analyze-li">Optimize Profile</button>
+                        </div>
+                        <div id="li-results" style="display:none;" class="grid-2">
+                            <div class="card" style="box-shadow:none;">
+                                <div class="score-circle" id="li-score" style="border-color:var(--accent-blue);">0</div>
+                                <p style="text-align:center; color:var(--text-secondary);">Profile Strength</p>
+                            </div>
+                            <div class="card" style="box-shadow:none;">
+                                <h4>Optimization Suggestions</h4>
+                                <ul id="li-recs" style="padding-left:20px; color:var(--text-secondary); margin-top:10px; line-height:1.6;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE E4: Job Discovery -->
+                <section id="module-e4" class="module">
+                    <div class="card-header">
+                        <span class="card-title">AI Job Recommendations</span>
+                        <span class="badge badge-green">Based on your skills</span>
+                    </div>
+                    <div class="grid-3" id="job-feed">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- MODULE E5: Mentor Connect -->
+                <section id="module-e5" class="module">
+                    <div class="card-header">
+                        <span class="card-title">Find a Career Mentor</span>
+                    </div>
+                    <div class="grid-4" id="mentor-feed">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- MODULE E6: Community Hub -->
+                <section id="module-e6" class="module">
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Recent Discussions</span>
+                            </div>
+                            <div id="comm-feed" style="display:flex; flex-direction:column; gap:15px;"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">Create Post</span>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="comm-title" class="form-control" placeholder="Post Title">
+                            </div>
+                            <div class="form-group">
+                                <textarea id="comm-content" class="form-control" rows="4" placeholder="What's on your mind?"></textarea>
+                            </div>
+                            <button class="btn btn-primary" id="btn-post">Publish</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE E8: AI Insights -->
+                <section id="module-e8" class="module">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title"><i class="fa-solid fa-brain"></i> AI Career Radar</span>
+                        </div>
+                        <div class="grid-2">
+                            <div style="height:350px; display:flex; justify-content:center;">
+                                <canvas id="chart-radar"></canvas>
+                            </div>
+                            <div>
+                                <h3 style="margin-bottom:15px; color:var(--accent-purple);">Career Trajectory Advice</h3>
+                                <p id="insight-advice" style="color:var(--text-secondary); line-height:1.6; font-size:16px;">Loading...</p>
+                                
+                                <h4 style="margin-top:25px; margin-bottom:10px;">Emerging Skills to Learn</h4>
+                                <div id="insight-skills" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Notifications Panel (E7) -->
+    <div id="notif-panel" style="position:fixed; top:70px; right:30px; width:350px; background:var(--bg-panel); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:15px; display:none; z-index:100; box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+        <h4 style="margin-bottom:15px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">Smart Notifications</h4>
+        <div id="notif-list" style="display:flex; flex-direction:column; gap:10px; max-height:400px; overflow-y:auto;">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script src="ecosystem-dashboard.js"></script>
+</body>
+</html>

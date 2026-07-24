@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Marketplace - ResumeSphere</title>
+    
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Boxicons for icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <link rel="stylesheet" href="marketplace-dashboard.css">
+</head>
+<body class="dark-theme">
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class='bx bx-hive'></i>
+            <span>ResumeSphere <strong>Marketplace</strong></span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#freelance" class="active">Freelance Gigs</a>
+            <a href="#mentors">Mentors</a>
+            <a href="#projects">Projects</a>
+            <a href="#orders">My Orders</a>
+        </div>
+        <div class="nav-profile">
+            <div class="wallet-pill">
+                <i class='bx bx-wallet'></i>
+                <span id="wallet-balance">$0.00</span>
+            </div>
+            <div class="user-avatar">
+                <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="User">
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="hero-section">
+        <div class="hero-content">
+            <h1>The AI-Powered <span>Talent Exchange</span></h1>
+            <p>Connect, collaborate, and monetize your skills in the world's most intelligent professional marketplace.</p>
+            <div class="search-bar">
+                <i class='bx bx-search'></i>
+                <input type="text" placeholder="Search for gigs, mentors, or projects..." id="global-search">
+                <button class="btn-primary">Search</button>
+            </div>
+        </div>
+        <div class="hero-graphics">
+            <!-- Decorative elements for premium feel -->
+            <div class="glass-card float-1">
+                <i class='bx bx-trending-up'></i>
+                <div>
+                    <small>Demand Trend</small>
+                    <strong>+24% in AI Gigs</strong>
+                </div>
+            </div>
+            <div class="glass-card float-2">
+                <i class='bx bx-check-shield'></i>
+                <div>
+                    <small>Trust Score</small>
+                    <strong>98/100</strong>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        
+        <!-- AI Recommendations Row -->
+        <section class="section-block" id="ai-recommendations">
+            <div class="section-header">
+                <h2><i class='bx bx-brain'></i> AI Recommended For You</h2>
+                <button class="btn-text">View All</button>
+            </div>
+            <div class="grid-layout recommendations-grid" id="recommendations-container">
+                <!-- JS populated -->
+            </div>
+        </section>
+
+        <!-- Gig Marketplace Row -->
+        <section class="section-block" id="freelance">
+            <div class="section-header">
+                <h2>Freelance Services</h2>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="development">Development</button>
+                    <button class="filter-btn" data-filter="design">Design</button>
+                    <button class="filter-btn" data-filter="writing">Resume Writing</button>
+                </div>
+            </div>
+            <div class="grid-layout gigs-grid" id="gigs-container">
+                <!-- JS populated -->
+            </div>
+        </section>
+        
+        <!-- Projects Row -->
+        <section class="section-block" id="projects">
+            <div class="section-header">
+                <h2>Open Projects</h2>
+                <button class="btn-outline"><i class='bx bx-plus'></i> Post a Project</button>
+            </div>
+            <div class="list-layout projects-list" id="projects-container">
+                <!-- JS populated -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Post Gig Modal -->
+    <div class="modal" id="post-gig-modal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3>Create a New Gig</h3>
+                <i class='bx bx-x close-modal'></i>
+            </div>
+            <div class="modal-body">
+                <!-- Form handled in JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
+
+    <script src="marketplace-dashboard.js"></script>
+</body>
+</html>

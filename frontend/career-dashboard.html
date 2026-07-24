@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Career Assistant - ResumeSphere</title>
+    <!-- CDNs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="career-dashboard.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="sidebar-logo">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>ResumeSphere <span style="color: var(--accent-blue)">AI</span></span>
+                </a>
+            </div>
+            <nav class="sidebar-nav" id="sidebar-nav">
+                <!-- C9 -->
+                <a href="#" class="nav-item active" data-target="module-c9">
+                    <i class="fa-solid fa-chart-pie"></i> Analytics Dashboard
+                </a>
+                <!-- C1 -->
+                <a href="#" class="nav-item" data-target="module-c1">
+                    <i class="fa-solid fa-map-location-dot"></i> Career Coach
+                </a>
+                <!-- C2 -->
+                <a href="#" class="nav-item" data-target="module-c2">
+                    <i class="fa-solid fa-robot"></i> AI Chat Assistant
+                </a>
+                <!-- C3 -->
+                <a href="#" class="nav-item" data-target="module-c3">
+                    <i class="fa-solid fa-file-signature"></i> Cover Letter
+                </a>
+                <!-- C4 -->
+                <a href="#" class="nav-item" data-target="module-c4">
+                    <i class="fa-solid fa-graduation-cap"></i> Learning Roadmap
+                </a>
+                <!-- C5 -->
+                <a href="#" class="nav-item" data-target="module-c5">
+                    <i class="fa-solid fa-certificate"></i> Certifications
+                </a>
+                <!-- C6 -->
+                <a href="#" class="nav-item" data-target="module-c6">
+                    <i class="fa-solid fa-laptop-code"></i> Portfolio Analyzer
+                </a>
+                <!-- C7 -->
+                <a href="#" class="nav-item" data-target="module-c7">
+                    <i class="fa-solid fa-gauge-high"></i> Job Readiness
+                </a>
+                <!-- C8 -->
+                <a href="#" class="nav-item" data-target="module-c8">
+                    <i class="fa-solid fa-clipboard-list"></i> Job Tracker
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-wrapper">
+            <!-- Top Nav -->
+            <header class="top-nav">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <button class="icon-btn" id="mobile-menu-btn" style="display: none;">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <h1 class="page-title" id="page-title-display">Analytics Dashboard</h1>
+                </div>
+                <div class="top-actions">
+                    <button class="icon-btn" id="theme-toggle-btn" title="Toggle Theme">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <a href="index.html" class="btn btn-secondary">
+                        <i class="fa-solid fa-arrow-left"></i> Back to App
+                    </a>
+                </div>
+            </header>
+
+            <!-- Content Area (Modules) -->
+            <div class="content-area" id="content-area">
+                
+                <!-- MODULE C9: Analytics Dashboard -->
+                <section id="module-c9" class="module-section active">
+                    <div class="grid-3" style="margin-bottom: 30px;">
+                        <div class="glass-card" style="text-align: center;">
+                            <h3 class="form-label">ATS Trend</h3>
+                            <canvas id="chart-ats-trend" height="200"></canvas>
+                        </div>
+                        <div class="glass-card" style="text-align: center;">
+                            <h3 class="form-label">Interview Performance</h3>
+                            <canvas id="chart-interview-trend" height="200"></canvas>
+                        </div>
+                        <div class="glass-card" style="text-align: center;">
+                            <h3 class="form-label">Career Readiness</h3>
+                            <canvas id="chart-readiness" height="200"></canvas>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="glass-card">
+                            <h3 class="form-label">Skill Growth Areas</h3>
+                            <canvas id="chart-skill-growth" height="300"></canvas>
+                        </div>
+                        <div class="glass-card">
+                            <h3 class="form-label">Job Applications</h3>
+                            <canvas id="chart-applications" height="300"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE C1: Career Coach -->
+                <section id="module-c1" class="module-section">
+                    <div class="glass-card" style="margin-bottom: 20px;">
+                        <h2 class="card-title"><i class="fa-solid fa-route"></i> Career Roadmap Generator</h2>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label class="form-label">Target Role</label>
+                                <input type="text" id="c1-target-role" class="form-control" value="Senior Full Stack Engineer">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Current Top Skills (comma separated)</label>
+                                <input type="text" id="c1-resume-skills" class="form-control" value="React, Node.js, AWS">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="c1-generate-btn"><i class="fa-solid fa-magic"></i> Generate Roadmap</button>
+                    </div>
+                    <div id="c1-results" style="display: none;">
+                        <div class="grid-3" id="c1-timeline"></div>
+                    </div>
+                </section>
+
+                <!-- MODULE C2: Chat Assistant -->
+                <section id="module-c2" class="module-section" style="height: calc(100vh - 150px); display: none; flex-direction: column;">
+                    <div class="glass-card" style="flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 0;">
+                        <div style="padding: 15px 20px; border-bottom: 1px solid var(--border-color); background: rgba(0,0,0,0.1);">
+                            <h2 class="card-title" style="margin:0; border:none; padding:0;"><i class="fa-solid fa-robot"></i> Career AI Assistant</h2>
+                        </div>
+                        <div id="chat-history" style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px;">
+                            <!-- Messages go here -->
+                        </div>
+                        <div style="padding: 15px; border-top: 1px solid var(--border-color);">
+                            <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;" id="chat-suggestions">
+                                <span class="badge badge-blue" style="cursor:pointer;" onclick="document.getElementById('chat-input').value=this.innerText">Why is my ATS score low?</span>
+                                <span class="badge badge-blue" style="cursor:pointer;" onclick="document.getElementById('chat-input').value=this.innerText">Which project should I improve?</span>
+                                <span class="badge badge-blue" style="cursor:pointer;" onclick="document.getElementById('chat-input').value=this.innerText">How can I prepare for interviews?</span>
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="text" id="chat-input" class="form-control" placeholder="Ask anything about your career...">
+                                <button class="btn btn-primary" id="chat-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE C3: Cover Letter -->
+                <section id="module-c3" class="module-section">
+                    <div class="grid-2">
+                        <div class="glass-card">
+                            <h2 class="card-title"><i class="fa-solid fa-pen-nib"></i> Details</h2>
+                            <div class="form-group">
+                                <label class="form-label">Company Name</label>
+                                <input type="text" id="c3-company" class="form-control" placeholder="e.g. Google">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Target Role</label>
+                                <input type="text" id="c3-role" class="form-control" placeholder="e.g. Frontend Engineer">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Job Description Snippet</label>
+                                <textarea id="c3-jd" class="form-control" placeholder="Paste JD highlights here..."></textarea>
+                            </div>
+                            <div style="display:flex; gap:10px;">
+                                <button class="btn btn-primary" id="c3-generate-btn"><i class="fa-solid fa-magic"></i> Generate</button>
+                                <button class="btn btn-secondary" id="c3-clear-btn">Clear</button>
+                            </div>
+                        </div>
+                        <div class="glass-card" style="display: flex; flex-direction: column;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom:10px;">
+                                <h2 class="card-title" style="border:none; margin:0; padding:0;"><i class="fa-solid fa-file-lines"></i> Result</h2>
+                                <div style="display:flex; gap:10px;">
+                                    <button class="icon-btn" id="c3-copy-btn" title="Copy"><i class="fa-solid fa-copy"></i></button>
+                                    <button class="icon-btn" id="c3-pdf-btn" title="Download PDF"><i class="fa-solid fa-file-pdf"></i></button>
+                                </div>
+                            </div>
+                            <textarea id="c3-result-editor" class="form-control" style="flex:1; min-height:300px;" placeholder="Generated cover letter will appear here..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE C4: Learning Roadmap -->
+                <section id="module-c4" class="module-section">
+                    <div class="glass-card" style="margin-bottom: 20px;">
+                        <h2 class="card-title"><i class="fa-solid fa-book-open"></i> Generate Learning Plan</h2>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="c4-skill" class="form-control" placeholder="Target Skill (e.g., React, System Design)">
+                            <button class="btn btn-primary" id="c4-generate-btn">Generate</button>
+                        </div>
+                    </div>
+                    <div id="c4-results" style="display: none;">
+                        <h3 class="form-label" style="margin-bottom:15px; font-size:1.1rem;">Roadmap</h3>
+                        <div class="grid-3" id="c4-tasks-container"></div>
+                        <h3 class="form-label" style="margin-top:30px; margin-bottom:15px; font-size:1.1rem;">Recommended Resources</h3>
+                        <div class="grid-4" id="c4-resources-container"></div>
+                    </div>
+                </section>
+
+                <!-- MODULE C5: Certifications -->
+                <section id="module-c5" class="module-section">
+                    <div class="glass-card" style="margin-bottom: 20px;">
+                        <h2 class="card-title"><i class="fa-solid fa-award"></i> Certification Recommendations</h2>
+                        <button class="btn btn-primary" id="c5-fetch-btn"><i class="fa-solid fa-sync"></i> Find Best Certifications</button>
+                    </div>
+                    <div class="grid-3" id="c5-certs-container"></div>
+                </section>
+
+                <!-- MODULE C6: Portfolio Analyzer -->
+                <section id="module-c6" class="module-section">
+                    <div class="grid-2">
+                        <div class="glass-card">
+                            <h2 class="card-title"><i class="fa-solid fa-code"></i> Analyze Projects</h2>
+                            <div class="form-group">
+                                <label class="form-label">Project Description / README text</label>
+                                <textarea id="c6-project-text" class="form-control" style="height: 200px;" placeholder="Paste project details or README..."></textarea>
+                            </div>
+                            <button class="btn btn-primary" id="c6-analyze-btn"><i class="fa-solid fa-magnifying-glass-chart"></i> Analyze</button>
+                        </div>
+                        <div class="glass-card">
+                            <h2 class="card-title"><i class="fa-solid fa-square-poll-vertical"></i> Scores</h2>
+                            <div id="c6-scores-container" style="display:flex; flex-direction:column; gap:15px;">
+                                <!-- Scores injected here -->
+                                <p style="color:var(--text-secondary);">Run analysis to see scores and suggestions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MODULE C7: Job Readiness -->
+                <section id="module-c7" class="module-section">
+                    <div class="glass-card" style="margin-bottom:20px; text-align:center;">
+                        <h2 class="card-title" style="justify-content:center;"><i class="fa-solid fa-gauge"></i> Job Readiness Score</h2>
+                        <button class="btn btn-primary" id="c7-calculate-btn">Calculate Score</button>
+                    </div>
+                    <div class="grid-4" id="c7-scores-container">
+                        <!-- Circular progress injected here -->
+                    </div>
+                    <div class="glass-card" style="margin-top:20px;" id="c7-suggestions-card">
+                        <h3 class="form-label">Improvement Suggestions</h3>
+                        <ul id="c7-suggestions-list" style="padding-left: 20px; color: var(--text-secondary);"></ul>
+                    </div>
+                </section>
+
+                <!-- MODULE C8: Job Tracker -->
+                <section id="module-c8" class="module-section">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+                        <h2 class="page-title"><i class="fa-solid fa-kanban"></i> Kanban Job Tracker</h2>
+                        <button class="btn btn-primary" id="c8-add-btn"><i class="fa-solid fa-plus"></i> Add Job</button>
+                    </div>
+                    
+                    <div style="display:flex; gap:20px; overflow-x:auto; padding-bottom: 20px; min-height: 400px;">
+                        <!-- Columns -->
+                        <div class="kanban-col" style="min-width:280px; flex:1; background:rgba(0,0,0,0.2); border-radius:var(--radius-md); padding:15px;" data-status="Wishlist">
+                            <h3 class="form-label" style="text-align:center; border-bottom:1px solid var(--border-color); padding-bottom:10px;">Wishlist</h3>
+                            <div class="kanban-dropzone" style="min-height: 200px; display:flex; flex-direction:column; gap:10px; margin-top:10px;" id="kb-wishlist"></div>
+                        </div>
+                        <div class="kanban-col" style="min-width:280px; flex:1; background:rgba(0,0,0,0.2); border-radius:var(--radius-md); padding:15px;" data-status="Applied">
+                            <h3 class="form-label" style="text-align:center; border-bottom:1px solid var(--border-color); padding-bottom:10px;">Applied</h3>
+                            <div class="kanban-dropzone" style="min-height: 200px; display:flex; flex-direction:column; gap:10px; margin-top:10px;" id="kb-applied"></div>
+                        </div>
+                        <div class="kanban-col" style="min-width:280px; flex:1; background:rgba(0,0,0,0.2); border-radius:var(--radius-md); padding:15px;" data-status="Interview">
+                            <h3 class="form-label" style="text-align:center; border-bottom:1px solid var(--border-color); padding-bottom:10px;">Interview</h3>
+                            <div class="kanban-dropzone" style="min-height: 200px; display:flex; flex-direction:column; gap:10px; margin-top:10px;" id="kb-interview"></div>
+                        </div>
+                        <div class="kanban-col" style="min-width:280px; flex:1; background:rgba(0,0,0,0.2); border-radius:var(--radius-md); padding:15px;" data-status="Offer">
+                            <h3 class="form-label" style="text-align:center; border-bottom:1px solid var(--border-color); padding-bottom:10px;">Offer</h3>
+                            <div class="kanban-dropzone" style="min-height: 200px; display:flex; flex-direction:column; gap:10px; margin-top:10px;" id="kb-offer"></div>
+                        </div>
+                        <div class="kanban-col" style="min-width:280px; flex:1; background:rgba(0,0,0,0.2); border-radius:var(--radius-md); padding:15px;" data-status="Rejected">
+                            <h3 class="form-label" style="text-align:center; border-bottom:1px solid var(--border-color); padding-bottom:10px;">Rejected</h3>
+                            <div class="kanban-dropzone" style="min-height: 200px; display:flex; flex-direction:column; gap:10px; margin-top:10px;" id="kb-rejected"></div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Modal for C8 (Hidden by default) -->
+    <div id="c8-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+        <div class="glass-card" style="width: 400px; max-width:90%;">
+            <h2 class="card-title">Add Job Application</h2>
+            <div class="form-group">
+                <label class="form-label">Company Name</label>
+                <input type="text" id="c8-form-company" class="form-control">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Role</label>
+                <input type="text" id="c8-form-role" class="form-control">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Status</label>
+                <select id="c8-form-status" class="form-control">
+                    <option value="Wishlist">Wishlist</option>
+                    <option value="Applied">Applied</option>
+                    <option value="Interview">Interview</option>
+                    <option value="Offer">Offer</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+            </div>
+            <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:20px;">
+                <button class="btn btn-secondary" onclick="document.getElementById('c8-modal').style.display='none'">Cancel</button>
+                <button class="btn btn-primary" id="c8-save-btn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core App Logic -->
+    <script src="career-dashboard.js"></script>
+</body>
+</html>

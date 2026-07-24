@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Talent Network - ResumeSphere</title>
+    
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Boxicons for icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <link rel="stylesheet" href="network-dashboard.css">
+</head>
+<body class="dark-theme">
+    
+    <!-- Navigation -->
+    <nav class="navbar glass-panel-nav">
+        <div class="nav-brand">
+            <i class='bx bx-globe'></i>
+            <span>ResumeSphere <strong>Network</strong></span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html"><i class='bx bx-home'></i> Home</a>
+            <a href="#feed" class="active"><i class='bx bx-news'></i> Feed</a>
+            <a href="#connections"><i class='bx bx-network-chart'></i> Network</a>
+            <a href="#events"><i class='bx bx-calendar-event'></i> Events</a>
+        </div>
+        <div class="nav-profile">
+            <div class="search-bar-small">
+                <i class='bx bx-search'></i>
+                <input type="text" placeholder="Search network..." id="semantic-search">
+            </div>
+            <div class="notification-bell">
+                <i class='bx bxs-bell-ring'></i>
+                <span class="badge">3</span>
+            </div>
+            <div class="user-avatar">
+                <img src="https://ui-avatars.com/api/?name=You&background=8b5cf6&color=fff" alt="User">
+            </div>
+        </div>
+    </nav>
+
+    <div class="network-layout">
+        <!-- Left Sidebar: AI Suggestions & Profile -->
+        <aside class="sidebar-left">
+            <div class="profile-card glass-panel">
+                <div class="profile-bg"></div>
+                <img src="https://ui-avatars.com/api/?name=You&background=8b5cf6&color=fff" class="profile-img" alt="You">
+                <h3>Your Name</h3>
+                <p>Senior Software Engineer</p>
+                <div class="profile-stats">
+                    <div><strong>142</strong><span>Connections</span></div>
+                    <div><strong>94</strong><span>Influence</span></div>
+                </div>
+            </div>
+
+            <div class="suggestions-card glass-panel">
+                <h4><i class='bx bx-bulb'></i> AI Matchmaker</h4>
+                <div id="ai-team-matches">
+                    <!-- Populated by JS -->
+                </div>
+                <button class="btn-outline btn-full">View All Suggestions</button>
+            </div>
+        </aside>
+
+        <!-- Main Feed Column -->
+        <main class="feed-column">
+            <!-- Create Post -->
+            <div class="create-post glass-panel">
+                <div class="post-input-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=You&background=8b5cf6&color=fff" alt="You">
+                    <input type="text" id="post-input" placeholder="Share an achievement, article, or project...">
+                </div>
+                <div class="post-actions">
+                    <button><i class='bx bx-image-add'></i> Media</button>
+                    <button><i class='bx bx-calendar-event'></i> Event</button>
+                    <button><i class='bx bx-award'></i> Certificate</button>
+                    <button class="btn-primary" id="btn-post">Post</button>
+                </div>
+            </div>
+
+            <!-- Feed Stream -->
+            <div id="feed-stream">
+                <!-- Posts populated by JS -->
+            </div>
+        </main>
+
+        <!-- Right Sidebar: Live Chat Hub -->
+        <aside class="sidebar-right glass-panel">
+            <div class="chat-header">
+                <h4><i class='bx bx-message-square-dots'></i> Live Hub</h4>
+                <span class="status-indicator online">Online</span>
+            </div>
+            <div class="chat-list" id="active-chats">
+                <!-- Active users populated by JS -->
+                <div class="chat-user" data-uid="u1">
+                    <img src="https://ui-avatars.com/api/?name=Alice&background=10b981&color=fff" alt="Alice">
+                    <div class="chat-user-info">
+                        <strong>Alice Dev</strong>
+                        <small>Hey, did you check the PR?</small>
+                    </div>
+                </div>
+                <div class="chat-user" data-uid="u2">
+                    <img src="https://ui-avatars.com/api/?name=Bob&background=f59e0b&color=fff" alt="Bob">
+                    <div class="chat-user-info">
+                        <strong>Bob Design</strong>
+                        <small>Typing...</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-window" id="chat-window">
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Messages appear here -->
+                    <div class="msg-bubble incoming">Hello! Welcome to the Talent Network.</div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chat-input-box" placeholder="Type a message...">
+                    <button id="chat-send-btn"><i class='bx bxs-send'></i></button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
+
+    <script src="network-dashboard.js"></script>
+</body>
+</html>

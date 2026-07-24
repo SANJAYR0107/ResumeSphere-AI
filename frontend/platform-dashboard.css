@@ -1,0 +1,116 @@
+/* ==========================================================================
+   ResumeSphere Platform OS - Theme (v14.0.0)
+   ========================================================================== */
+
+:root {
+    --os-bg: #000000;
+    --os-panel: #111111;
+    --os-border: #333333;
+    
+    --os-primary: #6366f1; /* Indigo */
+    --os-secondary: #a855f7; /* Purple */
+    
+    --os-text: #e5e5e5;
+    --os-muted: #888888;
+    --os-code: #10b981; /* Terminal Green */
+    
+    --font-heading: 'Outfit', sans-serif;
+    --font-mono: 'Fira Code', monospace;
+    
+    --radius-md: 8px;
+    --transition: all 0.2s ease;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body.platform-theme {
+    background-color: var(--os-bg);
+    color: var(--os-text);
+    font-family: var(--font-heading);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Nav --- */
+.platform-nav {
+    background: var(--os-panel);
+    border-bottom: 1px solid var(--os-border);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 2rem;
+}
+.nav-brand { display: flex; align-items: center; gap: 0.5rem; font-size: 1.3rem; }
+.nav-brand i { color: var(--os-primary); font-size: 1.6rem; }
+.nav-actions { display: flex; align-items: center; gap: 1rem; }
+.user-avatar img { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--os-primary); }
+
+/* --- Layout --- */
+.platform-layout { display: flex; flex: 1; overflow: hidden; }
+.platform-sidebar {
+    width: 250px; background: var(--os-panel);
+    border-right: 1px solid var(--os-border); padding: 1.5rem 0;
+}
+.sidebar-menu { list-style: none; }
+.sidebar-menu li {
+    padding: 0.8rem 1.5rem; display: flex; align-items: center; gap: 0.8rem;
+    color: var(--os-muted); cursor: pointer; transition: var(--transition);
+}
+.sidebar-menu li:hover { color: white; background: rgba(255,255,255,0.05); }
+.sidebar-menu li.active {
+    color: var(--os-primary);
+    border-left: 3px solid var(--os-primary);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.platform-main { flex: 1; padding: 2rem; overflow-y: auto; }
+
+/* --- Views & Components --- */
+.view-section { display: none; }
+.view-section.active { display: block; animation: fadeIn 0.3s; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.header-action { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+.header-action h2 { font-weight: 600; }
+
+.btn { padding: 0.6rem 1.2rem; border-radius: var(--radius-md); border: none; cursor: pointer; font-family: var(--font-heading); transition: var(--transition); display: inline-flex; align-items: center; gap: 0.4rem; }
+.btn-primary { background: var(--os-primary); color: white; }
+.btn-primary:hover { background: #4f46e5; }
+.btn-outline { background: transparent; border: 1px solid var(--os-border); color: white; }
+
+.badge { padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-family: var(--font-mono); }
+.badge-os { background: rgba(168, 85, 247, 0.2); color: var(--os-secondary); border: 1px solid var(--os-secondary); }
+.badge-outline { border: 1px solid var(--os-border); color: var(--os-muted); }
+
+/* --- App Grid --- */
+.app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+.app-card { background: var(--os-panel); border: 1px solid var(--os-border); border-radius: var(--radius-md); padding: 1.5rem; transition: var(--transition); }
+.app-card:hover { border-color: var(--os-primary); transform: translateY(-2px); }
+.app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.app-header h3 { font-size: 1.1rem; }
+.app-desc { color: var(--os-muted); font-size: 0.9rem; margin-bottom: 1.5rem; line-height: 1.4; }
+
+/* --- Workflow Canvas (Conceptual) --- */
+.workflow-canvas { background: var(--os-panel); border: 1px solid var(--os-border); border-radius: var(--radius-md); padding: 2rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+.node { background: #1a1a1a; border: 1px solid var(--os-border); padding: 1rem 2rem; border-radius: 30px; font-size: 0.9rem; }
+.node-start { border-color: var(--os-primary); color: var(--os-primary); }
+.node-end { border-color: #10b981; color: #10b981; }
+.node-group { display: flex; gap: 2rem; }
+.connector i { color: var(--os-muted); font-size: 1.5rem; }
+
+.execution-log { background: #0a0a0a; border: 1px solid var(--os-border); border-radius: var(--radius-md); padding: 1rem; font-family: var(--font-mono); font-size: 0.85rem; color: var(--os-muted); min-height: 100px; }
+.log-line { margin-bottom: 0.3rem; }
+.log-success { color: var(--os-code); }
+
+/* --- Sandbox Editor --- */
+.editor-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; height: 60vh; }
+.code-editor, .terminal-output { background: #0a0a0a; border: 1px solid var(--os-border); border-radius: var(--radius-md); display: flex; flex-direction: column; }
+.editor-header { padding: 0.8rem 1rem; border-bottom: 1px solid var(--os-border); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.85rem; }
+#function-code { flex: 1; background: transparent; border: none; color: #e5e5e5; font-family: var(--font-mono); font-size: 0.9rem; padding: 1rem; resize: none; outline: none; line-height: 1.5; }
+.terminal-output { padding: 1rem; font-family: var(--font-mono); font-size: 0.85rem; color: var(--os-code); overflow-y: auto; white-space: pre-wrap; }
+
+/* --- BI Chat --- */
+.bi-chat-box { background: var(--os-panel); border: 1px solid var(--os-border); border-radius: var(--radius-md); height: 60vh; display: flex; flex-direction: column; }
+.bi-output { flex: 1; padding: 1.5rem; overflow-y: auto; font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.6; }
+.bi-input-area { padding: 1rem; border-top: 1px solid var(--os-border); display: flex; gap: 1rem; }
+.bi-input-area input { flex: 1; background: #0a0a0a; border: 1px solid var(--os-border); color: white; padding: 0.8rem 1rem; border-radius: var(--radius-md); font-family: var(--font-mono); outline: none; }
+.bi-input-area input:focus { border-color: var(--os-primary); }
